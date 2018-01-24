@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ssgl-parent</artifactId>
+        <groupId>com.bysj</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>ssgl-manager-dao</module>
+        <module>ssgl-manager-pojo</module>
+        <module>ssgl-manager-service</module>
+        <module>ssgl-manager-web</module>
+    </modules>
+    <packaging>pom</packaging>
+    <artifactId>ssgl-manager</artifactId>
+
+    <dependencies>
+        <dependency>
+            <artifactId>ssgl-common</artifactId>
+            <groupId>com.bysj</groupId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssgl.mapper.StudentMapper" >
+  <resultMap id="BaseResultMap" type="com.ssgl.bean.Student" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="sid" property="sid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="BIT" />
+    <result column="graduate_time" property="graduateTime" jdbcType="TIMESTAMP" />
+    <result column="home_phone" property="homePhone" jdbcType="VARCHAR" />
+    <result column="entrance_time" property="entranceTime" jdbcType="VARCHAR" />
+    <result column="is_undergraduate" property="isUndergraduate" jdbcType="BIT" />
+    <result column="is_graduate" property="isGraduate" jdbcType="BIT" />
+    <result column="room_number" property="roomNumber" jdbcType="VARCHAR" />
+    <result column="dormitory_no" property="dormitoryNo" jdbcType="VARCHAR" />
+    <result column="bed_no" property="bedNo" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="duty" property="duty" jdbcType="VARCHAR" />
+    <result column="faculty" property="faculty" jdbcType="VARCHAR" />
+    <result column="icon" property="icon" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, sid, name, age, sex, graduate_time, home_phone, entrance_time, is_undergraduate, 
+    is_graduate, room_number, dormitory_no, bed_no, address, phone, duty, faculty, icon
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ssgl.bean.StudentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from student
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from student
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ssgl.bean.StudentExample" >
+    delete from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ssgl.bean.Student" >
+    insert into student (id, sid, name, 
+      age, sex, graduate_time, 
+      home_phone, entrance_time, is_undergraduate, 
+      is_graduate, room_number, dormitory_no, 
+      bed_no, address, phone, 
+      duty, faculty, icon
+      )
+    values (#{id,jdbcType=VARCHAR}, #{sid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{age,jdbcType=INTEGER}, #{sex,jdbcType=BIT}, #{graduateTime,jdbcType=TIMESTAMP}, 
+      #{homePhone,jdbcType=VARCHAR}, #{entranceTime,jdbcType=VARCHAR}, #{isUndergraduate,jdbcType=BIT}, 
+      #{isGraduate,jdbcType=BIT}, #{roomNumber,jdbcType=VARCHAR}, #{dormitoryNo,jdbcType=VARCHAR}, 
+      #{bedNo,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{duty,jdbcType=VARCHAR}, #{faculty,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssgl.bean.Student" >
+    insert into student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sid != null" >
+        sid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="graduateTime != null" >
+        graduate_time,
+      </if>
+      <if test="homePhone != null" >
+        home_phone,
+      </if>
+      <if test="entranceTime != null" >
+        entrance_time,
+      </if>
+      <if test="isUndergraduate != null" >
+        is_undergraduate,
+      </if>
+      <if test="isGraduate != null" >
+        is_graduate,
+      </if>
+      <if test="roomNumber != null" >
+        room_number,
+      </if>
+      <if test="dormitoryNo != null" >
+        dormitory_no,
+      </if>
+      <if test="bedNo != null" >
+        bed_no,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="duty != null" >
+        duty,
+      </if>
+      <if test="faculty != null" >
+        faculty,
+      </if>
+      <if test="icon != null" >
+        icon,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sid != null" >
+        #{sid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=BIT},
+      </if>
+      <if test="graduateTime != null" >
+        #{graduateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="homePhone != null" >
+        #{homePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="entranceTime != null" >
+        #{entranceTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isUndergraduate != null" >
+        #{isUndergraduate,jdbcType=BIT},
+      </if>
+      <if test="isGraduate != null" >
+        #{isGraduate,jdbcType=BIT},
+      </if>
+      <if test="roomNumber != null" >
+        #{roomNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="dormitoryNo != null" >
+        #{dormitoryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bedNo != null" >
+        #{bedNo,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="duty != null" >
+        #{duty,jdbcType=VARCHAR},
+      </if>
+      <if test="faculty != null" >
+        #{faculty,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null" >
+        #{icon,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ssgl.bean.StudentExample" resultType="java.lang.Integer" >
+    select count(*) from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update student
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sid != null" >
+        sid = #{record.sid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.age != null" >
+        age = #{record.age,jdbcType=INTEGER},
+      </if>
+      <if test="record.sex != null" >
+        sex = #{record.sex,jdbcType=BIT},
+      </if>
+      <if test="record.graduateTime != null" >
+        graduate_time = #{record.graduateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.homePhone != null" >
+        home_phone = #{record.homePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.entranceTime != null" >
+        entrance_time = #{record.entranceTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isUndergraduate != null" >
+        is_undergraduate = #{record.isUndergraduate,jdbcType=BIT},
+      </if>
+      <if test="record.isGraduate != null" >
+        is_graduate = #{record.isGraduate,jdbcType=BIT},
+      </if>
+      <if test="record.roomNumber != null" >
+        room_number = #{record.roomNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dormitoryNo != null" >
+        dormitory_no = #{record.dormitoryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bedNo != null" >
+        bed_no = #{record.bedNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.duty != null" >
+        duty = #{record.duty,jdbcType=VARCHAR},
+      </if>
+      <if test="record.faculty != null" >
+        faculty = #{record.faculty,jdbcType=VARCHAR},
+      </if>
+      <if test="record.icon != null" >
+        icon = #{record.icon,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update student
+    set id = #{record.id,jdbcType=VARCHAR},
+      sid = #{record.sid,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      age = #{record.age,jdbcType=INTEGER},
+      sex = #{record.sex,jdbcType=BIT},
+      graduate_time = #{record.graduateTime,jdbcType=TIMESTAMP},
+      home_phone = #{record.homePhone,jdbcType=VARCHAR},
+      entrance_time = #{record.entranceTime,jdbcType=VARCHAR},
+      is_undergraduate = #{record.isUndergraduate,jdbcType=BIT},
+      is_graduate = #{record.isGraduate,jdbcType=BIT},
+      room_number = #{record.roomNumber,jdbcType=VARCHAR},
+      dormitory_no = #{record.dormitoryNo,jdbcType=VARCHAR},
+      bed_no = #{record.bedNo,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      duty = #{record.duty,jdbcType=VARCHAR},
+      faculty = #{record.faculty,jdbcType=VARCHAR},
+      icon = #{record.icon,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssgl.bean.Student" >
+    update student
+    <set >
+      <if test="sid != null" >
+        sid = #{sid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=BIT},
+      </if>
+      <if test="graduateTime != null" >
+        graduate_time = #{graduateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="homePhone != null" >
+        home_phone = #{homePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="entranceTime != null" >
+        entrance_time = #{entranceTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isUndergraduate != null" >
+        is_undergraduate = #{isUndergraduate,jdbcType=BIT},
+      </if>
+      <if test="isGraduate != null" >
+        is_graduate = #{isGraduate,jdbcType=BIT},
+      </if>
+      <if test="roomNumber != null" >
+        room_number = #{roomNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="dormitoryNo != null" >
+        dormitory_no = #{dormitoryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bedNo != null" >
+        bed_no = #{bedNo,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="duty != null" >
+        duty = #{duty,jdbcType=VARCHAR},
+      </if>
+      <if test="faculty != null" >
+        faculty = #{faculty,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null" >
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssgl.bean.Student" >
+    update student
+    set sid = #{sid,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      sex = #{sex,jdbcType=BIT},
+      graduate_time = #{graduateTime,jdbcType=TIMESTAMP},
+      home_phone = #{homePhone,jdbcType=VARCHAR},
+      entrance_time = #{entranceTime,jdbcType=VARCHAR},
+      is_undergraduate = #{isUndergraduate,jdbcType=BIT},
+      is_graduate = #{isGraduate,jdbcType=BIT},
+      room_number = #{roomNumber,jdbcType=VARCHAR},
+      dormitory_no = #{dormitoryNo,jdbcType=VARCHAR},
+      bed_no = #{bedNo,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      duty = #{duty,jdbcType=VARCHAR},
+      faculty = #{faculty,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,305 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2017/12/30 0030
+  Time: 23:27
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@include file="../common/common-easyui.jsp" %>
+<html>
+<head>
+    <title>学生管理</title>
+    <script>
+        $.extend($.fn.validatebox.defaults.rules, {
+            validateSid: {
+                validator: function (value) {
+                    return value.length == 10;
+                },
+                message: '学号必须为10位'
+            },
+            validateRoomNumber: {
+                validator: function (value) {
+                    return value.length == 4;
+                },
+                message: "宿舍号必须是4位"
+            },
+            validateDormitoryNo: {
+                validator: function (value) {
+                    return value.length == 1 && value != '0';
+                },
+                message: "宿舍号必须是1位且不能为0"
+            },
+            validateBedNo: {
+                validator: function (value) {
+                    return value.length == 1 && value != '0' && value != '9';
+                },
+                message: "床号必须是1位且不能为0"
+            },
+            validateAddress: {
+                validator: function (value) {
+                    return value.trim().length > 0;
+                },
+                message: "请正确的输入家庭住址"
+            },
+            validateName: {
+                validator: function (value) {
+                    return value.trim().length > 0;
+                },
+                message: "请输入正确的姓名"
+            },
+            validatePhone: {
+                validator: function (value) {
+                    return value.length == 11;
+                },
+                message: "请输入正确的手机号"
+            }
+        });
+
+        $(function () {
+            $("#entranceTime").datebox({
+                required: true,
+                editable:false,
+                missingMessage: '入学时间必填'
+            });
+            $("#graduateTime").datebox({
+                required: true,
+                editable:false,
+                missingMessage: '毕业时间必填'
+            });
+
+            $("#roomNumber").combobox({
+                required: true,
+                missingMessage: "宿舍号必填"
+            });
+            $("#dormitoryNo").combobox({
+                required: true,
+                missingMessage: "楼号必填",
+                url:'${pageContext.request.contextPath}/dormitory/selectAllDormitories.action',
+                valueField:'buildingNo',
+                textField:'buildingNo',
+                onChange:function (newValue, oldValue) {
+                    var bulidingNo = newValue;
+                    $("#roomNumber").combobox({
+                        url:'${pageContext.request.contextPath}/floor/getLayers.action?buildingNo='+bulidingNo,
+                        valueField:'buildingNo',
+                        textField:'buildingNo'
+                    });
+                }
+            });
+            $("#bedNo").numberbox({
+                required: true,
+                missingMessage: "床号必填",
+                validType: 'validateBedNo'
+            }),
+
+            $("#province").combobox({
+                required: true,
+                url:"${pageContext.request.contextPath}/province/selectProvinces.action",
+                valueField:"provinceid",
+                textField:"province",
+                missingMessage:"省份必填！",
+                onSelect:function (record) {
+                    var provinceid=record.provinceid;
+                    $("#city").combobox("clear");
+                    $("#county").combobox("clear");
+                    $("#city").combobox("reload","${pageContext.request.contextPath}/city/selectCitiesByProvinceId.action?provinceid="+provinceid);
+                }
+            }),
+            $("#city").combobox({
+                required: true,
+                valueField:"cityid",
+                textField:"city",
+                missingMessage:"市区必填！",
+                onSelect:function (record) {
+                    var cityid = record.cityid;
+                    $("#county").combobox("clear");
+                    $("#county").combobox("reload","${pageContext.request.contextPath}/city/selectCountiesByCityId.action?cityid="+cityid);
+                }
+            }),
+            $("#county").combobox({
+                required: true,
+                valueField:"areaid",
+                textField:"area",
+                missingMessage:"所属县必填！"
+            }),
+
+            $("#faculty").combobox({
+                required:true,
+                valueField:"facultyid",
+                textField:"faculty",
+                missingMessage:"学院必填",
+                url:"${pageContext.request.contextPath}/faculty/selectAllFaculties.action",
+                onSelect:function (record) {
+                    var faultyid = record.facultyid;
+                    $("#profess").combobox("clear");
+                    $("#profess").combobox("reload","${pageContext.request.contextPath}/faculty/selectAllFacultiesByFacultyId.action?facultyid="+faultyid);
+                }
+            }),
+            $("#profess").combobox({
+                required:true,
+                valueField:"facultyid",
+                textField:"faculty",
+                missingMessage:"专业必填"
+            }),
+
+            $("#phone").numberbox({
+                required: true,
+                missingMessage: "手机号码必填",
+                validType: 'validatePhone'
+            }),
+            $("#familyPhone").numberbox({
+                required: true,
+                missingMessage: "家庭号码必填",
+                validType: 'validatePhone'
+            }),
+
+            $("#dg").datagrid({
+
+                url: 'selectStudentsPage.action',
+                toolbar: [
+                    {
+                        iconCls: 'icon-add',
+                        text: '添加学生',
+                        handler: function () {
+                            $("#mydialog").dialog('open');
+                        }
+                    }, {
+                        iconCls: 'icon-edit',
+                        text: '修改学生',
+                        handler: function () {
+
+                        }
+                    }, {
+                        iconCls: 'icon-remove',
+                        text: '删除学生',
+                        handler: function () {
+
+                        }
+                    }, {
+                        iconCls: 'icon-search',
+                        text: '查找学生',
+                        handler: function () {
+
+                        }
+                    }, {
+                        iconCls: 'icon-reload',
+                        text: '刷新',
+                        handler: function () {
+                            $("#dg").datagrid("reload");
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div>
+    <table id="dg"></table>
+</div>
+
+<div style="width:380px;height:480px;background: url('../../../images/form.jpg')" id="mydialog" class="easyui-dialog"
+     modal="true" closed="true" title="添加学生">
+    <form id="studentForm" action="" method="post">
+        <table align="center">
+            <tr>
+                <td>学号：</td>
+                <td><input id="sid" type="text" name="sid" value=""
+                           class="easyui-numberbox"
+                           data-options="required:true,
+                       missingMessage:'学号为必选项！',
+                       validType:'validateSid'"></td>
+            </tr>
+            <tr>
+                <td>姓名：</td>
+                <td><input id="name" name="name" type="text" value="" class="easyui-validatebox" required="true"
+                           missingMessage="学生姓名必填！" validType="validateName"></td>
+            </tr>
+            <tr>
+                <td>年龄：</td>
+                <td><input id="age" name="age" type="text" value="" class="easyui-numberbox" required="true"
+                           missingMessage="学生年龄必填！"></td>
+            </tr>
+            <tr>
+                <td>性别 ：</td>
+                <td>
+                    <input name="sex" type="radio" checked="checked" value="0">女
+                    <input name="sex" type="radio" value="1">男
+                </td>
+            </tr>
+            <tr>
+                <td>入学时间：</td>
+                <td><input id="entranceTime" type="text" name="entranceTime" value=""></td>
+            </tr>
+            <tr>
+                <td>毕学时间：</td>
+                <td><input id="graduateTime" type="text" name="graduateTime" value=""></td>
+            </tr>
+            <tr>
+                <td>本科生：</td>
+                <td>
+                    <input name="isUndergraduate" type="radio" checked="checked" value="0">否
+                    <input name="isUndergraduate" type="radio" value="1">是
+                </td>
+            </tr>
+            <tr>
+                <td>毕业生：</td>
+                <td>
+                    <input name="isGraduate" type="radio" checked="checked" value="0">否
+                    <input name="isGraduate" type="radio" value="1">是
+                </td>
+            </tr>
+            <tr>
+                <td>楼号：</td>
+                <td>
+                    <input id="dormitoryNo" name="dormitoryNo" value="">
+                </td>
+            </tr>
+            <tr>
+                <td>宿舍号：</td>
+                <td><input id="roomNumber" name="roomNumber" value="">
+                    </td>
+            </tr>
+            <tr>
+                <td>床号：</td>
+                <td><input id="bedNo" type="text" name="bedNo" value=""></td>
+            </tr>
+            <tr style="rowspan: 3">
+                <td>家庭住址：</td>
+                <td><input id="province" name="province" value="" style="width: 70px;">
+                <input id="city" name="city" value="" style="width: 70px;">
+                <input id="county"name="province" value="" style="width: 70px;"></td>
+            </tr>
+            <tr>
+                <td>手机号码：</td>
+                <td><input id="phone" type="text" name="phone" value=""></td>
+            </tr>
+            <tr>
+                <td>家庭电话：</td>
+                <td><input id="familyPhone" type="text" name="familyPhone" value=""></td>
+            </tr>
+            <tr>
+                <td>职务：</td>
+                <td><input id="duty" type="text" name="duty" value=""></td>
+            </tr>
+            <tr>
+                <td>院系：</td>
+                <td><input id="faculty" name="faculty" value="" style="width: 70px;">
+                    <input id="profess" name="profess" value="" style="width: 70px;"></td>
+            </tr>
+            <tr>
+                <td>照片：</td>
+                <td><input id="icon" type="text" name="icon" value=""></td>
+            </tr>
+            <tr align="center">
+                <td><a id="confirm" class="easyui-linkbutton">确定</a></td>
+                <td><a id="cancel" class="easyui-linkbutton">取消</a></td>
+            </tr>
+        </table>
+
+    </form>
+</div>
+</body>
+</html>

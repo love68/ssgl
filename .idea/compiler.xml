@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ssgl-common" />
+        <module name="ssgl-manager-dao" />
+        <module name="ssgl-manager-pojo" />
+        <module name="ssgl-manager-service" />
+        <module name="ssgl-manager-web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ssgl-common" target="1.7" />
+      <module name="ssgl-manager" target="1.7" />
+      <module name="ssgl-manager-dao" target="1.7" />
+      <module name="ssgl-manager-pojo" target="1.7" />
+      <module name="ssgl-manager-service" target="1.7" />
+      <module name="ssgl-manager-web" target="1.7" />
+      <module name="ssgl-parent" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

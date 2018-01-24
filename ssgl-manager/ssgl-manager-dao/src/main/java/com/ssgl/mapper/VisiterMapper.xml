@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssgl.mapper.VisiterMapper" >
+  <resultMap id="BaseResultMap" type="com.ssgl.bean.Visiter" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="visiter_id" property="visiterId" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="visit_time" property="visitTime" jdbcType="VARCHAR" />
+    <result column="visit_student_name" property="visitStudentName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, visiter_id, name, visit_time, visit_student_name, phone, content
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ssgl.bean.VisiterExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from visiter
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from visiter
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from visiter
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ssgl.bean.VisiterExample" >
+    delete from visiter
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ssgl.bean.Visiter" >
+    insert into visiter (id, visiter_id, name, 
+      visit_time, visit_student_name, phone, 
+      content)
+    values (#{id,jdbcType=VARCHAR}, #{visiterId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{visitTime,jdbcType=VARCHAR}, #{visitStudentName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{content,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssgl.bean.Visiter" >
+    insert into visiter
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="visiterId != null" >
+        visiter_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="visitTime != null" >
+        visit_time,
+      </if>
+      <if test="visitStudentName != null" >
+        visit_student_name,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="visiterId != null" >
+        #{visiterId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="visitTime != null" >
+        #{visitTime,jdbcType=VARCHAR},
+      </if>
+      <if test="visitStudentName != null" >
+        #{visitStudentName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ssgl.bean.VisiterExample" resultType="java.lang.Integer" >
+    select count(*) from visiter
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update visiter
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.visiterId != null" >
+        visiter_id = #{record.visiterId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.visitTime != null" >
+        visit_time = #{record.visitTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.visitStudentName != null" >
+        visit_student_name = #{record.visitStudentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update visiter
+    set id = #{record.id,jdbcType=VARCHAR},
+      visiter_id = #{record.visiterId,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      visit_time = #{record.visitTime,jdbcType=VARCHAR},
+      visit_student_name = #{record.visitStudentName,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      content = #{record.content,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssgl.bean.Visiter" >
+    update visiter
+    <set >
+      <if test="visiterId != null" >
+        visiter_id = #{visiterId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="visitTime != null" >
+        visit_time = #{visitTime,jdbcType=VARCHAR},
+      </if>
+      <if test="visitStudentName != null" >
+        visit_student_name = #{visitStudentName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssgl.bean.Visiter" >
+    update visiter
+    set visiter_id = #{visiterId,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      visit_time = #{visitTime,jdbcType=VARCHAR},
+      visit_student_name = #{visitStudentName,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

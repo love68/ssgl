@@ -33,14 +33,14 @@ public class UserController {
         return userService.login(user, request, j_captcha);
     }
 
-    /*
+
     @RequestMapping(value = "logout")
     public void logout() {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
             subject.logout(); // session 会销毁，在SessionListener监听session销毁，清理权限缓存
         }
-    }*/
+    }
 
 
 }

@@ -34,13 +34,13 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "logout")
+    /*@RequestMapping(value = "logout")
     public void logout() {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
             subject.logout(); // session 会销毁，在SessionListener监听session销毁，清理权限缓存
         }
-    }
+    }*/
 
 
 }

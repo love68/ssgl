@@ -8,6 +8,7 @@ package com.ssgl.service;
  */
 
 import com.ssgl.bean.Dormitory;
+import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public interface DormitoryService {
      * @return
      * @throws Exception
      */
-    String selectAllDormitories() throws Exception;
+    Page<Dormitory> selectAllDormitories(Integer page, Integer pageSize) throws Exception;
 
 
     /**

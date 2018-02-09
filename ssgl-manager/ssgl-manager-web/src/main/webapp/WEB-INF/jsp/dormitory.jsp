@@ -24,7 +24,7 @@
             $("#dg").datagrid({
                 idField:"buildingNo",
                 title:'宿舍楼管理',
-
+                pagination:true,
                 url:"${pageContext.request.contextPath}/dormitory/selectAllDormitories.action",
                 rownumbers:true,
                 columns:[[

@@ -28,7 +28,6 @@ public class FacultyServiceImpl implements FacultyService {
         FacultyExample example = new FacultyExample();
         FacultyExample.Criteria criteria = example.createCriteria().andParentFacultyIdEqualTo("0");
         List<Faculty> faculties = facultyMapper.selectByExample(example);
-        System.out.println(JSONArray.toJSONString(faculties));
         return null == faculties ? "" : JSONArray.toJSONString(faculties);
     }
 
@@ -37,7 +36,6 @@ public class FacultyServiceImpl implements FacultyService {
         FacultyExample example = new FacultyExample();
         FacultyExample.Criteria criteria = example.createCriteria().andParentFacultyIdEqualTo(facultyid);
         List<Faculty> faculties = facultyMapper.selectByExample(example);
-        System.out.println(JSONArray.toJSONString(faculties));
         return null == faculties ? "" : JSONArray.toJSONString(faculties);
     }
 }

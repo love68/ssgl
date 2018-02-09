@@ -8,12 +8,16 @@ package com.ssgl.service.impl;
  */
 
 import com.alibaba.fastjson.JSONArray;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ssgl.bean.Dormitory;
 import com.ssgl.bean.DormitoryExample;
+import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
 import com.ssgl.mapper.CustomerDormitoryMapper;
 import com.ssgl.mapper.DormitoryMapper;
 import com.ssgl.service.DormitoryService;
+import com.ssgl.util.StringUtils;
 import com.ssgl.util.Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,7 @@ public class DormitoryServiceImpl implements DormitoryService {
 
     @Autowired
     public CustomerDormitoryMapper customerDormitoryMapper;
+
     @Override
     public void addDormitory(Dormitory dormitory) throws Exception {
         dormitory.setId(Util.makeId());
@@ -35,16 +40,24 @@ public class DormitoryServiceImpl implements DormitoryService {
     }
 
     @Override
-    public String selectAllDormitories() throws Exception {
+    public Page<Dormitory> selectAllDormitories(Integer page, Integer pageSize) throws Exception {
+        PageHelper.startPage(page, pageSize);
         DormitoryExample example = new DormitoryExample();
         List<Dormitory> dormitories = dormitoryMapper.selectByExample(example);
-        return null == dormitories ? "" : JSONArray.toJSONString(dormitories);
+        if (null != dormitories && dormitories.size() > 0) {
+            PageInfo<Dormitory> pageInfo = new PageInfo<Dormitory>(dormitories);
+            Page<Dormitory> result = new Page<>();
+            result.setTotalRecord((int) pageInfo.getTotal());
+            result.setList(pageInfo.getList());
+            return result;
+        }
+        return null;
     }
 
     @Override
     public Result deleteDormitories(List<String> ids) throws Exception {
         customerDormitoryMapper.deleteDormitories(ids);
-        return new Result("ok","删除成功");
+        return new Result("ok", "删除成功");
     }
 
     @Override
@@ -52,9 +65,9 @@ public class DormitoryServiceImpl implements DormitoryService {
         //从数据库中查到原数据
         Dormitory targetDormitory = dormitoryMapper.selectByPrimaryKey(dormitory.getId());
         //将更改的信息写到对象中
-        BeanUtils.copyProperties(dormitory,targetDormitory);
+        BeanUtils.copyProperties(dormitory, targetDormitory);
         //写回到数据库中
         dormitoryMapper.updateByPrimaryKey(targetDormitory);
-        return new Result("ok","修改成功");
+        return new Result("ok", "修改成功");
     }
 }

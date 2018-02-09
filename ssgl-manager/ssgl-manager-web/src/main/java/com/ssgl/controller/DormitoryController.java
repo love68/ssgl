@@ -1,6 +1,8 @@
 package com.ssgl.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ssgl.bean.Dormitory;
+import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
 import com.ssgl.service.DormitoryService;
 import com.ssgl.util.StringUtils;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
  * 功能:
@@ -45,9 +49,13 @@ public class DormitoryController {
 
     @ResponseBody
     @RequestMapping(value = "selectAllDormitories")
-    public String selectAllDormitories(){
+    public String selectAllDormitories(Integer page, Integer rows){
         try {
-            return dormitoryService.selectAllDormitories();
+            Page<Dormitory> result = dormitoryService.selectAllDormitories(page,rows);
+            Map<String,Object> map = new HashMap<>();
+            map.put("total",result.getTotalRecord());
+            map.put("rows",result.getList());
+            return JSONObject.toJSONString(map);
         } catch (Exception e) {
             throw new RuntimeException("出错了。。。");
         }

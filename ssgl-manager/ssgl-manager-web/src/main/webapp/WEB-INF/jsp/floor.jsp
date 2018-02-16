@@ -19,7 +19,6 @@
                 modal:true,
                 draggable:false
             });
-
             $("#dg").datagrid({
                 idField:"id",
                 title:'楼层管理',
@@ -129,7 +128,8 @@
                     }
                 ],
                 pagination:true,
-                pageList:[10,15,20]
+                pageSize:5,
+                pageList:[5,10,15,20]
             });
 
            $("#confirm").click(function () {

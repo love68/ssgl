@@ -65,9 +65,6 @@
                             })
                         })
                     </script>
-
-
-
                 </ul>
             </div>
             <div title="宿舍楼管理" data-options="" style="">
@@ -79,6 +76,11 @@
                 <a id="lcgl">
                     <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;">
                         <div style="font-size: 14px;margin-top: 5px;margin-left: 16px;">楼层管理</div>
+                    </div>
+                </a>
+                <a id="fjgl">
+                    <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;">
+                        <div style="font-size: 14px;margin-top: 5px;margin-left: 16px;">房间管理</div>
                     </div>
                 </a>
             </div>
@@ -116,19 +118,77 @@
                                     "content":'<iframe frameborder=0 style=width:100%;height:100% src='+ "${pageContext.request.contextPath}/floor/toFloorUI.action" +' ></iframe>'
                                 });
                             }
+                        }else if("房间管理" == title){
+                            //查看该选项卡是否已经打开
+                            var flag = $("#tt").tabs("exists",title);
+                            //如果未打开
+                            if(!flag){
+                                //打开选项卡
+                                $("#tt").tabs("add",{
+                                    "title" : title,
+                                    "closable" : true,
+                                    "content":'<iframe frameborder=0 style=width:100%;height:100% src='+ "${pageContext.request.contextPath}/room/toManagerRoomUI.action" +' ></iframe>'
+                                });
+                            }
                         }
                     })
                 })
             </script>
-
-            <div title="房间管理">
-                content3
-            </div>
             <div title="权限管理">
-                content3
+                <a id="qxgl">
+                    <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;">
+                        <div style="font-size: 14px;margin-top: 5px;margin-left: 16px;">权限管理</div>
+                    </div>
+                </a>
+                <script>
+                    $(function () {
+                        $("a").click(function () {
+                            var title = $(this).text();
+                            title = $.trim(title);
+                            if("权限管理" == title){
+                                //查看该选项卡是否已经打开
+                                var flag = $("#tt").tabs("exists",title);
+                                //如果未打开
+                                if(!flag){
+                                    //打开选项卡
+                                    $("#tt").tabs("add",{
+                                        "title" : title,
+                                        "closable" : true,
+                                        "content":'<iframe frameborder=0 style=width:100%;height:100% src='+ "${pageContext.request.contextPath}/dormitory/toDormitoryUI.action" +' ></iframe>'
+                                    });
+                                }
+                            }
+                        })
+                    })
+                </script>
             </div>
             <div title="管理员管理">
-                content3
+                <a id="glygl">
+                    <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;">
+                        <div style="font-size: 14px;margin-top: 5px;margin-left: 16px;">管理员管理</div>
+                    </div>
+                </a>
+                <script>
+                    $(function () {
+                        $("a").click(function () {
+                            var title = $(this).text();
+                            title = $.trim(title);
+                            if("管理员管理" == title){
+                                //查看该选项卡是否已经打开
+                                var flag = $("#tt").tabs("exists",title);
+                                //如果未打开
+                                if(!flag){
+                                    //打开选项卡
+                                    $("#tt").tabs("add",{
+                                        "title" : title,
+                                        "closable" : true,
+                                        "content":'<iframe frameborder=0 style=width:100%;height:100% src='+ "${pageContext.request.contextPath}/dormitory/toDormitoryUI.action" +' ></iframe>'
+                                    });
+                                }
+                            }
+                        })
+                    })
+                </script>
             </div>
             <div title="系统设置">
                 <a id="logout" onclick="logout()">

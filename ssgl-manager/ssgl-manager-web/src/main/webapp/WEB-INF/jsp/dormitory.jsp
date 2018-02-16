@@ -25,6 +25,8 @@
                 idField:"buildingNo",
                 title:'宿舍楼管理',
                 pagination:true,
+                pageSize:5,
+                pageList:[5,10,15,20],
                 url:"${pageContext.request.contextPath}/dormitory/selectAllDormitories.action",
                 rownumbers:true,
                 columns:[[

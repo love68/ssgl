@@ -180,7 +180,7 @@
                         $(function () {
                             var bulidingNo = "";
                            $("#building_no").combobox({
-                               url:'${pageContext.request.contextPath}/dormitory/selectAllDormitories.action',
+                               url:'${pageContext.request.contextPath}/dormitory/findAllDormitories.action',
                                valueField:'buildingNo',
                                textField:'buildingNo',
                                onChange:function (newValue, oldValue) {

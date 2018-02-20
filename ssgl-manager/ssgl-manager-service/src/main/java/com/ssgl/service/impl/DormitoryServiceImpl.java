@@ -8,6 +8,7 @@ package com.ssgl.service.impl;
  */
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ssgl.bean.Dormitory;
@@ -52,6 +53,12 @@ public class DormitoryServiceImpl implements DormitoryService {
             return result;
         }
         return null;
+    }
+    @Override
+    public String findAllDormitories() throws Exception {
+        DormitoryExample example = new DormitoryExample();
+        List<Dormitory> dormitories = dormitoryMapper.selectByExample(example);
+        return JSONObject.toJSONString(dormitories);
     }
 
     @Override

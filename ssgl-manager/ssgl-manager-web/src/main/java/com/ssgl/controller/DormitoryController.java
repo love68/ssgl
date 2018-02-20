@@ -62,6 +62,15 @@ public class DormitoryController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "findAllDormitories")
+    public String selectAllDormitories(){
+        try {
+            return dormitoryService.findAllDormitories();
+        } catch (Exception e) {
+            throw new RuntimeException("出错了。。。");
+        }
+    }
+    @ResponseBody
     @RequestMapping(value = "deleteDormitories")
     public Result deleteDormitories(HttpServletRequest request){
         try {

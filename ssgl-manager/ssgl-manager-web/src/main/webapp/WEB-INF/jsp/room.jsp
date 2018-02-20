@@ -51,8 +51,8 @@
                     {field:'dormitoryNum',title:'宿舍楼号',width:100,align:'right'},
                     {field:'starLevel',title:'宿舍星级',width:100,align:'right'},
                     {field:'score',title:'宿舍评分',width:100,align:'right'},
-                ]]
-
+                ]],
+                pagination:true
             });
 
         });

@@ -28,6 +28,8 @@ public interface DormitoryService {
      */
     Page<Dormitory> selectAllDormitories(Integer page, Integer pageSize) throws Exception;
 
+    String findAllDormitories() throws Exception;
+
 
     /**
      * 删除宿舍楼

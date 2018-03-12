@@ -30,8 +30,8 @@
     </div>
     <div data-options="region:'south',title:'版权信息',split:true" style="height:100px;"></div>
     <div data-options="region:'west',title:'系统菜单',split:true" style="width:200px;">
-        <div id="aa" class="easyui-accordion" style="width:180px;height:200px;">
-            <div title="学生管理" data-options="">
+        <div id="aa" class="easyui-accordion" style="width:180px;height:200px;" data-options="selected:1">
+            <div title="学生管理" >
                 <ul>
                     <a href="#">
                         <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;margin-left: -40px;margin-top: -12px;">
@@ -214,4 +214,4 @@
         </div>
     </div>
 </body>
-</html>K
+</html>

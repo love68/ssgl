@@ -20,7 +20,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Page<Room> selectRoomPage(Integer page, Integer rows) throws Exception {
-        PageHelper.startPage(page,rows);
+        PageHelper.startPage(page, rows);
         RoomExample example = new RoomExample();
         List<Room> roomList = roomMapper.selectByExample(example);
         PageInfo<Room> pageInfo = new PageInfo<Room>(roomList);
@@ -40,8 +40,13 @@ public class RoomServiceImpl implements RoomService {
 
         //写回到数据库
         int r = roomMapper.updateByPrimaryKey(oldRoom);
-        if(r!=1){
+        if (r != 1) {
             throw new RuntimeException();
         }
+    }
+
+    @Override
+    public void addRoom(Room room) throws Exception {
+        roomMapper.insert(room);
     }
 }

@@ -96,7 +96,7 @@
                                 })
                                 $("#roomDialog").dialog("open");
                                 $("#roomForm").form("load",{
-                                    building_no:arr[0].buildingNo,
+                                    dormitoryNum:arr[0].buildingNo,
                                     layer:arr[0].layer,
                                     students:arr[0].students,
                                     roomNumber:arr[0].roomNumber,
@@ -178,11 +178,11 @@
                 </tr>
                 <tr>
                     <td>宿舍楼号：</td>
-                    <td><input id="building_no" name="building_no" value="" ></td>
+                    <td><input id="dormitoryNum" name="dormitoryNum" value="" ></td>
                     <script>
                         $(function () {
                             var bulidingNo = "";
-                            $("#building_no").combobox({
+                            $("#dormitoryNum").combobox({
                                 url:'${pageContext.request.contextPath}/dormitory/findAllDormitories.action',
                                 valueField:'buildingNo',
                                 textField:'buildingNo'
@@ -197,11 +197,11 @@
                 </tr>
                 <tr>
                     <td>实际人数：</td>
-                    <td><input id="people_num" type="text" name="people_num" class="easyui-numberbox" required="true" missingMessage="实际人数必填"></td>
+                    <td><input id="peopleNum" type="text" name="peopleNum" class="easyui-numberbox" required="true" missingMessage="实际人数必填"></td>
                 </tr>
                 <tr>
                     <td>宿舍星级：</td>
-                    <td><input id="star_level" type="text" name="star_level" class="easyui-numberbox" required="true" missingMessage="星级必填"></td>
+                    <td><input id="starLevel" type="text" name="starLevel" class="easyui-numberbox" required="true" missingMessage="星级必填"></td>
                 </tr>
                 <tr>
                     <td>宿舍分数：</td>

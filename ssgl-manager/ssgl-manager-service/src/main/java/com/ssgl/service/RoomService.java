@@ -20,5 +20,5 @@ public interface RoomService {
      */
     void updateRoom(Room room) throws Exception;
 
-
+    void addRoom(Room room) throws Exception;
 }

@@ -1,10 +1,7 @@
 package com.ssgl.util;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Util {
 	/**

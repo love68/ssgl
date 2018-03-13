@@ -1,7 +1,10 @@
 package com.ssgl.service;
 
 import com.ssgl.bean.Page;
+import com.ssgl.bean.Result;
 import com.ssgl.bean.Room;
+
+import java.util.List;
 
 public interface RoomService {
     /**
@@ -12,6 +15,8 @@ public interface RoomService {
      * @throws Exception
      */
     Page<Room> selectRoomPage(Integer page, Integer rows) throws Exception;
+
+    Result deleteRooms(List<String> ids) throws Exception;
 
     /**
      * 更新房间信息

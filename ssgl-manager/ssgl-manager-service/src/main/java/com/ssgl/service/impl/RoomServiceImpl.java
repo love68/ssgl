@@ -3,8 +3,10 @@ package com.ssgl.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ssgl.bean.Page;
+import com.ssgl.bean.Result;
 import com.ssgl.bean.Room;
 import com.ssgl.bean.RoomExample;
+import com.ssgl.mapper.CustomerRoomMapper;
 import com.ssgl.mapper.RoomMapper;
 import com.ssgl.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ public class RoomServiceImpl implements RoomService {
 
     @Autowired
     public RoomMapper roomMapper;
+    @Autowired
+    public CustomerRoomMapper customerRoomMapper;
 
     @Override
     public Page<Room> selectRoomPage(Integer page, Integer rows) throws Exception {
@@ -28,6 +32,12 @@ public class RoomServiceImpl implements RoomService {
         result.setList(pageInfo.getList());
         result.setTotalRecord((int) pageInfo.getTotal());
         return result;
+    }
+
+    @Override
+    public Result deleteRooms(List<String> ids) throws Exception {
+        customerRoomMapper.deleteRooms(ids);
+        return new Result("ok", "删除成功");
     }
 
     @Override

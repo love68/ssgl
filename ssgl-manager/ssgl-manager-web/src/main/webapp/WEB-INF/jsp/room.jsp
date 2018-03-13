@@ -96,11 +96,12 @@
                                 })
                                 $("#roomDialog").dialog("open");
                                 $("#roomForm").form("load",{
-                                    dormitoryNum:arr[0].buildingNo,
-                                    layer:arr[0].layer,
-                                    students:arr[0].students,
+                                    dormitoryNum:arr[0].dormitoryNum,
+                                    score:arr[0].score,
+                                    starLevel:arr[0].starLevel,
+                                    peopleNum:arr[0].peopleNum,
                                     roomNumber:arr[0].roomNumber,
-                                    spaces:arr[0].spaces
+                                    capacity:arr[0].capacity
                                 });
                             }
                         }
@@ -119,6 +120,7 @@
                     }
                 ],
                 columns:[[
+                    {field:"ck",title:"选择",checkbox:true},
                     {field:'roomNumber',title:'宿舍号',width:100},
                     {field:'capacity',title:'宿舍容量',width:100},
                     {field:'peopleNum',title:'宿舍人数',width:100,align:'right'},
@@ -126,7 +128,9 @@
                     {field:'starLevel',title:'宿舍星级',width:100,align:'right'},
                     {field:'score',title:'宿舍评分',width:100,align:'right'},
                 ]],
-                pagination:true
+                pagination:true,
+                pageSize:5,
+                pageList:[5,10,15,20]
             });
 
 

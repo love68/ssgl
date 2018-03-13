@@ -3,13 +3,19 @@ package com.ssgl.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.ssgl.bean.Page;
+import com.ssgl.bean.Result;
 import com.ssgl.bean.Room;
 import com.ssgl.service.RoomService;
+import com.ssgl.util.StringUtils;
 import com.ssgl.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
  * 功能:
@@ -29,8 +35,11 @@ public class RoomController {
     @RequestMapping(value = "selectRoomsPage",produces = "text/json;utf-8")
     public String selectRoomsPage(Integer page,Integer rows){
         try {
-            Page<Room> rooms = roomService.selectRoomPage(page,rows);
-            return JSONObject.toJSONString(rooms);
+            Page<Room> result = roomService.selectRoomPage(page,rows);
+            Map<String,Object> map = new HashMap<>();
+            map.put("total",result.getTotalRecord());
+            map.put("rows",result.getList());
+            return JSONObject.toJSONString(map);
         }catch (Exception e){
             throw new RuntimeException("出错了");
         }
@@ -48,6 +57,15 @@ public class RoomController {
             roomService.addRoom(room);
         } catch (Exception e) {
             throw new RuntimeException("出错了");
+        }
+    }
+    @RequestMapping(value = "deleteRoom")
+    public Result deleteRoom(HttpServletRequest request){
+        try {
+            return roomService.deleteRooms(StringUtils.stringConvertList(request.getParameter("ids")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("error","删除失败");
         }
     }
 }

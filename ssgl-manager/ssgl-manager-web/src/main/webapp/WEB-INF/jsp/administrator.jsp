@@ -9,48 +9,83 @@
 <%@include file="common/common-easyui.jsp"%>
 <html>
 <head>
-    <title>房间管理</title>
     <script>
         $(function () {
 
-
-            $("#roomDatagrid").datagrid({
-                title:'房间管理',
-                url:'${pageContext.request.contextPath}/room/selectRoomsPage.action',
-                toolbar:[
+            var flag = "";
+            $("#visitorDatagrid").datagrid({
+                title: '访客管理',
+                url: '${pageContext.request.contextPath}/user/selectUsersPage.action',
+                toolbar: [
                     {
-                        text:'新增房间',
-                        iconCls:"icon-add",
-                        handler:function () {
+                        text: '新增管理员',
+                        iconCls: "icon-add",
+                        handler: function () {
+                            flag = "add";
+                            $("#userDialog").dialog({
+                                title:"添加管理员"
+                            });
+                            $("#userDialog").dialog("open");
+                        }
+                    },{
+                        text: '查找访客',
+                        iconCls: "icon-search",
+                        handler: function () {
 
                         }
                     },{
-                        text:'删除房间',
+                        text:'删除',
                         iconCls:"icon-remove",
                         handler:function () {
-
-                        }
-                    },{
-                        text:'编辑房间',
-                        iconCls:"icon-edit",
-                        handler:function () {
-
-                        }
-                    },{
-                        text:'查找房间',
-                        iconCls:"icon-search",
-                        handler:function () {
-
+                            var arr = $("#dg").datagrid("getSelections");
+                            if(arr.length<=0){
+                                $.messager.show({
+                                    title:"提示信息",
+                                    msg:"请至少选择一行删除"
+                                })
+                            }else {
+                                $.messager.confirm("确认信息","确定删除吗？",function (r) {
+                                    var ids ="";
+                                    if(r){
+                                        for(var i = 0;i<arr.length;i++){
+                                            ids += arr[i].id + ",";
+                                        }
+                                        ids = ids.substring(0,ids.length-1);
+                                        $.ajax({
+                                            url:"${pageContext.request.contextPath}/user/deleteUsers.action",
+                                            type:"post",
+                                            data:{ids:ids},
+                                            async:true,
+                                            cache:false,
+                                            dataType:"json",
+                                            success:function (r) {
+                                                $("#dg").datagrid("reload");
+                                                $("#dg").datagrid("clearSelections");
+                                                $.messager.show({
+                                                    title:r.status,
+                                                    msg:r.message
+                                                })
+                                            },
+                                            error:function (r) {
+                                                $.messager.show({
+                                                    title:r.status,
+                                                    msg:r.message
+                                                })
+                                            }
+                                        })
+                                    }
+                                });
+                            }
                         }
                     }
                 ],
-                columns:[[
-                    {field:'roomNumber',title:'宿舍号',width:100},
-                    {field:'capacity',title:'宿舍容量',width:100},
-                    {field:'peopleNum',title:'宿舍人数',width:100,align:'right'},
-                    {field:'dormitoryNum',title:'宿舍楼号',width:100,align:'right'},
-                    {field:'starLevel',title:'宿舍星级',width:100,align:'right'},
-                    {field:'score',title:'宿舍评分',width:100,align:'right'},
+                columns: [[
+                    {field: 'name', title: '访客姓名', width: 100},
+                    {field: 'visiterId', title: '身份证号', width: 100},
+                    {field: 'visitTime', title: '来访时间', width: 100},
+                    {field: 'visitStudentName', title: '要找学生姓名', width: 100, align: 'right'},
+                    {field: 'phone', title: '手机号', width: 100, align: 'right'},
+                    {field: 'content', title: '来访事由', width: 100, align: 'right'}
                 ]]
 
             });
@@ -60,8 +95,58 @@
     </script>
 </head>
 <body>
-    <div>
-        <table id="roomDatagrid"></table>
-    </div>
+<div>
+    <table id="visitorDatagrid"></table>
+</div>
+
+<div id="roomDialog" style="display:none;">
+    <form id="roomForm"  method="post">
+        <input type="hidden" name="id">
+        <table>
+            <tr>
+                <td>宿舍号：</td>
+                <td><input id="roomNumber" name="roomNumber" class="easyui-numberbox" value="" required="true" validType="length[4,4]" missingMessage="宿舍号必填" invalidMessage="宿舍号必须为4位"></td>
+            </tr>
+            <tr>
+                <td>宿舍楼号：</td>
+                <td><input id="building_no" name="building_no" value="" ></td>
+                <script>
+                    $(function () {
+                        var bulidingNo = "";
+                        $("#building_no").combobox({
+                            url:'${pageContext.request.contextPath}/dormitory/findAllDormitories.action',
+                            valueField:'buildingNo',
+                            textField:'buildingNo'
+                        });
+                    });
+                </script>
+            </tr>
+
+            <tr>
+                <td>宿舍容量：</td>
+                <td><input id="capacity" type="text" name="capacity" class="easyui-numberbox" required="true" missingMessage="宿舍容量"/></td>
+            </tr>
+            <tr>
+                <td>实际人数：</td>
+                <td><input id="people_num" type="text" name="people_num" class="easyui-numberbox" required="true" missingMessage="实际人数必填"></td>
+            </tr>
+            <tr>
+                <td>宿舍星级：</td>
+                <td><input id="star_level" type="text" name="star_level" class="easyui-numberbox" required="true" missingMessage="星级必填"></td>
+            </tr>
+            <tr>
+                <td>宿舍分数：</td>
+                <td><input id="score" type="text" name="score" class="easyui-numberbox" ></td>
+            </tr>
+            <tr align="center">
+                <td><a id="confirm" class="easyui-linkbutton">确定</a></td>
+                <td><a id="cancel" class="easyui-linkbutton">重置</a></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+
 </body>
 </html>
+

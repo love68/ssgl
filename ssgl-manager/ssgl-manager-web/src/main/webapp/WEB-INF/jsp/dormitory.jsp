@@ -199,7 +199,7 @@
                 </tr>
                 <tr align="center">
                     <td><a id="confirm" class="easyui-linkbutton">确定</a></td>
-                    <td><a id="cancel" class="easyui-linkbutton">取消</a></td>
+                    <td><a id="cancel" class="easyui-linkbutton">重置</a></td>
                 </tr>
             </table>
         </form>

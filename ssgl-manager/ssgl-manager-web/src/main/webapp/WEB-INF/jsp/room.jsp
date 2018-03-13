@@ -20,7 +20,7 @@
                 modal:true,
                 draggable:false
             });
-            $("#roomDatagrid").datagrid({
+            $("#dg").datagrid({
                 title:'房间管理',
                 url:'${pageContext.request.contextPath}/room/selectRoomsPage.action',
                 toolbar:[
@@ -114,7 +114,7 @@
                         text:'刷新',
                         iconCls:"icon-reload",
                         handler:function () {
-                            $("#roomDatagrid").datagrid("reload");
+                            $("#dg").datagrid("reload");
                         }
                     }
                 ],
@@ -129,19 +129,53 @@
                 pagination:true
             });
 
-        });
 
+            $("#confirm").click(function () {
+                $('#roomForm').form("submit",{
+                    url:flag == "add" ? '${pageContext.request.contextPath}/room/addRoom.action':'${pageContext.request.contextPath}/room/editRoom.action' ,
+                    onSubmit:function(){
+                        if(!$('#roomForm').form('validate')){
+                            $.messager.show({
+                                title:'提示信息' ,
+                                msg:'验证没有通过,不能提交表单!'
+                            });
+                            return false ;		//当表单验证不通过的时候 必须要return false
+                        }
+                    } ,
+                    success:function(result){
+                        $("#roomDialog").dialog("close");
+                        $("#dg").datagrid("clearSelections");
+                        $("#dg").datagrid("reload");
+                        $("#roomForm").form("clear");
+                        var result = $.parseJSON(result);
+                        $.messager.show({
+                            title:result.status ,
+                            msg:result.message
+                        });
+                    }
+                });
+            });
+
+            $("#cancel").click(function () {
+                $("#roomForm").form("clear");
+            });
+
+        });
     </script>
 </head>
 <body>
     <div>
-        <table id="roomDatagrid"></table>
+        <table id="dg"></table>
     </div>
 
     <div id="roomDialog" style="display:none;">
         <form id="roomForm"  method="post">
             <input type="hidden" name="id">
             <table>
+                <tr>
+                    <td>宿舍号：</td>
+                    <td><input id="roomNumber" name="roomNumber" class="easyui-numberbox" value="" required="true" validType="length[4,4]" missingMessage="宿舍号必填" invalidMessage="宿舍号必须为4位"></td>
+                </tr>
                 <tr>
                     <td>宿舍楼号：</td>
                     <td><input id="building_no" name="building_no" value="" ></td>
@@ -151,39 +185,31 @@
                             $("#building_no").combobox({
                                 url:'${pageContext.request.contextPath}/dormitory/findAllDormitories.action',
                                 valueField:'buildingNo',
-                                textField:'buildingNo',
-                                onChange:function (newValue, oldValue) {
-                                    bulidingNo = newValue;
-                                    $("#layer").combobox({
-                                        url:'${pageContext.request.contextPath}/floor/getLayers.action?buildingNo='+bulidingNo,
-                                        valueField:'buildingNo',
-                                        textField:'buildingNo'
-                                    });
-                                }
+                                textField:'buildingNo'
                             });
-
                         });
                     </script>
                 </tr>
+
                 <tr>
-                    <td>楼层号：</td>
-                    <td><input id="layer" name="layer" class="easyui-combobox" value="" required="true" validType="length[1,1]" missingMessage="楼号必填" invalidMessage="楼层号必须为1位"></td>
+                    <td>宿舍容量：</td>
+                    <td><input id="capacity" type="text" name="capacity" class="easyui-numberbox" required="true" missingMessage="宿舍容量"/></td>
                 </tr>
                 <tr>
-                    <td>学生总数：</td>
-                    <td><input id="students" type="text" name="students" class="easyui-numberbox" /></td>
+                    <td>实际人数：</td>
+                    <td><input id="people_num" type="text" name="people_num" class="easyui-numberbox" required="true" missingMessage="实际人数必填"></td>
                 </tr>
                 <tr>
-                    <td>房间总数：</td>
-                    <td><input id="room_number" type="text" name="roomNumber" class="easyui-numberbox" required="true" missingMessage="房间总数必填"></td>
+                    <td>宿舍星级：</td>
+                    <td><input id="star_level" type="text" name="star_level" class="easyui-numberbox" required="true" missingMessage="星级必填"></td>
                 </tr>
                 <tr>
-                    <td>剩余房间数：</td>
-                    <td><input id="spaces" type="text" name="spaces" class="easyui-numberbox" required="true" missingMessage="剩余总数必填"></td>
+                    <td>宿舍分数：</td>
+                    <td><input id="score" type="text" name="score" class="easyui-numberbox" ></td>
                 </tr>
                 <tr align="center">
                     <td><a id="confirm" class="easyui-linkbutton">确定</a></td>
-                    <td><a id="cancel" class="easyui-linkbutton">取消</a></td>
+                    <td><a id="cancel" class="easyui-linkbutton">重置</a></td>
                 </tr>
             </table>
         </form>

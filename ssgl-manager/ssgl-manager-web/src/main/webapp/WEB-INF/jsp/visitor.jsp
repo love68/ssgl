@@ -12,7 +12,7 @@
     <script>
         $(function () {
 
-
+            var flag = "";
             $("#visitorDatagrid").datagrid({
                 title: '访客管理',
                 url: '${pageContext.request.contextPath}/visitor/selectVisitorsPage.action',
@@ -21,15 +21,13 @@
                         text: '新增访客',
                         iconCls: "icon-add",
                         handler: function () {
-
+                            flag = "add";
+                            $("#visitorDialog").dialog({
+                                title:"添加房间"
+                            });
+                            $("#visitorDialog").dialog("open");
                         }
-                    }, {
-                        text: '修改访客',
-                        iconCls: "icon-edit",
-                        handler: function () {
-
-                        }
-                    }, {
+                    },{
                         text: '查找访客',
                         iconCls: "icon-search",
                         handler: function () {
@@ -53,8 +51,57 @@
     </script>
 </head>
 <body>
-<div>
-    <table id="visitorDatagrid"></table>
-</div>
+    <div>
+        <table id="visitorDatagrid"></table>
+    </div>
+
+    <div id="roomDialog" style="display:none;">
+        <form id="roomForm"  method="post">
+            <input type="hidden" name="id">
+            <table>
+                <tr>
+                    <td>宿舍号：</td>
+                    <td><input id="roomNumber" name="roomNumber" class="easyui-numberbox" value="" required="true" validType="length[4,4]" missingMessage="宿舍号必填" invalidMessage="宿舍号必须为4位"></td>
+                </tr>
+                <tr>
+                    <td>宿舍楼号：</td>
+                    <td><input id="building_no" name="building_no" value="" ></td>
+                    <script>
+                        $(function () {
+                            var bulidingNo = "";
+                            $("#building_no").combobox({
+                                url:'${pageContext.request.contextPath}/dormitory/findAllDormitories.action',
+                                valueField:'buildingNo',
+                                textField:'buildingNo'
+                            });
+                        });
+                    </script>
+                </tr>
+
+                <tr>
+                    <td>宿舍容量：</td>
+                    <td><input id="capacity" type="text" name="capacity" class="easyui-numberbox" required="true" missingMessage="宿舍容量"/></td>
+                </tr>
+                <tr>
+                    <td>实际人数：</td>
+                    <td><input id="people_num" type="text" name="people_num" class="easyui-numberbox" required="true" missingMessage="实际人数必填"></td>
+                </tr>
+                <tr>
+                    <td>宿舍星级：</td>
+                    <td><input id="star_level" type="text" name="star_level" class="easyui-numberbox" required="true" missingMessage="星级必填"></td>
+                </tr>
+                <tr>
+                    <td>宿舍分数：</td>
+                    <td><input id="score" type="text" name="score" class="easyui-numberbox" ></td>
+                </tr>
+                <tr align="center">
+                    <td><a id="confirm" class="easyui-linkbutton">确定</a></td>
+                    <td><a id="cancel" class="easyui-linkbutton">重置</a></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+
 </body>
 </html>

@@ -1,7 +1,6 @@
 package com.ssgl.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
 import com.ssgl.bean.Room;
@@ -59,7 +58,7 @@ public class RoomController {
             return new Result("ok","添加成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("ok","添加失败");
+            return new Result("error","添加失败");
         }
     }
 
@@ -71,7 +70,7 @@ public class RoomController {
             return new Result("ok","修改成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("ok","修改失败");
+            return new Result("error","修改失败");
         }
     }
 

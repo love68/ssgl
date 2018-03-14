@@ -10,9 +10,17 @@
 <html>
 <head>
     <script>
-        $(function () {
 
-            var flag = "";
+        $.extend($.fn.validatebox.defaults.rules, {
+            idcardRule: {
+                validator: function(value,param){
+                    return value.length == param[0];
+                },
+                message: '请输入正确的身份证号'
+            }
+        });
+
+        $(function () {
             $("#visitorDatagrid").datagrid({
                 title: '访客管理',
                 url: '${pageContext.request.contextPath}/visitor/selectVisitorsPage.action',
@@ -21,7 +29,6 @@
                         text: '新增访客',
                         iconCls: "icon-add",
                         handler: function () {
-                            flag = "add";
                             $("#visitorDialog").dialog({
                                 title:"添加房间"
                             });
@@ -33,6 +40,12 @@
                         handler: function () {
 
                         }
+                    },{
+                        iconCls: 'icon-reload',
+                        text: '刷新',
+                        handler: function () {
+                            $("#visitorDatagrid").datagrid("reload");
+                        }
                     }
                 ],
                 columns: [[
@@ -42,10 +55,43 @@
                     {field: 'visitStudentName', title: '要找学生姓名', width: 100, align: 'right'},
                     {field: 'phone', title: '手机号', width: 100, align: 'right'},
                     {field: 'content', title: '来访事由', width: 100, align: 'right'}
-                ]]
+                ]],
+                pagination:true
 
             });
+            $("#confirm").click(function () {
+                $('#visitorForm').form("submit",{
+                    url:'${pageContext.request.contextPath}/visitor/addVisitor.action',
+                    onSubmit:function(){
+                        if(!$('#visitorForm').form('validate')){
+                            $.messager.show({
+                                title:'提示信息' ,
+                                msg:'验证没有通过,不能提交表单!'
+                            });
+                            return false ;		//当表单验证不通过的时候 必须要return false
+                        }
+                    } ,
+                    success:function(result){
+                        //关闭对话框
+                        $("#visitorDialog").dialog("close");
+                        //刷新数据表格
+                        $("#dg").datagrid("reload");
+                        //清空所选项
+                        $("#dg").datagrid("clearSelections");
+                        //清空表单
+                        $("#visitorForm").form("clear");
+                        var result = $.parseJSON(result);
+                        $.messager.show({
+                            title:result.status ,
+                            msg:result.message
+                        });
+                    }
+                });
+            });
 
+            $("#cancel").click(function () {
+                $("#visitorForm").form("clear");
+            });
         });
 
     </script>
@@ -55,44 +101,34 @@
         <table id="visitorDatagrid"></table>
     </div>
 
-    <div id="roomDialog" style="display:none;">
-        <form id="roomForm"  method="post">
+    <div id="visitorDialog" style="display:none;">
+        <form id="visitorForm"  method="post">
             <input type="hidden" name="id">
             <table>
                 <tr>
-                    <td>宿舍号：</td>
-                    <td><input id="roomNumber" name="roomNumber" class="easyui-numberbox" value="" required="true" validType="length[4,4]" missingMessage="宿舍号必填" invalidMessage="宿舍号必须为4位"></td>
+                    <td>身份证号：</td>
+                    <td><input id="visiterId" name="visiterId" value=""class="easyui-textbox" required="true" data-options="validType:'idcardRule[18]'" missingMessage="身份号必填" invalidMessage="身份号必须为18位"></td>
                 </tr>
                 <tr>
-                    <td>宿舍楼号：</td>
-                    <td><input id="building_no" name="building_no" value="" ></td>
-                    <script>
-                        $(function () {
-                            var bulidingNo = "";
-                            $("#building_no").combobox({
-                                url:'${pageContext.request.contextPath}/dormitory/findAllDormitories.action',
-                                valueField:'buildingNo',
-                                textField:'buildingNo'
-                            });
-                        });
-                    </script>
+                    <td>访客姓名：</td>
+                    <td><input id="name" name="name" value="" class="easyui-textbox" required="true" missingMessage="访客姓名必填"></td>
                 </tr>
 
                 <tr>
-                    <td>宿舍容量：</td>
-                    <td><input id="capacity" type="text" name="capacity" class="easyui-numberbox" required="true" missingMessage="宿舍容量"/></td>
+                    <td>访问人：</td>
+                    <td><input id="visitStudentName" type="text" class="easyui-textbox" name="visitStudentName" required="true" missingMessage="必填"/></td>
                 </tr>
                 <tr>
-                    <td>实际人数：</td>
-                    <td><input id="people_num" type="text" name="people_num" class="easyui-numberbox" required="true" missingMessage="实际人数必填"></td>
+                    <td>到访时间：</td>
+                    <td><input id="visitTime" type="text" name="visitTime" class="easyui-datetimebox" data-options="editable:false" required="true" missingMessage="到访时间必填"></td>
                 </tr>
                 <tr>
-                    <td>宿舍星级：</td>
-                    <td><input id="star_level" type="text" name="star_level" class="easyui-numberbox" required="true" missingMessage="星级必填"></td>
+                    <td>手机号码：</td>
+                    <td><input id="phone" type="text" name="phone" class="easyui-numberbox" required="true" validType="length[11,11]" missingMessage="手机号必填" invalidMessage="手机号必须为11位数字"></td>
                 </tr>
                 <tr>
-                    <td>宿舍分数：</td>
-                    <td><input id="score" type="text" name="score" class="easyui-numberbox" ></td>
+                    <td>到访事由：</td>
+                    <td><input id="content" type="text" name="content" class="easyui-textbox" required="true" ></td>
                 </tr>
                 <tr align="center">
                     <td><a id="confirm" class="easyui-linkbutton">确定</a></td>

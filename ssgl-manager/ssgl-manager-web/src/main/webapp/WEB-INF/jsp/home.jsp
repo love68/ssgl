@@ -168,6 +168,27 @@
                         <div style="font-size: 14px;margin-top: 5px;margin-left: 16px;">访客管理</div>
                     </div>
                 </a>
+                <script>
+                    $(function(){
+                        $("a").click(function () {
+                            var title = $(this).text();
+                            title = $.trim(title);
+                            if("访客管理" == title){
+                                //查看该选项卡是否已经打开
+                                var flag = $("#tt").tabs("exists",title);
+                                //如果未打开
+                                if(!flag){
+                                    //打开选项卡
+                                    $("#tt").tabs("add",{
+                                        "title" : title,
+                                        "closable" : true,
+                                        "content":'<iframe frameborder=0 style=width:100%;height:100% src='+ "${pageContext.request.contextPath}/visitor/toManagerVisitorUI.action" +' ></iframe>'
+                                    });
+                                }
+                            }
+                        })
+                    });
+                </script>
             </div>
             <div title="管理员管理">
                 <a id="glygl">

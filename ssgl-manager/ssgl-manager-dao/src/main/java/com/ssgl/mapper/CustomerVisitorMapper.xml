@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssgl.mapper.CustomerVisitorMapper">
+
+    <resultMap id="visitorMap" type="com.ssgl.bean.Visiter">
+        <id column="id" property="id"></id>
+        <result column="visiter_id" property="visiterId"></result>
+        <result column="name" property="name"></result>
+        <result column="visit_time" property="visitTime"></result>
+        <result column="visit_student_name" property="visitStudentName"></result>
+        <result column="phone" property="phone"></result>
+        <result column="content" property="content"></result>
+    </resultMap>
+
+    <select id="selectAllVisitor" resultMap="visitorMap">
+        SELECT * FROM visiter
+    </select>
+
+</mapper>

@@ -6,6 +6,7 @@ import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
 import com.ssgl.bean.Visiter;
 import com.ssgl.bean.VisiterExample;
+import com.ssgl.mapper.CustomerVisitorMapper;
 import com.ssgl.mapper.VisiterMapper;
 import com.ssgl.service.VisitorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class VisitorServiceImpl implements VisitorService {
 
     @Autowired
     public VisiterMapper visiterMapper;
+    @Autowired
+    public CustomerVisitorMapper customerVisitorMapper;
+
 
     @Override
     public Result addVisitor(Visiter visiter) throws Exception {
@@ -28,10 +32,11 @@ public class VisitorServiceImpl implements VisitorService {
     @Override
     public Page<Visiter> selectVisitorsPage(Integer page, Integer rows) throws Exception {
         PageHelper.startPage(page, rows);
-        VisiterExample example = new VisiterExample();
-        List<Visiter> dormitories = visiterMapper.selectByExample(example);
-        if (null != dormitories && dormitories.size() > 0) {
-            PageInfo<Visiter> pageInfo = new PageInfo<Visiter>(dormitories);
+//        VisiterExample example = new VisiterExample();
+//        List<Visiter> visiters = visiterMapper.selectByExample(example);
+        List<Visiter> visiters = customerVisitorMapper.selectAllVisitor();
+        if (null != visiters && visiters.size() > 0) {
+            PageInfo<Visiter> pageInfo = new PageInfo<Visiter>(visiters);
             Page<Visiter> result = new Page<>();
             result.setTotalRecord((int) pageInfo.getTotal());
             result.setList(pageInfo.getList());

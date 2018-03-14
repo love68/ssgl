@@ -38,7 +38,8 @@
                         text: '查找访客',
                         iconCls: "icon-search",
                         handler: function () {
-
+                            console.log("xxxx");
+                            $("#cc").layout("expand","north");
                         }
                     },{
                         iconCls: 'icon-reload',
@@ -50,11 +51,11 @@
                 ],
                 columns: [[
                     {field: 'name', title: '访客姓名', width: 100},
-                    {field: 'visiterId', title: '身份证号', width: 100},
-                    {field: 'visitTime', title: '来访时间', width: 100},
+                    {field: 'visiterId', title: '身份证号', width: 200},
+                    {field: 'visitTime', title: '来访时间', width: 200},
                     {field: 'visitStudentName', title: '要找学生姓名', width: 100, align: 'right'},
                     {field: 'phone', title: '手机号', width: 100, align: 'right'},
-                    {field: 'content', title: '来访事由', width: 100, align: 'right'}
+                    {field: 'content', title: '来访事由', width: 500, align: 'right'}
                 ]],
                 pagination:true
 
@@ -92,14 +93,50 @@
             $("#cancel").click(function () {
                 $("#visitorForm").form("clear");
             });
+
+            $("#btn1").click(function () {
+                $('#visitorDatagrid').datagrid('load' ,serializeForm($('#mysearch')));
+            });
+
+            $("#btn2").click(function () {
+                $("#mysearch").form("clear");
+            });
+
+            //js方法：序列化表单
+            function serializeForm(form){
+                var obj = {};
+                $.each(form.serializeArray(),function(index){
+                    if(obj[this['name']]){
+                        obj[this['name']] = obj[this['name']] + ','+this['value'];
+                    } else {
+                        obj[this['name']] =this['value'];
+                    }
+                });
+                return obj;
+            }
+
         });
 
     </script>
 </head>
 <body>
-    <div>
-        <table id="visitorDatagrid"></table>
+
+    <div id="cc" class="easyui-layout" style="width:100%;height:100%;">
+        <div id="serarchDiv" data-options="region:'north',title:'查询',split:true,collapsed:true"style="height:100px;" >
+            <form id="mysearch" method="post">
+                访客姓名：<input  name="name" value="" class="easyui-textbox" >
+                访问人：<input  type="text" class="easyui-textbox" name="visitStudentName" />
+                到访时间（开始）：<input  type="text" name="startVisitTime" class="easyui-datetimebox" data-options="editable:false">
+                到访时间（结束）：<input  type="text" name="endVisitTime" class="easyui-datetimebox" data-options="editable:false">
+                <a class="easyui-linkbutton" id="btn1">搜索</a>
+                <a class="easyui-linkbutton" id="btn2">清空</a>
+            </form>
+        </div>
+        <div data-options="region:'center',split:true" style="height:100px;">
+            <table id="visitorDatagrid"></table>
+        </div>
     </div>
+
 
     <div id="visitorDialog" style="display:none;">
         <form id="visitorForm"  method="post">

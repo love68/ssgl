@@ -41,12 +41,20 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public Result deleteRoom(String id) throws Exception {
+        roomMapper.deleteByPrimaryKey(id);
+        return new Result("ok", "删除成功");
+    }
+
+    @Override
     public void updateRoom(Room room) throws Exception {
         Room oldRoom = roomMapper.selectByPrimaryKey(room.getId());
 
         //更新数据
-        oldRoom.setStarLevel(room.getStarLevel());
-        oldRoom.setScore(room.getScore());
+        oldRoom.setStarLevel(room.getStarLevel());//更改星级
+        oldRoom.setPeopleNum(room.getPeopleNum());//更改实际人数
+        oldRoom.setScore(room.getScore());//更改分数
+        oldRoom.setCapacity(room.getCapacity());//更改容量
 
         //写回到数据库
         int r = roomMapper.updateByPrimaryKey(oldRoom);

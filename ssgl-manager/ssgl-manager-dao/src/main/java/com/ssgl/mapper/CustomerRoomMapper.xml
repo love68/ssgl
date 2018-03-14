@@ -1,25 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ssgl.mapper.CustomerDormitoryMapper" >
-
-    <select id="selectDormitory" parameterType="int" resultType="com.ssgl.bean.Dormitory">
-        SELECT * FROM dormitory WHERE building_no=#{building_no}
-    </select>
-
-    <delete id="deleteDormitories">
-        delete from dormitory where id in
-        <foreach collection="list" item="item" separator="," open="(" close=")" index="index">
+<mapper namespace="com.ssgl.mapper.CustomerRoomMapper">
+    <delete id="deleteRooms">
+        delete from room where room.id in
+        <foreach collection="list" index="index" open="(" close=")" separator="," item="item">
             #{item}
         </foreach>
     </delete>
-
-    <select id="selectLayerByBuidingNo" parameterType="int" resultType="int">
-        SELECT
-            floors
-        FROM
-            dormitory
-        WHERE
-            dormitory.building_no = #{buildingNo}
-    </select>
-
 </mapper>

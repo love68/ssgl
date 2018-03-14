@@ -50,17 +50,22 @@ public class RoomController {
         return "room";
     }
 
+    @ResponseBody
     @RequestMapping(value = "addRoom")
-    public void addRoom(Room room){
+    public Result addRoom(Room room){
         try {
             room.setId(Util.makeId());
             roomService.addRoom(room);
+            return new Result("ok","添加成功");
         } catch (Exception e) {
-            throw new RuntimeException("出错了");
+            e.printStackTrace();
+            return new Result("ok","添加失败");
         }
     }
-    @RequestMapping(value = "deleteRoom")
-    public Result deleteRoom(HttpServletRequest request){
+
+    @ResponseBody
+    @RequestMapping(value = "deleteRooms")
+    public Result deleteRooms(HttpServletRequest request){
         try {
             return roomService.deleteRooms(StringUtils.stringConvertList(request.getParameter("ids")));
         } catch (Exception e) {

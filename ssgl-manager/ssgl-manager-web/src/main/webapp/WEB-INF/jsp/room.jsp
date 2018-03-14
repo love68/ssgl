@@ -147,9 +147,13 @@
                         }
                     } ,
                     success:function(result){
+                        //关闭对话框
                         $("#roomDialog").dialog("close");
-                        $("#dg").datagrid("clearSelections");
+                        //刷新数据表格
                         $("#dg").datagrid("reload");
+                        //清空所选项
+                        $("#dg").datagrid("clearSelections");
+                        //清空表单
                         $("#roomForm").form("clear");
                         var result = $.parseJSON(result);
                         $.messager.show({

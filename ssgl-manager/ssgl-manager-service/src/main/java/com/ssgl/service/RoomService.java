@@ -16,8 +16,21 @@ public interface RoomService {
      */
     Page<Room> selectRoomPage(Integer page, Integer rows) throws Exception;
 
+    /**
+     * 批量删除房间
+     * @param ids
+     * @return
+     * @throws Exception
+     */
     Result deleteRooms(List<String> ids) throws Exception;
 
+    /**
+     * 单个删除房间
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    Result deleteRoom(String id) throws Exception;
     /**
      * 更新房间信息
      * @param room
@@ -26,4 +39,7 @@ public interface RoomService {
     void updateRoom(Room room) throws Exception;
 
     void addRoom(Room room) throws Exception;
+
+
+
 }

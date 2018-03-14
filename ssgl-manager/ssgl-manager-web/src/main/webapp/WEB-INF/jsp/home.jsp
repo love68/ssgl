@@ -162,6 +162,13 @@
                     })
                 </script>
             </div>
+            <div title="访客管理">
+                <a id="fkgl">
+                    <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;">
+                        <div style="font-size: 14px;margin-top: 5px;margin-left: 16px;">访客管理</div>
+                    </div>
+                </a>
+            </div>
             <div title="管理员管理">
                 <a id="glygl">
                     <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;">

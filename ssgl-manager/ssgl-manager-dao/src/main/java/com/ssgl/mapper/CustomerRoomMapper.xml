@@ -7,4 +7,7 @@
             #{item}
         </foreach>
     </delete>
+    <delete id="deleteRoom" parameterType="string">
+        delete from room where id=#{id}
+    </delete>
 </mapper>

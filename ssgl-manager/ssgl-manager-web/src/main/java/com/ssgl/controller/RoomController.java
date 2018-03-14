@@ -64,10 +64,23 @@ public class RoomController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "editRoom")
+    public Result editRoom(Room room){
+        try {
+            roomService.updateRoom(room);
+            return new Result("ok","修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("ok","修改失败");
+        }
+    }
+
+    @ResponseBody
     @RequestMapping(value = "deleteRooms")
     public Result deleteRooms(HttpServletRequest request){
         try {
             return roomService.deleteRooms(StringUtils.stringConvertList(request.getParameter("ids")));
+//            return roomService.deleteRoom(request.getParameter("ids"));
         } catch (Exception e) {
             e.printStackTrace();
             return new Result("error","删除失败");

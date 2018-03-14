@@ -96,6 +96,7 @@
                                 })
                                 $("#roomDialog").dialog("open");
                                 $("#roomForm").form("load",{
+                                    id:arr[0].id,
                                     dormitoryNum:arr[0].dormitoryNum,
                                     score:arr[0].score,
                                     starLevel:arr[0].starLevel,
@@ -128,9 +129,7 @@
                     {field:'starLevel',title:'宿舍星级',width:100,align:'right'},
                     {field:'score',title:'宿舍评分',width:100,align:'right'},
                 ]],
-                pagination:true,
-                pageSize:5,
-                pageList:[5,10,15,20]
+                pagination:true
             });
 
 

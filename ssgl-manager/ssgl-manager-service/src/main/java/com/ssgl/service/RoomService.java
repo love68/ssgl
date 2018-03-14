@@ -38,6 +38,11 @@ public interface RoomService {
      */
     void updateRoom(Room room) throws Exception;
 
+    /**
+     * 添加房间
+     * @param room
+     * @throws Exception
+     */
     void addRoom(Room room) throws Exception;
 
 

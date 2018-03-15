@@ -12,7 +12,28 @@
     <title>房间管理</title>
     <script>
         $(function () {
+            $("#btn1").click(function () {
+                $('#dg').datagrid('load' ,serializeForm($('#mysearch')));
+            });
 
+            $("#btn2").click(function () {
+                $("#mysearch").form("clear");
+            });
+            $("#cancel").click(function () {
+                $("#roomForm").form("clear");
+            });
+            //js方法：序列化表单
+            function serializeForm(form){
+                var obj = {};
+                $.each(form.serializeArray(),function(index){
+                    if(obj[this['name']]){
+                        obj[this['name']] = obj[this['name']] + ','+this['value'];
+                    } else {
+                        obj[this['name']] =this['value'];
+                    }
+                });
+                return obj;
+            }
             var flag = "";
             $("#roomDialog").dialog({
                 title:'添加楼层',
@@ -161,30 +182,12 @@
                         });
                     }
                 });
-            });
-            $("#btn1").click(function () {
-                $('#visitorDatagrid').datagrid('load' ,serializeForm($('#mysearch')));
-            });
 
-            $("#btn2").click(function () {
-                $("#mysearch").form("clear");
+
             });
-            $("#cancel").click(function () {
-                $("#roomForm").form("clear");
-            });
-            //js方法：序列化表单
-            function serializeForm(form){
-                var obj = {};
-                $.each(form.serializeArray(),function(index){
-                    if(obj[this['name']]){
-                        obj[this['name']] = obj[this['name']] + ','+this['value'];
-                    } else {
-                        obj[this['name']] =this['value'];
-                    }
-                });
-                return obj;
-            }
-        });
+});
+
+
     </script>
 </head>
 <body>

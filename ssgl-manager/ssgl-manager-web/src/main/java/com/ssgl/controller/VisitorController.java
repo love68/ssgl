@@ -37,10 +37,9 @@ public class VisitorController {
 
     @ResponseBody
     @RequestMapping(value = "selectVisitorsPage" ,produces = "text/json;charset=utf-8")
-    public String selectVisitorsPage(Integer page, Integer rows, HttpServletRequest request, HttpServletResponse response){
+    public String selectVisitorsPage(Integer page, Integer rows, HttpServletRequest request){
         try {
             Page<Visiter> result = visitorService.selectVisitorsPage(page,rows,request);
-            response.setContentType("text/html;charset=UTF-8");
             Map<String,Object> map = new HashMap<>();
             if(null!=request){
                 map.put("total",result.getTotalRecord());

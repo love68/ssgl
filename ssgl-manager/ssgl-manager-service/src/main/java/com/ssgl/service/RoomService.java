@@ -4,6 +4,7 @@ import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
 import com.ssgl.bean.Room;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface RoomService {
@@ -14,7 +15,7 @@ public interface RoomService {
      * @return
      * @throws Exception
      */
-    Page<Room> selectRoomPage(Integer page, Integer rows) throws Exception;
+    Page<Room> selectRoomPage(Integer page, Integer rows,HttpServletRequest request) throws Exception;
 
     /**
      * 批量删除房间

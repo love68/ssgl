@@ -32,9 +32,9 @@ public class RoomController {
 
     @ResponseBody
     @RequestMapping(value = "selectRoomsPage",produces = "text/json;utf-8")
-    public String selectRoomsPage(Integer page,Integer rows){
+    public String selectRoomsPage(Integer page,Integer rows, HttpServletRequest request){
         try {
-            Page<Room> result = roomService.selectRoomPage(page,rows);
+            Page<Room> result = roomService.selectRoomPage(page,rows,request);
             Map<String,Object> map = new HashMap<>();
             map.put("total",result.getTotalRecord());
             map.put("rows",result.getList());

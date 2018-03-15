@@ -12,6 +12,7 @@ import com.ssgl.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +25,14 @@ public class RoomServiceImpl implements RoomService {
     public CustomerRoomMapper customerRoomMapper;
 
     @Override
-    public Page<Room> selectRoomPage(Integer page, Integer rows) throws Exception {
+    public Page<Room> selectRoomPage(Integer page, Integer rows, HttpServletRequest request) throws Exception {
         PageHelper.startPage(page, rows);
         RoomExample example = new RoomExample();
+        String roomNumber = request.getParameter("roomNumber");
+        if (null != roomNumber && roomNumber.length()>0) {
+            example.createCriteria().andRoomNumberEqualTo(roomNumber);
+        }
+        example.setOrderByClause("room_number ASC");
         List<Room> roomList = roomMapper.selectByExample(example);
         PageInfo<Room> pageInfo = new PageInfo<Room>(roomList);
         Page<Room> result = new Page<>();

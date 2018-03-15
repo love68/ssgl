@@ -37,7 +37,10 @@ public class VisitorServiceImpl implements VisitorService {
         VisiterExample example = new VisiterExample();
         String name = request.getParameter("name");
         String visitStudentName = request.getParameter("visitStudentName");
-        String startVisitTime = Util.getDateTime(request.getParameter("startVisitTime"));
+        String startVisitTime = request.getParameter("startVisitTime");
+        if(null==startVisitTime||startVisitTime.trim().equals("")){
+            startVisitTime="1949-10-01 12:49:10";
+        }
         String endVisitTime = Util.getDateTime(request.getParameter("endVisitTime"));
         List<Visiter> visiters = customerVisitorMapper.selectAllVisitor(name,visitStudentName,startVisitTime,endVisitTime);
         /*if (null != name && name.trim().length()>0) {

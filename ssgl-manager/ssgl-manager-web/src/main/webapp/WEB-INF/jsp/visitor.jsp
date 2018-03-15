@@ -55,7 +55,7 @@
                     {field: 'visitTime', title: '来访时间', width: 200},
                     {field: 'visitStudentName', title: '要找学生姓名', width: 100, align: 'right'},
                     {field: 'phone', title: '手机号', width: 100, align: 'right'},
-                    {field: 'content', title: '来访事由', width: 500, align: 'right'}
+                    {field: 'content', title: '来访事由', width: 600, align: 'right'}
                 ]],
                 pagination:true
 

@@ -40,7 +40,7 @@ public class Util {
     }
 
     public static String getDateTime(String time){
-		if(null==time){
+		if(null==time||time.trim().equals("")){
 			return new Date().toString();
 		}
 		return time;

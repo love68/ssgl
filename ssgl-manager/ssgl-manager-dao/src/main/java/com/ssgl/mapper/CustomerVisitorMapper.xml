@@ -16,7 +16,10 @@
         SELECT * FROM visiter
         <where>
             <if test="name!=null and name!=''">AND name = #{name}</if>
+            <if test="visitStudentName!=null and visitStudentName!=''">AND visit_student_name = #{visitStudentName}</if>
+            <if test="startVisitTime!=null and endVisitTime!=''">AND visit_time BETWEEN #{startVisitTime} AND #{endVisitTime}</if>
         </where>
+        ORDER BY visit_time DESC
     </select>
 
 </mapper>

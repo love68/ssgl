@@ -76,9 +76,9 @@
                         //关闭对话框
                         $("#visitorDialog").dialog("close");
                         //刷新数据表格
-                        $("#dg").datagrid("reload");
+                        $("#visitorDialog").datagrid("reload");
                         //清空所选项
-                        $("#dg").datagrid("clearSelections");
+                        $("#visitorDialog").datagrid("clearSelections");
                         //清空表单
                         $("#visitorForm").form("clear");
                         var result = $.parseJSON(result);

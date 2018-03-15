@@ -14,6 +14,9 @@
 
     <select id="selectAllVisitor" resultMap="visitorMap">
         SELECT * FROM visiter
+        <where>
+            <if test="name!=null and name!=''">AND name = #{name}</if>
+        </where>
     </select>
 
 </mapper>

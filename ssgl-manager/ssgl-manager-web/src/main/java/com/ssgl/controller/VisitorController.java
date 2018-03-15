@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,13 +36,18 @@ public class VisitorController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "selectVisitorsPage")
-    public String selectVisitorsPage(Integer page,Integer rows){
+    @RequestMapping(value = "selectVisitorsPage" ,produces = "text/json;charset=utf-8")
+    public String selectVisitorsPage(Integer page, Integer rows, HttpServletRequest request, HttpServletResponse response){
         try {
-            Page<Visiter> result = visitorService.selectVisitorsPage(page,rows);
+            Page<Visiter> result = visitorService.selectVisitorsPage(page,rows,request);
+            response.setContentType("text/html;charset=UTF-8");
             Map<String,Object> map = new HashMap<>();
-            map.put("total",result.getTotalRecord());
-            map.put("rows",result.getList());
+            if(null!=request){
+                map.put("total",result.getTotalRecord());
+                map.put("rows",result.getList());
+                System.out.println(JSONObject.toJSONString(map));
+                return JSONObject.toJSONString(map);
+            }
             return JSONObject.toJSONString(map);
         } catch (Exception e) {
             throw new RuntimeException("出错了。。。");
@@ -52,7 +59,7 @@ public class VisitorController {
     public Result addVisitor(Visiter visiter){
         try {
             visiter.setId(Util.makeId());
-           return visitorService.addVisitor(visiter);
+            return visitorService.addVisitor(visiter);
         }catch (Exception e){
             e.printStackTrace();
             return new Result("error","添加失败");

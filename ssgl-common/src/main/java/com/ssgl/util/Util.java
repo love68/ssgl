@@ -39,4 +39,11 @@ public class Util {
         return format.format(d);
     }
 
+    public static String getDateTime(String time){
+		if(null==time){
+			return new Date().toString();
+		}
+		return time;
+	}
+
 }

@@ -12,6 +12,7 @@ import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
 import com.ssgl.bean.TUser;
 import com.ssgl.service.UserService;
+import com.ssgl.util.MD5Utils;
 import com.ssgl.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,7 +49,7 @@ public class UserController {
     public Result addUser(TUser user) {
         try {
             user.setId(String.valueOf(Util.makeId()));
-            System.out.println(user);
+            user.setPassword(MD5Utils.md5(user.getPassword()));
             return userService.addUser(user);
         } catch (Exception e) {
             e.printStackTrace();

@@ -34,6 +34,7 @@
                             $("#userDialog").dialog({
                                 title:"添加管理员"
                             });
+                            $("#userForm").form("clear");
                             $("#userDialog").dialog("open");
                         }
                     },{
@@ -118,10 +119,24 @@
                     }
                 ],
                 columns: [[
+                    {field:"ck",title:"选择",checkbox:true},
                     {field: 'username', title: '管理员姓名', width: 100},
-                    {field: 'password', title: '密码', width: 100},
-                    {field: 'birthday', title: '生日', width: 100},
-                    {field: 'gender', title: '性别', width: 100, align: 'right'},
+                    {field: 'password', title: '密码', width: 100,formatter:function (value,row,index) {
+                        return "******";
+                    }},
+                    {field: 'birthday', title: '生日', width: 100,
+                        formatter: function (value, row, index) {
+                            var time = new Date(value);
+                            return time.toLocaleDateString();
+                        }},
+                    {field: 'gender', title: '性别', width: 100, align: 'right',
+                        formatter: function (value, row, index) {
+                            if(value==1){
+                               return '男';
+                            }else if(value==0){
+                                return '<span style=color:red; >女</span>';
+                            }
+                        }},
                     {field: 'telephone', title: '手机号', width: 100, align: 'right'},
                     {field: 'remark', title: '评价', width: 100, align: 'right'},
                     {field: 'email', title: '邮箱', width: 100, align: 'right'}
@@ -163,7 +178,7 @@
                 $("#userForm").form("clear");
             });
             $("#btn2").click(function () {
-                $("#userForm").form("clear");
+                $("#mysearch").form("clear");
             });
 
             $("#btn1").click(function () {
@@ -191,7 +206,7 @@
     <div id="cc" class="easyui-layout" style="width:100%;height:100%;">
         <div id="serarchDiv" data-options="region:'north',title:'查询',split:true,collapsed:true"style="height:100px;" >
             <form id="mysearch" method="post">
-                用户名：<input name="username" class="easyui-numberbox" value="">
+                用户名：<input name="username" type="text" value="">
                 <a class="easyui-linkbutton" id="btn1">搜索</a>
                 <a class="easyui-linkbutton" id="btn2">清空</a>
             </form>
@@ -225,15 +240,15 @@
             </tr>
             <tr>
                 <td>电话：</td>
-                <td><input id="telephone" type="text" name="telephone" value=""></td>
+                <td><input id="telephone" type="text" name="telephone" value="" class="easyui-numberbox" required="true" validType="length[11,11]"missingMessage="手机号必填" invalidMessage="手机号必须为11位数字"missingMessage="手机号必填" ></td>
             </tr>
             <tr>
                 <td>评价：</td>
-                <td><input id="remark" type="text" name="remark" class="easyui-textbox" required="true" missingMessage="评价必填"></td>
+                <td><input id="remark" type="text" name="remark" value="" class="easyui-textbox" required="true" missingMessage="评价必填"></td>
             </tr>
             <tr>
                 <td>邮箱：</td>
-                <td><input id="email" type="text" name="email" class="easyui-validatebox" data-options="required:true,validType:'email'"></td>
+                <td><input id="email" type="text" name="email" value="" class="easyui-textbox" data-options="required:true,validType:'email'"></td>
             </tr>
             <tr align="center">
                 <td><a id="confirm" class="easyui-linkbutton">确定</a></td>

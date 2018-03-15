@@ -3,6 +3,9 @@
 <mapper namespace="com.ssgl.mapper.CustomerUserMapper">
     <select id="selectUsers" resultType="com.ssgl.bean.TUser">
         SELECT * FROM t_user
+        <where>
+            <if test="username!=null and username!=''">and username=#{username}</if>
+        </where>
     </select>
 
 </mapper>

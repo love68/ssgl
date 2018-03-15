@@ -41,6 +41,7 @@
                             $("#floorDialog").dialog({
                                 title:"添加楼层"
                             });
+                            $("#floorForm").form("clear");
                             $("#floorDialog").dialog("open");
                         }
                     },{

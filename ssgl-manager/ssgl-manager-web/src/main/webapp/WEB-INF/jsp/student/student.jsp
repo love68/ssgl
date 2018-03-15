@@ -180,7 +180,7 @@
                         iconCls: 'icon-search',
                         text: '查找学生',
                         handler: function () {
-
+                            $("#cc").layout("expand","north");
                         }
                     }, {
                         iconCls: 'icon-reload',
@@ -191,14 +191,45 @@
                     }
                 ]
             });
+
+
+            $("#cancel").click(function () {
+                $("#visitorForm").form("clear");
+            });
+
+            $("#btn1").click(function () {
+                $('#visitorDatagrid').datagrid('load' ,serializeForm($('#mysearch')));
+            });
+
+            //js方法：序列化表单
+            function serializeForm(form){
+                var obj = {};
+                $.each(form.serializeArray(),function(index){
+                    if(obj[this['name']]){
+                        obj[this['name']] = obj[this['name']] + ','+this['value'];
+                    } else {
+                        obj[this['name']] =this['value'];
+                    }
+                });
+                return obj;
+            }
         });
     </script>
 </head>
 <body>
 
-<div>
-    <table id="dg"></table>
-</div>
+    <div id="cc" class="easyui-layout" style="width:100%;height:100%;">
+        <div id="serarchDiv" data-options="region:'north',title:'查询',split:true,collapsed:true"style="height:100px;" >
+            <form id="mysearch" method="post">
+                宿舍号：<input name="roomNumber" class="easyui-numberbox" value="">
+                <a class="easyui-linkbutton" id="btn1">搜索</a>
+                <a class="easyui-linkbutton" id="btn2">清空</a>
+            </form>
+        </div>
+        <div data-options="region:'center',split:true" style="height:100px;">
+            <table id="dg"></table>
+        </div>
+    </div>
 
 <div style="width:380px;height:480px;background: url('../../../images/form.jpg')" id="mydialog" class="easyui-dialog"
      modal="true" closed="true" title="添加学生">

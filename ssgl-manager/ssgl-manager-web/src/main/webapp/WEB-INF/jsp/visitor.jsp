@@ -38,7 +38,6 @@
                         text: '查找访客',
                         iconCls: "icon-search",
                         handler: function () {
-                            console.log("xxxx");
                             $("#cc").layout("expand","north");
                         }
                     },{
@@ -98,10 +97,6 @@
                 $('#visitorDatagrid').datagrid('load' ,serializeForm($('#mysearch')));
             });
 
-            $("#btn2").click(function () {
-                $("#mysearch").form("clear");
-            });
-
             //js方法：序列化表单
             function serializeForm(form){
                 var obj = {};
@@ -114,6 +109,10 @@
                 });
                 return obj;
             }
+            $("#btn2").click(function () {
+                $("#mysearch").form("clear");
+            });
+
 
         });
 

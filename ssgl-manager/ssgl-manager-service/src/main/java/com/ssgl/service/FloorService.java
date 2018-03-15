@@ -12,6 +12,8 @@ import com.ssgl.bean.Floor;
 import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface FloorService {
     /**
      * 添加楼层方法
@@ -23,7 +25,7 @@ public interface FloorService {
 
     String selectAllFloors() throws Exception;
 
-    Page<CustomFloor> selectFloorDormitories(Integer page, Integer rows) throws Exception;
+    Page<CustomFloor> selectFloorDormitories(Integer page, Integer rows,HttpServletRequest request) throws Exception;
 
     Result deleteFloors(String ids) throws Exception;
 

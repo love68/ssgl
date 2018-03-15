@@ -60,13 +60,16 @@ public class FloorController {
 
     @ResponseBody
     @RequestMapping(value = "selectFloorDormitories",produces = "text/json;charset=utf-8")
-    public String selectFloorDormitories(Integer page, Integer rows){
+    public String selectFloorDormitories(Integer page, Integer rows,HttpServletRequest request){
         try {
-            Page<CustomFloor> p = floorService.selectFloorDormitories(page,rows);
+            Page<CustomFloor> p = floorService.selectFloorDormitories(page,rows,request);
             Map<String, Object> map = new LinkedHashMap<>();
-            map.put("total", p.getTotalRecord());
-            map.put("rows", p.getList());
-            return JSONArray.toJSONString(map);
+            if(null!=p){
+                map.put("total", p.getTotalRecord());
+                map.put("rows", p.getList());
+                return JSONArray.toJSONString(map);
+            }
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

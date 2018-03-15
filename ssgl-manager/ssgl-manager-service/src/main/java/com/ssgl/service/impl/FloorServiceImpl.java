@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,9 +71,10 @@ public class FloorServiceImpl implements FloorService {
     }
 
     @Override
-    public com.ssgl.bean.Page<CustomFloor> selectFloorDormitories(Integer page, Integer pageSize) throws Exception {
+    public com.ssgl.bean.Page<CustomFloor> selectFloorDormitories(Integer page, Integer pageSize,HttpServletRequest request) throws Exception {
         PageHelper.startPage(page, pageSize);
-        List<CustomFloor> floors = customFloorMapper.selectFloorDormitories();
+        String buildingNo = request.getParameter("building_no");
+        List<CustomFloor> floors = customFloorMapper.selectFloorDormitories(buildingNo);
         if (null != floors && floors.size() > 0) {
             PageInfo<CustomFloor> pageInfo = new PageInfo<>(floors);
             com.ssgl.bean.Page result = new com.ssgl.bean.Page();

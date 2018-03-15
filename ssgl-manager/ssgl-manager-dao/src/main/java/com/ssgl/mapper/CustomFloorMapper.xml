@@ -13,6 +13,9 @@
 
     <select id="selectFloorDormitories" resultMap="selectFloorDormitoriesMap">
         SELECT FLOOR.*,dormitory_floor.dormitory_num FROM FLOOR LEFT JOIN dormitory_floor ON floor.id=dormitory_floor.floor_id
+        <where>
+            <if test="buildingNo!=null and buildingNo!=''">AND dormitory_num = #{buildingNo}</if>
+        </where>
     </select>
 
     <delete id="deleteFloors">

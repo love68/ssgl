@@ -117,7 +117,7 @@
                         text:'查找楼层',
                         iconCls: 'icon-search',
                         handler: function(){
-
+                            $("#cc").layout("expand","north");
                         }
                     },{
                         text:'刷新',
@@ -145,7 +145,6 @@
                         }
                     } ,
                     success:function(result){
-                        console.log("xxxxxx");
                         $("#floorDialog").dialog("close");
                         $("#dg").datagrid("clearSelections");
                         $("#dg").datagrid("reload");
@@ -158,7 +157,25 @@
                     }
                 });
             });
+            $("#btn1").click(function () {
+                $('#dg').datagrid('load' ,serializeForm($('#mysearch')));
+            });
 
+            $("#btn2").click(function () {
+                $("#mysearch").form("clear");
+            });
+            //js方法：序列化表单
+            function serializeForm(form){
+                var obj = {};
+                $.each(form.serializeArray(),function(index){
+                    if(obj[this['name']]){
+                        obj[this['name']] = obj[this['name']] + ','+this['value'];
+                    } else {
+                        obj[this['name']] =this['value'];
+                    }
+                });
+                return obj;
+            }
             $("#cancel").click(function () {
                 $("#floorForm").form("clear");
             });
@@ -166,9 +183,37 @@
     </script>
 </head>
 <body>
-    <div>
+<div id="cc" class="easyui-layout" style="width:100%;height:100%;">
+    <div id="serarchDiv" data-options="region:'north',title:'查询',split:true,collapsed:true"style="height:100px;" >
+        <form id="mysearch" method="post">
+            宿舍楼号：<input id="building_no1" name="building_no" value="" >
+            <script>
+                $(function () {
+                    var bulidingNo = "";
+                    $("#building_no1").combobox({
+                        url:'${pageContext.request.contextPath}/dormitory/findAllDormitories.action',
+                        valueField:'buildingNo',
+                        textField:'buildingNo',
+                        onChange:function (newValue, oldValue) {
+                            bulidingNo = newValue;
+                            $("#layer").combobox({
+                                url:'${pageContext.request.contextPath}/floor/getLayers.action?buildingNo='+bulidingNo,
+                                valueField:'buildingNo',
+                                textField:'buildingNo'
+                            });
+                        }
+                    });
+                });
+            </script>
+
+            <a class="easyui-linkbutton" id="btn1">搜索</a>
+            <a class="easyui-linkbutton" id="btn2">清空</a>
+        </form>
+    </div>
+    <div data-options="region:'center',split:true" style="height:100px;">
         <table id="dg"></table>
     </div>
+</div>
     <div id="floorDialog">
         <form id="floorForm"  method="post">
             <input type="hidden" name="id">

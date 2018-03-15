@@ -7,8 +7,13 @@ package com.ssgl.service.impl;
  * Time: 21:31
  */
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.ssgl.bean.Page;
+import com.ssgl.bean.Result;
 import com.ssgl.bean.TUser;
 import com.ssgl.bean.TUserExample;
+import com.ssgl.mapper.CustomerUserMapper;
 import com.ssgl.mapper.TUserMapper;
 import com.ssgl.service.UserService;
 import com.ssgl.util.MD5Utils;
@@ -26,6 +31,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     public TUserMapper userMapper;
+    @Autowired
+    public CustomerUserMapper customerUserMapper;
 
     /**
      * 根据邮箱查找用户
@@ -65,6 +72,27 @@ public class UserServiceImpl implements UserService {
         }else {
             return "login";
         }
+    }
+
+    @Override
+    public Page<TUser> selectUsersPage(Integer page, Integer rows, HttpServletRequest request) throws Exception {
+        PageHelper.startPage(page,rows);
+        String username = request.getParameter("username");
+        List<TUser> users = customerUserMapper.selectUsers(username);
+        if(null!=users&&users.size()>0){
+            PageInfo<TUser> info = new PageInfo<TUser>(users);
+            Page<TUser> result = new Page<>();
+            result.setTotalRecord((int)info.getTotal());
+            result.setList(info.getList());
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public Result addUser(TUser user) throws Exception {
+        userMapper.insertSelective(user);
+        return new Result("ok","添加成功");
     }
 
 

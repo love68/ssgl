@@ -11,13 +11,24 @@
 
     <context:component-scan base-package="com.ssgl.controller"></context:component-scan>
 
-    <mvc:annotation-driven></mvc:annotation-driven>
+    <mvc:annotation-driven conversion-service="customConverter">
+    </mvc:annotation-driven>
+
+    <!--配置自定义转换器 -->
+    <bean id="customConverter"
+          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean class="com.ssgl.converter.DateConverter"></bean>
+            </list>
+        </property>
+    </bean>
 
     <bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
         <property name="basename">
             <value>properties/spring-views</value>
         </property>
-        <property name="order" value="0" />
+        <property name="order" value="0"/>
     </bean>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -27,14 +38,14 @@
     </bean>
 
     <!-- 配置图片上传解析器 -->
-   <!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="5242880"></property>
-    </bean>-->
+    <!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+         <property name="maxUploadSize" value="5242880"></property>
+     </bean>-->
 
     <!-- 配置资源映射 -->
-    <mvc:resources location="/js/" mapping="/js/**" />
-    <mvc:resources location="/fonts/" mapping="/fonts/**" />
-    <mvc:resources location="/images/" mapping="/images/**" />
-    <mvc:resources location="/css/" mapping="/css/**" />
+    <mvc:resources location="/js/" mapping="/js/**"/>
+    <mvc:resources location="/fonts/" mapping="/fonts/**"/>
+    <mvc:resources location="/images/" mapping="/images/**"/>
+    <mvc:resources location="/css/" mapping="/css/**"/>
 
 </beans>

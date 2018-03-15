@@ -7,6 +7,8 @@ package com.ssgl.service;
  * Time: 21:30
  */
 
+import com.ssgl.bean.Page;
+import com.ssgl.bean.Result;
 import com.ssgl.bean.TUser;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,4 +23,10 @@ public interface UserService {
     TUser selectUserByUsername(String username) throws Exception;
 
     String login(TUser user, HttpServletRequest request,String j_captcha);
+
+    Page<TUser> selectUsersPage(Integer page, Integer rows, HttpServletRequest request) throws Exception;
+
+    Result addUser(TUser user) throws Exception;
+
+
 }

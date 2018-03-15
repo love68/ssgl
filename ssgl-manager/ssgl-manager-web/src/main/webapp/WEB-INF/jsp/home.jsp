@@ -210,7 +210,7 @@
                                     $("#tt").tabs("add",{
                                         "title" : title,
                                         "closable" : true,
-                                        "content":'<iframe frameborder=0 style=width:100%;height:100% src='+ "${pageContext.request.contextPath}/dormitory/toDormitoryUI.action" +' ></iframe>'
+                                        "content":'<iframe frameborder=0 style=width:100%;height:100% src='+ "${pageContext.request.contextPath}/toUserUI.action" +' ></iframe>'
                                     });
                                 }
                             }

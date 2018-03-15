@@ -7,15 +7,20 @@ package com.ssgl.controller;
  * Time: 21:00
  */
 
+import com.alibaba.fastjson.JSONObject;
+import com.ssgl.bean.Page;
+import com.ssgl.bean.Result;
 import com.ssgl.bean.TUser;
 import com.ssgl.service.UserService;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
+import com.ssgl.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -33,14 +38,40 @@ public class UserController {
         return userService.login(user, request, j_captcha);
     }
 
+    @RequestMapping(value = "toUserUI")
+    public String toFloorUI() {
+        return "administrator";
+    }
 
-    /*@RequestMapping(value = "logout")
-    public void logout() {
-        Subject subject = SecurityUtils.getSubject();
-        if (subject.isAuthenticated()) {
-            subject.logout(); // session 会销毁，在SessionListener监听session销毁，清理权限缓存
+    @ResponseBody
+    @RequestMapping(value = "addUser")
+    public Result addUser(TUser user) {
+        try {
+            user.setId(String.valueOf(Util.makeId()));
+            System.out.println(user);
+            return userService.addUser(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("error", "添加失败");
         }
-    }*/
+    }
 
+
+    @ResponseBody
+    @RequestMapping(value = "selectUsersPage", produces = "text/html;charset=utf-8")
+    public String selectUsersPage(Integer page, Integer rows, HttpServletRequest request) {
+        try {
+            Page<TUser> result = userService.selectUsersPage(page, rows, request);
+            Map<String, Object> map = new HashMap<>();
+            if (null != result) {
+                map.put("total", result.getTotalRecord());
+                map.put("rows", result.getList());
+                return JSONObject.toJSONString(map);
+            }
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

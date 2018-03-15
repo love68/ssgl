@@ -168,7 +168,29 @@
                         iconCls: 'icon-edit',
                         text: '修改学生',
                         handler: function () {
-
+                            flag = "edit";
+                            var arr = $("#dg").datagrid("getSelections");
+                            if(arr.length!=1){
+                                $.messager.show({
+                                    title:"提示信息",
+                                    msg:"请选择一行数据操作",
+                                    showType:'show'
+                                })
+                            }else{
+                                $("#roomDialog").dialog({
+                                    title:"修改楼层"
+                                })
+                                $("#roomDialog").dialog("open");
+                                $("#roomForm").form("load",{
+                                    id:arr[0].id,
+                                    dormitoryNum:arr[0].dormitoryNum,
+                                    score:arr[0].score,
+                                    starLevel:arr[0].starLevel,
+                                    peopleNum:arr[0].peopleNum,
+                                    roomNumber:arr[0].roomNumber,
+                                    capacity:arr[0].capacity
+                                });
+                            }
                         }
                     }, {
                         iconCls: 'icon-remove',

@@ -10,12 +10,21 @@
 <html>
 <head>
     <script>
+
+        $.extend($.fn.validatebox.defaults.rules, {
+            validatePhone: {
+                validator: function (value) {
+                    return value.length == 11;
+                },
+                message: "请输入正确的手机号"
+            }
+        });
         $(function () {
 
             var flag = "";
-            $("#visitorDatagrid").datagrid({
+            $("#dg").datagrid({
                 title: '访客管理',
-                url: '${pageContext.request.contextPath}/user/selectUsersPage.action',
+                url: '${pageContext.request.contextPath}/selectUsersPage.action',
                 toolbar: [
                     {
                         text: '新增管理员',
@@ -28,13 +37,42 @@
                             $("#userDialog").dialog("open");
                         }
                     },{
-                        text: '查找访客',
+                        text: '查找管理员',
                         iconCls: "icon-search",
                         handler: function () {
                             $("#cc").layout("expand","north");
                         }
                     },{
-                        text:'删除',
+                        text: '修改信息',
+                        iconCls: "icon-edit",
+                        handler: function () {
+                            flag = "edit";
+                            var arr = $("#dg").datagrid("getSelections");
+                            if(arr.length!=1){
+                                $.messager.show({
+                                    title:"提示信息",
+                                    msg:"请选择一行数据操作",
+                                    showType:'show'
+                                })
+                            }else{
+                                $("#userDialog").dialog({
+                                    title:"修改信息"
+                                })
+                                $("#userDialog").dialog("open");
+                                $("#userForm").form("load",{
+                                    id:arr[0].id,
+                                    username:arr[0].username,
+                                    password:arr[0].password,
+                                    birthday:arr[0].birthday,
+                                    gender:arr[0].gender,
+                                    telephone:arr[0].telephone,
+                                    email:arr[0].email,
+                                    remark:arr[0].remark
+                                });
+                            }
+                        }
+                    },{
+                        text:'删除管理员',
                         iconCls:"icon-remove",
                         handler:function () {
                             var arr = $("#dg").datagrid("getSelections");
@@ -52,7 +90,7 @@
                                         }
                                         ids = ids.substring(0,ids.length-1);
                                         $.ajax({
-                                            url:"${pageContext.request.contextPath}/user/deleteUsers.action",
+                                            url:"${pageContext.request.contextPath}/deleteUsers.action",
                                             type:"post",
                                             data:{ids:ids},
                                             async:true,
@@ -80,21 +118,56 @@
                     }
                 ],
                 columns: [[
-                    {field: 'name', title: '访客姓名', width: 100},
-                    {field: 'visiterId', title: '身份证号', width: 100},
-                    {field: 'visitTime', title: '来访时间', width: 100},
-                    {field: 'visitStudentName', title: '要找学生姓名', width: 100, align: 'right'},
-                    {field: 'phone', title: '手机号', width: 100, align: 'right'},
-                    {field: 'content', title: '来访事由', width: 100, align: 'right'}
-                ]]
+                    {field: 'username', title: '管理员姓名', width: 100},
+                    {field: 'password', title: '密码', width: 100},
+                    {field: 'birthday', title: '生日', width: 100},
+                    {field: 'gender', title: '性别', width: 100, align: 'right'},
+                    {field: 'telephone', title: '手机号', width: 100, align: 'right'},
+                    {field: 'remark', title: '评价', width: 100, align: 'right'},
+                    {field: 'email', title: '邮箱', width: 100, align: 'right'}
+                ]],
+                pagination:true
 
             });
+
+            $("#confirm").click(function () {
+                $('#userForm').form("submit",{
+                    url:flag == "add" ? '${pageContext.request.contextPath}/addUser.action':'${pageContext.request.contextPath}/editUser.action' ,
+                    onSubmit:function(){
+                        if(!$('#userForm').form('validate')){
+                            $.messager.show({
+                                title:'提示信息' ,
+                                msg:'验证没有通过,不能提交表单!'
+                            });
+                            return false ;		//当表单验证不通过的时候 必须要return false
+                        }
+                    } ,
+                    success:function(result){
+                        //关闭对话框
+                        $("#userDialog").dialog("close");
+                        //刷新数据表格
+                        $("#dg").datagrid("reload");
+                        //清空所选项
+                        $("#dg").datagrid("clearSelections");
+                        //清空表单
+                        $("#userForm").form("clear");
+                        var result = $.parseJSON(result);
+                        $.messager.show({
+                            title:result.status ,
+                            msg:result.message
+                        });
+                    }
+                });
+            });
             $("#cancel").click(function () {
-                $("#visitorForm").form("clear");
+                $("#userForm").form("clear");
+            });
+            $("#btn2").click(function () {
+                $("#userForm").form("clear");
             });
 
             $("#btn1").click(function () {
-                $('#visitorDatagrid').datagrid('load' ,serializeForm($('#mysearch')));
+                $('#dg').datagrid('load' ,serializeForm($('#mysearch')));
             });
 
             //js方法：序列化表单
@@ -118,54 +191,49 @@
     <div id="cc" class="easyui-layout" style="width:100%;height:100%;">
         <div id="serarchDiv" data-options="region:'north',title:'查询',split:true,collapsed:true"style="height:100px;" >
             <form id="mysearch" method="post">
-                宿舍号：<input name="roomNumber" class="easyui-numberbox" value="">
+                用户名：<input name="username" class="easyui-numberbox" value="">
                 <a class="easyui-linkbutton" id="btn1">搜索</a>
                 <a class="easyui-linkbutton" id="btn2">清空</a>
             </form>
         </div>
         <div data-options="region:'center',split:true" style="height:100px;">
-            <table id="visitorDatagrid"></table>
+            <table id="dg"></table>
         </div>
     </div>
 
-<div id="roomDialog" style="display:none;">
-    <form id="roomForm"  method="post">
+<div id="userDialog" style="display:none;"  modal="true" >
+    <form id="userForm"  method="post">
         <input type="hidden" name="id">
         <table>
             <tr>
-                <td>宿舍号：</td>
-                <td><input id="roomNumber" name="roomNumber" class="easyui-numberbox" value="" required="true" validType="length[4,4]" missingMessage="宿舍号必填" invalidMessage="宿舍号必须为4位"></td>
+                <td>用户名：</td>
+                <td><input id="username" name="username" class="easyui-textbox" value="" required="true" missingMessage="用户名必填"></td>
             </tr>
             <tr>
-                <td>宿舍楼号：</td>
-                <td><input id="building_no" name="building_no" value="" ></td>
-                <script>
-                    $(function () {
-                        var bulidingNo = "";
-                        $("#building_no").combobox({
-                            url:'${pageContext.request.contextPath}/dormitory/findAllDormitories.action',
-                            valueField:'buildingNo',
-                            textField:'buildingNo'
-                        });
-                    });
-                </script>
+                <td>密码：</td>
+                <td><input id="password" name="password" value="" class="easyui-passwordbox" prompt="Password" required="true" missingMessage="密码必填"></td>
+            </tr>
+            <tr>
+                <td>生日：</td>
+                <td><input id="birthday" name="birthday" value="" class= "easyui-datebox" required ="required" missingMessage="生日必填"> </td>
             </tr>
 
             <tr>
-                <td>宿舍容量：</td>
-                <td><input id="capacity" type="text" name="capacity" class="easyui-numberbox" required="true" missingMessage="宿舍容量"/></td>
+                <td>性别：</td>
+                <td><input name="gender" type="radio" checked="checked" value="0">女
+                    <input name="gender" type="radio" value="1">男</td>
             </tr>
             <tr>
-                <td>实际人数：</td>
-                <td><input id="people_num" type="text" name="people_num" class="easyui-numberbox" required="true" missingMessage="实际人数必填"></td>
+                <td>电话：</td>
+                <td><input id="telephone" type="text" name="telephone" value=""></td>
             </tr>
             <tr>
-                <td>宿舍星级：</td>
-                <td><input id="star_level" type="text" name="star_level" class="easyui-numberbox" required="true" missingMessage="星级必填"></td>
+                <td>评价：</td>
+                <td><input id="remark" type="text" name="remark" class="easyui-textbox" required="true" missingMessage="评价必填"></td>
             </tr>
             <tr>
-                <td>宿舍分数：</td>
-                <td><input id="score" type="text" name="score" class="easyui-numberbox" ></td>
+                <td>邮箱：</td>
+                <td><input id="email" type="text" name="email" class="easyui-validatebox" data-options="required:true,validType:'email'"></td>
             </tr>
             <tr align="center">
                 <td><a id="confirm" class="easyui-linkbutton">确定</a></td>

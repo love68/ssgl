@@ -11,6 +11,7 @@ import com.ssgl.bean.Dormitory;
 import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface DormitoryService {
@@ -26,7 +27,7 @@ public interface DormitoryService {
      * @return
      * @throws Exception
      */
-    Page<Dormitory> selectAllDormitories(Integer page, Integer pageSize) throws Exception;
+    Page<Dormitory> selectAllDormitories(Integer page, Integer pageSize,HttpServletRequest request) throws Exception;
 
     String findAllDormitories() throws Exception;
 

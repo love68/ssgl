@@ -24,6 +24,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.rmi.activation.ActivationGroup_Stub;
 import java.util.List;
 
 @Service
@@ -41,9 +43,13 @@ public class DormitoryServiceImpl implements DormitoryService {
     }
 
     @Override
-    public Page<Dormitory> selectAllDormitories(Integer page, Integer pageSize) throws Exception {
+    public Page<Dormitory> selectAllDormitories(Integer page, Integer pageSize,HttpServletRequest request) throws Exception {
         PageHelper.startPage(page, pageSize);
         DormitoryExample example = new DormitoryExample();
+        String buildingNo = request.getParameter("buildingNo");
+        if(null!=buildingNo&&buildingNo.length()>0) {
+            example.createCriteria().andBuildingNoEqualTo(Integer.valueOf(buildingNo));
+        }
         List<Dormitory> dormitories = dormitoryMapper.selectByExample(example);
         if (null != dormitories && dormitories.size() > 0) {
             PageInfo<Dormitory> pageInfo = new PageInfo<Dormitory>(dormitories);

@@ -49,9 +49,9 @@ public class DormitoryController {
 
     @ResponseBody
     @RequestMapping(value = "selectAllDormitories")
-    public String selectAllDormitories(Integer page, Integer rows){
+    public String selectAllDormitories(Integer page, Integer rows,HttpServletRequest request){
         try {
-            Page<Dormitory> result = dormitoryService.selectAllDormitories(page,rows);
+            Page<Dormitory> result = dormitoryService.selectAllDormitories(page,rows,request);
             Map<String,Object> map = new HashMap<>();
             map.put("total",result.getTotalRecord());
             map.put("rows",result.getList());

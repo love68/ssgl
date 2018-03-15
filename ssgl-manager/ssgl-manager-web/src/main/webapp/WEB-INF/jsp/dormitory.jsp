@@ -166,12 +166,12 @@
                 $("#dormitoryForm").form("clear");
             });
 
-            $("#cancel").click(function () {
-                $("#visitorForm").form("clear");
+            $("#btn2").click(function () {
+                $("#mysearch").form("clear");
             });
 
             $("#btn1").click(function () {
-                $('#visitorDatagrid').datagrid('load' ,serializeForm($('#mysearch')));
+                $('#dg').datagrid('load' ,serializeForm($('#mysearch')));
             });
 
             //js方法：序列化表单
@@ -194,7 +194,17 @@
     <div id="cc" class="easyui-layout" style="width:100%;height:100%;">
         <div id="serarchDiv" data-options="region:'north',title:'查询',split:true,collapsed:true"style="height:100px;" >
             <form id="mysearch" method="post">
-                宿舍号：<input name="roomNumber" class="easyui-numberbox" value="">
+                宿舍楼号：<input id="building_no1" name="buildingNo" value="">
+                <script>
+                    $(function () {
+                        var bulidingNo = "";
+                        $("#building_no1").combobox({
+                            url:'${pageContext.request.contextPath}/dormitory/findAllDormitories.action',
+                            valueField:'buildingNo',
+                            textField:'buildingNo'
+                        });
+                    });
+                </script>
                 <a class="easyui-linkbutton" id="btn1">搜索</a>
                 <a class="easyui-linkbutton" id="btn2">清空</a>
             </form>

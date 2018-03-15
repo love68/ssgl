@@ -8,4 +8,11 @@
         </where>
     </select>
 
+    <delete id="deleteUsers">
+        DELETE from t_user where id IN
+        <foreach collection="list" item="item" open="(" close=")" index="index" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
 </mapper>

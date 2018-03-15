@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface CustomerUserMapper {
     List<TUser> selectUsers(@Param("username") String username);
+
+    void deleteUsers(List<String> ids);
+
 }

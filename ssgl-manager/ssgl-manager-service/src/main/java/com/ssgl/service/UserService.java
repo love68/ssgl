@@ -12,6 +12,7 @@ import com.ssgl.bean.Result;
 import com.ssgl.bean.TUser;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface UserService {
     /**
@@ -28,5 +29,8 @@ public interface UserService {
 
     Result addUser(TUser user) throws Exception;
 
+    Result updateUser(TUser user) throws Exception;
+
+    Result deleteUsers(List<String> ids) throws Exception;
 
 }

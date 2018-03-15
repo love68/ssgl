@@ -13,6 +13,7 @@ import com.ssgl.bean.Result;
 import com.ssgl.bean.TUser;
 import com.ssgl.service.UserService;
 import com.ssgl.util.MD5Utils;
+import com.ssgl.util.StringUtils;
 import com.ssgl.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -57,7 +58,6 @@ public class UserController {
         }
     }
 
-
     @ResponseBody
     @RequestMapping(value = "selectUsersPage", produces = "text/html;charset=utf-8")
     public String selectUsersPage(Integer page, Integer rows, HttpServletRequest request) {
@@ -75,4 +75,25 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @RequestMapping(value="deleteUsers")
+    public Result deleteUsers(String ids){
+        try {
+            return userService.deleteUsers(StringUtils.stringConvertList(ids));
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result("error", "删除失败");
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value="updateUser")
+    public Result updateUser(TUser user){
+        try {
+            return userService.updateUser(user);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result("error", "修改失败");
+        }
+    }
 }

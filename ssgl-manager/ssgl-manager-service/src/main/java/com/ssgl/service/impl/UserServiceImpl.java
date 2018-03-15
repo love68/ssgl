@@ -95,5 +95,26 @@ public class UserServiceImpl implements UserService {
         return new Result("ok","添加成功");
     }
 
+    @Override
+    public Result updateUser(TUser user) throws Exception {
+        TUser oldUser = userMapper.selectByPrimaryKey(user.getId());//获取到的数据库中的值
+        //更新数据
+        oldUser.setPassword(MD5Utils.md5(user.getPassword()));
+        oldUser.setBirthday(user.getBirthday());
+        oldUser.setEmail(user.getEmail());
+        oldUser.setGender(user.getGender());
+        oldUser.setRemark(user.getRemark());
+        oldUser.setTelephone(user.getTelephone());
+        oldUser.setUsername(user.getUsername());
 
+        //写回到数据库中
+        userMapper.updateByPrimaryKey(oldUser);
+        return new Result("ok","修改成功");
+    }
+
+    @Override
+    public Result deleteUsers(List<String> ids) throws Exception {
+        customerUserMapper.deleteUsers(ids);
+        return new Result("ok","删除成功");
+    }
 }

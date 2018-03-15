@@ -147,7 +147,7 @@
 
             $("#confirm").click(function () {
                 $('#userForm').form("submit",{
-                    url:flag == "add" ? '${pageContext.request.contextPath}/addUser.action':'${pageContext.request.contextPath}/editUser.action' ,
+                    url:flag == "add" ? '${pageContext.request.contextPath}/addUser.action':'${pageContext.request.contextPath}/updateUser.action' ,
                     onSubmit:function(){
                         if(!$('#userForm').form('validate')){
                             $.messager.show({

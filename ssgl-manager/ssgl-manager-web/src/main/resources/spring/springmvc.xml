@@ -20,6 +20,7 @@
         <property name="converters">
             <list>
                 <bean class="com.ssgl.converter.DateConverter"></bean>
+                <bean class="com.ssgl.converter.DateConvertString"></bean>
             </list>
         </property>
     </bean>

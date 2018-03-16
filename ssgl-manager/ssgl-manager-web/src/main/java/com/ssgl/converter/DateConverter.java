@@ -15,4 +15,15 @@ public class DateConverter implements Converter<String, Date> {
         }
         return null;
     }
+
+ /*   public String dateConvertString(Date date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println(simpleDateFormat.format(date));
+        return simpleDateFormat.format(date);
+    }
+
+    public static void main(String[] args) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println(simpleDateFormat.format(new Date()));
+    }*/
 }

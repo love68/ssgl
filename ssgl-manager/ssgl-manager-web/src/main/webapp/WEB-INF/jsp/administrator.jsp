@@ -10,7 +10,9 @@
 <html>
 <head>
     <script>
-
+        Date.prototype.toLocaleString = function() {
+            return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate() + "/ " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
+        };
         $.extend($.fn.validatebox.defaults.rules, {
             validatePhone: {
                 validator: function (value) {
@@ -49,6 +51,9 @@
                         handler: function () {
                             flag = "edit";
                             var arr = $("#dg").datagrid("getSelections");
+                            var unixTimestamp = new Date(arr[0].birthday) ;
+                            commonTime = unixTimestamp.toLocaleString().toString();
+                            arr[0].birthday=commonTime.substr(0,commonTime.indexOf(" "));
                             if(arr.length!=1){
                                 $.messager.show({
                                     title:"提示信息",
@@ -184,7 +189,6 @@
             $("#btn1").click(function () {
                 $('#dg').datagrid('load' ,serializeForm($('#mysearch')));
             });
-
             //js方法：序列化表单
             function serializeForm(form){
                 var obj = {};
@@ -222,15 +226,15 @@
         <table>
             <tr>
                 <td>用户名：</td>
-                <td><input id="username" name="username" class="easyui-textbox" value="" required="true" missingMessage="用户名必填"></td>
+                <td><input id="username" name="username" class="easyui-textbox" required="true" missingMessage="用户名必填"></td>
             </tr>
             <tr>
                 <td>密码：</td>
-                <td><input id="password" name="password" value="" class="easyui-passwordbox" prompt="Password" required="true" missingMessage="密码必填"></td>
+                <td><input id="password" name="password" class="easyui-passwordbox" prompt="Password" required="true" missingMessage="密码必填"></td>
             </tr>
             <tr>
                 <td>生日：</td>
-                <td><input id="birthday" name="birthday" value="" class= "easyui-datebox" required ="required" missingMessage="生日必填"> </td>
+                <td><input id="birthday" name="birthday" class= "easyui-datebox" required ="required" missingMessage="生日必填"> </td>
             </tr>
 
             <tr>
@@ -240,15 +244,15 @@
             </tr>
             <tr>
                 <td>电话：</td>
-                <td><input id="telephone" type="text" name="telephone" value="" class="easyui-numberbox" required="true" validType="length[11,11]"missingMessage="手机号必填" invalidMessage="手机号必须为11位数字"missingMessage="手机号必填" ></td>
+                <td><input id="telephone" type="text" name="telephone" class="easyui-numberbox" required="true" validType="length[11,11]" missingMessage="手机号必填" invalidMessage="手机号必须为11位数字" missingMessage="手机号必填" ></td>
             </tr>
             <tr>
                 <td>评价：</td>
-                <td><input id="remark" type="text" name="remark" value="" class="easyui-textbox" required="true" missingMessage="评价必填"></td>
+                <td><input id="remark" type="text" name="remark" class="easyui-textbox" required="true" missingMessage="评价必填"></td>
             </tr>
             <tr>
                 <td>邮箱：</td>
-                <td><input id="email" type="text" name="email" value="" class="easyui-textbox" data-options="required:true,validType:'email'"></td>
+                <td><input id="email" type="text" name="email" class="easyui-textbox" data-options="required:true,validType:'email'"></td>
             </tr>
             <tr align="center">
                 <td><a id="confirm" class="easyui-linkbutton">确定</a></td>

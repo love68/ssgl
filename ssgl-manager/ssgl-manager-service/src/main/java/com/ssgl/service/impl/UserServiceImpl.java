@@ -36,53 +36,55 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 根据邮箱查找用户
+     *
      * @param email
      * @return
      */
-    public TUser selectUserByUsername(String email){
+    public TUser selectUserByUsername(String email) {
         TUserExample example = new TUserExample();
         TUserExample.Criteria criteria = example.createCriteria().andEmailEqualTo(email);
         List<TUser> users = userMapper.selectByExample(example);
-        return users.size()>0?users.get(0):null;
+        return users.size() > 0 ? users.get(0) : null;
     }
 
     /**
      * 用户登录方法
-     * @param user 登录的用户
+     *
+     * @param user      登录的用户
      * @param request
      * @param j_captcha 用户输入的验证码
      */
     @Override
-    public String login(TUser user, HttpServletRequest request,String j_captcha) {
+    public String login(TUser user, HttpServletRequest request, String j_captcha) {
         //获取当前session中的验证码
         String checkcode = (String) request.getSession().getAttribute("key");
-        if(null != checkcode && null != j_captcha && checkcode.equals(j_captcha)){
+        if (null != checkcode && null != j_captcha && checkcode.equals(j_captcha)) {
             //验证码匹配正确
             Subject subject = SecurityUtils.getSubject();
             AuthenticationToken token = new UsernamePasswordToken(user.getUsername(), MD5Utils.md5(user.getPassword()));
             try {
                 subject.login(token);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 return "forward:toIndex.action";
             }
             TUser loginUser = (TUser) subject.getPrincipal();
-            request.getSession().setAttribute("loginUser",loginUser);
+            request.getSession().setAttribute("loginUser", loginUser);
             return "home";
-        }else {
+        } else {
             return "login";
         }
     }
 
     @Override
     public Page<TUser> selectUsersPage(Integer page, Integer rows, HttpServletRequest request) throws Exception {
-        PageHelper.startPage(page,rows);
+        PageHelper.startPage(page, rows);
         String username = request.getParameter("username");
         List<TUser> users = customerUserMapper.selectUsers(username);
-        if(null!=users&&users.size()>0){
+        if (null != users && users.size() > 0) {
             PageInfo<TUser> info = new PageInfo<TUser>(users);
             Page<TUser> result = new Page<>();
-            result.setTotalRecord((int)info.getTotal());
+            result.setTotalRecord((int) info.getTotal());
             result.setList(info.getList());
             return result;
         }
@@ -92,7 +94,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result addUser(TUser user) throws Exception {
         userMapper.insertSelective(user);
-        return new Result("ok","添加成功");
+        return new Result("ok", "添加成功");
     }
 
     @Override
@@ -109,12 +111,12 @@ public class UserServiceImpl implements UserService {
 
         //写回到数据库中
         userMapper.updateByPrimaryKey(oldUser);
-        return new Result("ok","修改成功");
+        return new Result("ok", "修改成功");
     }
 
     @Override
     public Result deleteUsers(List<String> ids) throws Exception {
         customerUserMapper.deleteUsers(ids);
-        return new Result("ok","删除成功");
+        return new Result("ok", "删除成功");
     }
 }

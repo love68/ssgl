@@ -57,12 +57,12 @@
         });
 
         $(function () {
-            $("#entranceTime").datebox({
+            $("#entranceTime,#entranceTime1").datebox({
                 required: true,
                 editable:false,
                 missingMessage: '入学时间必填'
             });
-            $("#graduateTime").datebox({
+            $("#graduateTime,#graduateTime1").datebox({
                 required: true,
                 editable:false,
                 missingMessage: '毕业时间必填'
@@ -124,7 +124,7 @@
                 missingMessage:"所属县必填！"
             }),
 
-            $("#faculty").combobox({
+            $("#faculty,#faculty1").combobox({
                 required:true,
                 valueField:"facultyid",
                 textField:"faculty",
@@ -136,7 +136,7 @@
                     $("#profess").combobox("reload","${pageContext.request.contextPath}/faculty/selectAllFacultiesByFacultyId.action?facultyid="+faultyid);
                 }
             }),
-            $("#profess").combobox({
+            $("#profess,#profess1").combobox({
                 required:true,
                 valueField:"facultyid",
                 textField:"faculty",
@@ -215,12 +215,12 @@
             });
 
 
-            $("#cancel").click(function () {
-                $("#visitorForm").form("clear");
+            $("#btn2").click(function () {
+                $("#mysearch").form("clear");
             });
 
             $("#btn1").click(function () {
-                $('#visitorDatagrid').datagrid('load' ,serializeForm($('#mysearch')));
+                $('#dg').datagrid('load' ,serializeForm($('#mysearch')));
             });
 
             //js方法：序列化表单
@@ -240,10 +240,25 @@
 </head>
 <body>
 
-    <div id="cc" class="easyui-layout" style="width:100%;height:100%;">
+    <div id="cc" class="easyui-layout" style="width:100%;height:500px;">
         <div id="serarchDiv" data-options="region:'north',title:'查询',split:true,collapsed:true"style="height:100px;" >
             <form id="mysearch" method="post">
+                姓名：<input name="name" type="text" value="" class="easyui-textbox">
+                学号：<input name="sid" type="text" value="" class="easyui-textbox">
                 宿舍号：<input name="roomNumber" class="easyui-numberbox" value="">
+                年龄：<input name="age" type="text" value="" class="easyui-numberbox"/>
+                性别 ：
+                    <input name="sex" type="radio" value="0">女
+                    <input name="sex" type="radio" value="1">男
+                <br/>
+                入学时间：
+                   <input id="entranceTime1" type="text" name="entranceTime" value="">
+                毕学时间：
+                    <input id="graduateTime1" type="text" name="graduateTime" value="">
+                职务：<input type="text" name="duty" value="" class="easyui-textbox">
+                院系：
+                    <input id="faculty1" name="faculty" value="" style="width: 70px;">
+                        <input id="profess1" name="profess" value="" style="width: 70px;">
                 <a class="easyui-linkbutton" id="btn1">搜索</a>
                 <a class="easyui-linkbutton" id="btn2">清空</a>
             </form>
@@ -267,7 +282,7 @@
             </tr>
             <tr>
                 <td>姓名：</td>
-                <td><input id="name" name="name" type="text" value="" class="easyui-validatebox" required="true"
+                <td><input id="name" name="name" type="text" value="" class="easyui-textbox" required="true"
                            missingMessage="学生姓名必填！" validType="validateName"></td>
             </tr>
             <tr>
@@ -335,7 +350,7 @@
             </tr>
             <tr>
                 <td>职务：</td>
-                <td><input id="duty" type="text" name="duty" value=""></td>
+                <td><input id="duty" type="text" name="duty" value="" class="easyui-textbox"></td>
             </tr>
             <tr>
                 <td>院系：</td>
@@ -344,7 +359,7 @@
             </tr>
             <tr>
                 <td>照片：</td>
-                <td><input id="icon" type="text" name="icon" value=""></td>
+                <td><input id="icon" type="text" name="icon" value="" class="easyui-filebox"></td>
             </tr>
             <tr align="center">
                 <td><a id="confirm" class="easyui-linkbutton">确定</a></td>

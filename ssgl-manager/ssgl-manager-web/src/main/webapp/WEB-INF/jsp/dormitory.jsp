@@ -46,6 +46,7 @@
                             $("#dormitoryDialog").dialog({
                                 title:"添加宿舍楼"
                             });
+                            $("#dormitoryForm").form("clear");
                             $("#dormitoryDialog").dialog("open");
                         }
                     },{

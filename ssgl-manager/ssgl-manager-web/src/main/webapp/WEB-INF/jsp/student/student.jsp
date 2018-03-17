@@ -11,6 +11,7 @@
 <head>
     <title>学生管理</title>
     <script>
+        var flag ="";
         $.extend($.fn.validatebox.defaults.rules, {
             validateSid: {
                 validator: function (value) {
@@ -75,7 +76,7 @@
             $("#dormitoryNo").combobox({
                 required: true,
                 missingMessage: "楼号必填",
-                url:'${pageContext.request.contextPath}/dormitory/selectAllDormitories.action',
+                url:'${pageContext.request.contextPath}/dormitory/findAllDormitories.action',
                 valueField:'buildingNo',
                 textField:'buildingNo',
                 onChange:function (newValue, oldValue) {
@@ -148,20 +149,24 @@
                 missingMessage: "手机号码必填",
                 validType: 'validatePhone'
             }),
-            $("#familyPhone").numberbox({
+            $("#homePhone").numberbox({
                 required: true,
                 missingMessage: "家庭号码必填",
                 validType: 'validatePhone'
             }),
 
             $("#dg").datagrid({
-
+                title:"学生管理",
                 url: 'selectStudentsPage.action',
                 toolbar: [
                     {
                         iconCls: 'icon-add',
                         text: '添加学生',
                         handler: function () {
+                            flag = "add";
+                            $("#mydialog").dialog({
+                                title:"添加学生"
+                            });
                             $("#mydialog").dialog('open');
                         }
                     }, {
@@ -177,11 +182,11 @@
                                     showType:'show'
                                 })
                             }else{
-                                $("#roomDialog").dialog({
-                                    title:"修改楼层"
+                                $("#myDialog").dialog({
+                                    title:"修改学生"
                                 })
-                                $("#roomDialog").dialog("open");
-                                $("#roomForm").form("load",{
+                                $("#myDialog").dialog("open");
+                                $("#studentForm").form("load",{
                                     id:arr[0].id,
                                     dormitoryNum:arr[0].dormitoryNum,
                                     score:arr[0].score,
@@ -196,7 +201,45 @@
                         iconCls: 'icon-remove',
                         text: '删除学生',
                         handler: function () {
-
+                            var arr = $("#dg").datagrid("getSelections");
+                            if(arr.length<=0){
+                                $.messager.show({
+                                    title:"提示信息",
+                                    msg:"请至少选择一行删除"
+                                })
+                            }else {
+                                $.messager.confirm("确认信息","确定删除吗？",function (r) {
+                                    var ids ="";
+                                    if(r){
+                                        for(var i = 0;i<arr.length;i++){
+                                            ids += arr[i].id + ",";
+                                        }
+                                        ids = ids.substring(0,ids.length-1);
+                                        $.ajax({
+                                            url:"${pageContext.request.contextPath}/student/deleteStudents.action",
+                                            type:"post",
+                                            data:{ids:ids},
+                                            async:true,
+                                            cache:false,
+                                            dataType:"json",
+                                            success:function (r) {
+                                                $("#dg").datagrid("reload");
+                                                $("#dg").datagrid("clearSelections");
+                                                $.messager.show({
+                                                    title:r.status,
+                                                    msg:r.message
+                                                })
+                                            },
+                                            error:function (r) {
+                                                $.messager.show({
+                                                    title:r.status,
+                                                    msg:r.message
+                                                })
+                                            }
+                                        })
+                                    }
+                                });
+                            }
                         }
                     }, {
                         iconCls: 'icon-search',
@@ -223,6 +266,38 @@
                 $('#dg').datagrid('load' ,serializeForm($('#mysearch')));
             });
 
+            $("#confirm").click(function () {
+                $('#studentForm').form("submit",{
+                    url:flag == "add" ? '${pageContext.request.contextPath}/student/addStudent.action':'${pageContext.request.contextPath}/student/editStudent.action' ,
+                    onSubmit:function(){
+                        if(!$('#studentForm').form('validate')){
+                            $.messager.show({
+                                title:'提示信息' ,
+                                msg:'验证没有通过,不能提交表单!'
+                            });
+                            return false ;		//当表单验证不通过的时候 必须要return false
+                        }
+                    } ,
+                    success:function(result){
+                        //关闭对话框
+                        $("#mydialog").dialog("close");
+                        //刷新数据表格
+                        $("#dg").datagrid("reload");
+                        //清空所选项
+                        $("#dg").datagrid("clearSelections");
+                        //清空表单
+                        $("#studentForm").form("clear");
+                        var result = $.parseJSON(result);
+                        $.messager.show({
+                            title:result.status ,
+                            msg:result.message
+                        });
+                    }
+                });
+            });
+            $("#cancel").click(function () {
+                $("#studentForm").form("clear");
+            });
             //js方法：序列化表单
             function serializeForm(form){
                 var obj = {};
@@ -270,11 +345,11 @@
 
 <div style="width:380px;height:480px;background: url('../../../images/form.jpg')" id="mydialog" class="easyui-dialog"
      modal="true" closed="true" title="添加学生">
-    <form id="studentForm" action="" method="post">
+    <form id="studentForm" action="" method="post" enctype="multipart/form-data">
         <table align="center">
             <tr>
                 <td>学号：</td>
-                <td><input id="sid" type="text" name="sid" value=""
+                <td><input id="sid" type="text" name="sid" value="1234567890"
                            class="easyui-numberbox"
                            data-options="required:true,
                        missingMessage:'学号为必选项！',
@@ -282,12 +357,12 @@
             </tr>
             <tr>
                 <td>姓名：</td>
-                <td><input id="name" name="name" type="text" value="" class="easyui-textbox" required="true"
+                <td><input id="name" name="name" type="text" value="贾俊康" class="easyui-textbox" required="true"
                            missingMessage="学生姓名必填！" validType="validateName"></td>
             </tr>
             <tr>
                 <td>年龄：</td>
-                <td><input id="age" name="age" type="text" value="" class="easyui-numberbox" required="true"
+                <td><input id="age" name="age" type="text" value="12" class="easyui-numberbox" required="true"
                            missingMessage="学生年龄必填！"></td>
             </tr>
             <tr>
@@ -299,11 +374,11 @@
             </tr>
             <tr>
                 <td>入学时间：</td>
-                <td><input id="entranceTime" type="text" name="entranceTime" value=""></td>
+                <td><input id="entranceTime" type="text" name="entranceTime" value="2018-03-08"></td>
             </tr>
             <tr>
                 <td>毕学时间：</td>
-                <td><input id="graduateTime" type="text" name="graduateTime" value=""></td>
+                <td><input id="graduateTime" type="text" name="graduateTime" value="2018-03-08"></td>
             </tr>
             <tr>
                 <td>本科生：</td>
@@ -322,35 +397,35 @@
             <tr>
                 <td>楼号：</td>
                 <td>
-                    <input id="dormitoryNo" name="dormitoryNo" value="">
+                    <input id="dormitoryNo" name="dormitoryNo" value="1">
                 </td>
             </tr>
             <tr>
                 <td>宿舍号：</td>
-                <td><input id="roomNumber" name="roomNumber" value="">
+                <td><input id="roomNumber" name="roomNumber" value="1101">
                     </td>
             </tr>
             <tr>
                 <td>床号：</td>
-                <td><input id="bedNo" type="text" name="bedNo" value=""></td>
+                <td><input id="bedNo" type="text" name="bedNo" value="1"></td>
             </tr>
             <tr style="rowspan: 3">
                 <td>家庭住址：</td>
                 <td><input id="province" name="province" value="" style="width: 70px;">
                 <input id="city" name="city" value="" style="width: 70px;">
-                <input id="county"name="province" value="" style="width: 70px;"></td>
+                <input id="county"name="county" value="" style="width: 70px;"></td>
             </tr>
             <tr>
                 <td>手机号码：</td>
-                <td><input id="phone" type="text" name="phone" value=""></td>
+                <td><input id="phone" type="text" name="phone" value="12345678901"></td>
             </tr>
             <tr>
                 <td>家庭电话：</td>
-                <td><input id="familyPhone" type="text" name="familyPhone" value=""></td>
+                <td><input id="homePhone" type="text" name="homePhone" value="12345678901"></td>
             </tr>
             <tr>
                 <td>职务：</td>
-                <td><input id="duty" type="text" name="duty" value="" class="easyui-textbox"></td>
+                <td><input id="duty" type="text" name="duty" value="xx" class="easyui-textbox"></td>
             </tr>
             <tr>
                 <td>院系：</td>
@@ -359,7 +434,7 @@
             </tr>
             <tr>
                 <td>照片：</td>
-                <td><input id="icon" type="text" name="icon" value="" class="easyui-filebox"></td>
+                <td><input id="icon" type="file" name="icon" value=""></td>
             </tr>
             <tr align="center">
                 <td><a id="confirm" class="easyui-linkbutton">确定</a></td>

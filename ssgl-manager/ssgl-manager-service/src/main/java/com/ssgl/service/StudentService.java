@@ -9,16 +9,53 @@ package com.ssgl.service;
 
 import com.ssgl.bean.Result;
 import com.ssgl.bean.Student;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Date;
 
 public interface StudentService {
     /**
-     * 添加学生接口
      *
-     * @param student
-     * @return 返回状态信息
+     * @param sid
+     * @param name
+     * @param age
+     * @param sex
+     * @param graduateTime
+     * @param homePhone
+     * @param entranceTime
+     * @param isUndergraduate
+     * @param isGraduate
+     * @param roomNumber
+     * @param dormitoryNo
+     * @param bedNo
+     * @param address
+     * @param phone
+     * @param duty
+     * @param faculty
+     * @param icon
+     * @return
      * @throws Exception
      */
-    Result addStudent(Student student) throws Exception;
+    Result addStudent(String sid,
+                      String name,
+                      Integer age,
+                      Boolean sex,
+                      Date graduateTime,
+                      String homePhone,
+                      String entranceTime,
+                      Boolean isUndergraduate,
+                      Boolean isGraduate,
+                      String roomNumber,
+                      String dormitoryNo,
+                      String bedNo,
+                      String province,
+                      String city,
+                      String county,
+                      String phone,
+                      String duty,
+                      String faculty,
+                      @RequestParam(value = "icon") MultipartFile icon) throws Exception;
 
 
     /**

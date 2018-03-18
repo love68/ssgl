@@ -31,7 +31,7 @@ public class RoomController {
     public RoomService roomService;
 
     @ResponseBody
-    @RequestMapping(value = "selectRoomsPage",produces = "text/json;utf-8")
+    @RequestMapping(value = "selectRoomsPage",produces = "text/json;charset=utf-8")
     public String selectRoomsPage(Integer page,Integer rows, HttpServletRequest request){
         try {
             Page<Room> result = roomService.selectRoomPage(page,rows,request);

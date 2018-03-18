@@ -7,7 +7,10 @@ package com.ssgl.controller;
  * Time: 23:53
  */
 
+import com.alibaba.fastjson.JSONObject;
+import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
+import com.ssgl.bean.Student;
 import com.ssgl.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/student/")
@@ -27,12 +33,24 @@ public class StudentController {
 
     @RequestMapping("managerStudent")
     public String managerStudent() {
-        return "student/student";
+        return "student";
     }
 
-    @RequestMapping("selectStudentsPage")
-    public String selectStudentsPage() {
-        return "";
+    @ResponseBody
+    @RequestMapping(value = "selectStudentsPage",produces = "text/json;charset=utf-8")
+    public String selectStudentsPage(Integer page, Integer rows, HttpServletRequest request) {
+        try {
+            Page<Student> page1 = studentService.selectStudentsPage(page,rows,request);
+            Map<String,Object> map = new HashMap<>();
+            if(null!=page1){
+                map.put("total",page1.getTotalRecord());
+                map.put("rows",page1.getList());
+                return JSONObject.toJSONString(map);
+            }
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @ResponseBody

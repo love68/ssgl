@@ -7,11 +7,13 @@ package com.ssgl.service;
  * Time: 13:40
  */
 
+import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
 import com.ssgl.bean.Student;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 public interface StudentService {
@@ -29,7 +31,6 @@ public interface StudentService {
      * @param roomNumber
      * @param dormitoryNo
      * @param bedNo
-     * @param address
      * @param phone
      * @param duty
      * @param faculty
@@ -93,5 +94,8 @@ public interface StudentService {
      * @throws Exception
      */
     String selectStudent(String sid, String name, String sex, Integer age, String entranceTime, String graduateTime, String faculty, Integer dedNo, Integer dormitoryNo, Integer roomNumber, Boolean isUndergraduate) throws Exception;
+
+    Page<Student> selectStudentsPage(Integer page, Integer rows, HttpServletRequest request) throws Exception;
+
 
 }

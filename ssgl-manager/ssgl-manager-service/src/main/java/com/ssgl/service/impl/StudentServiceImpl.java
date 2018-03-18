@@ -7,9 +7,10 @@ package com.ssgl.service.impl;
  * Time: 13:40
  */
 
-import com.ssgl.bean.Result;
-import com.ssgl.bean.Student;
-import com.ssgl.mapper.StudentMapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.ssgl.bean.*;
+import com.ssgl.mapper.*;
 import com.ssgl.service.StudentService;
 import com.ssgl.util.FastDFSClient;
 import com.ssgl.util.Util;
@@ -20,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -29,7 +32,29 @@ public class StudentServiceImpl implements StudentService {
     private String BASE_IMAGE_SERVER_URL;
 
     @Autowired
+    public ProvinceMapper provinceMapper;
+    @Autowired
+    public CityMapper cityMapper;
+    @Autowired
+    public CountyMapper countyMapper;
+    @Autowired
     public StudentMapper studentMapper;
+    @Autowired
+    public CustomerStudentMapper customerStudentMapper;
+
+    @Override
+    public Page<Student> selectStudentsPage(Integer page, Integer rows, HttpServletRequest request) throws Exception {
+        PageHelper.startPage(page,rows);
+        List<Student> students = customerStudentMapper.selectStudentsPage(null,null,null,null,null,null,null,null,null,null);
+        if(null!=students&&students.size()>0){
+            PageInfo<Student> pageInfo = new PageInfo<Student>(students);
+            Page<Student> result = new Page<>();
+            result.setList(pageInfo.getList());
+            result.setTotalRecord((int)pageInfo.getTotal());
+            return result;
+        }
+        return null;
+    }
 
     @Override
     public Result addStudent(String sid,
@@ -53,7 +78,19 @@ public class StudentServiceImpl implements StudentService {
                              @RequestParam(value = "icon") MultipartFile icon) throws Exception {
         Student student = new Student();
         student.setId(Util.makeId());
-        student.setAddress(province+" "+city+" "+county);
+        ProvinceExample example1 = new ProvinceExample();
+        example1.createCriteria().andProvinceidEqualTo(province);
+        String p = provinceMapper.selectByExample(example1).get(0).getProvince();
+
+        CityExample example2 = new CityExample();
+        example2.createCriteria().andCityidEqualTo(city);
+        String c = cityMapper.selectByExample(example2).get(0).getCity();
+
+        CountyExample example3 = new CountyExample();
+        example3.createCriteria().andAreaidEqualTo(county);
+        String c2= countyMapper.selectByExample(example3).get(0).getArea();
+
+        student.setAddress(p+" "+c+" "+c2);
         student.setAge(age);
         student.setBedNo(bedNo);
         student.setIsUndergraduate(isUndergraduate);

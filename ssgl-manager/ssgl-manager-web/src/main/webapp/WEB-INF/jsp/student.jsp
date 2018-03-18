@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@include file="../common/common-easyui.jsp" %>
+<%@include file="common/common-easyui.jsp" %>
 <html>
 <head>
     <title>学生管理</title>
@@ -157,7 +157,28 @@
 
             $("#dg").datagrid({
                 title:"学生管理",
-                url: 'selectStudentsPage.action',
+                url: '${pageContext.request.contextPath}/student/selectStudentsPage.action',
+                pagination:true,
+                columns:[[
+                    {field:"ck",title:"选择",checkbox:true},
+                    {field:'sid',title:'学号',width:100},
+                    {field:'name',title:'姓名',width:100},
+                    {field:'address',title:'地址',width:100,align:'right'},
+                    {field:'age',title:'年龄',width:100,align:'right'},
+                    {field:'dormitoryNo',title:'宿舍楼号',width:100,align:'right'},
+                    {field:'duty',title:'职务',width:100,align:'right'},
+                    {field:'graduateTime',title:'毕业时间',width:100,align:'right'},
+                    {field:'homePhone',title:'家庭电话',width:100,align:'right'},
+                    {field:'entranceTime',title:'入学时间',width:100,align:'right'},
+                    {field:'faculty',title:'院系',width:100,align:'right'},
+                    {field:'isGraduate',title:'是否毕业',width:100,align:'right'},
+                    {field:'isUndergraduate',title:'是否本科',width:100,align:'right'},
+                    {field:'phone',title:'电话',width:100,align:'right'},
+                    {field:'roomNumber',title:'宿舍号',width:100,align:'right'},
+                    {field:'sex',title:'性别',width:100,align:'right'},
+                    {field:'bedNo',title:'床位',width:100,align:'right'},
+                    {field:'头像',title:'床位',width:100,align:'right'},
+                ]],
                 toolbar: [
                     {
                         iconCls: 'icon-add',
@@ -329,7 +350,7 @@
                 入学时间：
                    <input id="entranceTime1" type="text" name="entranceTime" value="">
                 毕学时间：
-                    <input id="graduateTime1" type="text" name="graduateTime" value="">
+                    <input id="graduateTime1" type="text" name="graduateTime" value="" required="false">
                 职务：<input type="text" name="duty" value="" class="easyui-textbox">
                 院系：
                     <input id="faculty1" name="faculty" value="" style="width: 70px;">
@@ -343,7 +364,7 @@
         </div>
     </div>
 
-<div style="width:380px;height:480px;background: url('../../../images/form.jpg')" id="mydialog" class="easyui-dialog"
+<div style="width:380px;height:480px;background: url('../../images/form.jpg')" id="mydialog" class="easyui-dialog"
      modal="true" closed="true" title="添加学生">
     <form id="studentForm" action="" method="post" enctype="multipart/form-data">
         <table align="center">

@@ -7,5 +7,21 @@ package com.ssgl.mapper;
  * Time: 14:10
  */
 
+import com.ssgl.bean.Student;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
 public interface CustomerStudentMapper {
+    List<Student> selectStudentsPage(@Param("name") String name,
+                                     @Param("sid") String sid,
+                                     @Param("roomNumber") String roomNumber,
+                                     @Param("age") Integer age,
+                                     @Param("sex") Boolean sex,
+                                     @Param("entranceTime1") String entranceTime,
+                                     @Param("graduateTime") String graduateTime,
+                                     @Param("duty") String duty,
+                                     @Param("faculty") String faculty,
+                                     @Param("profess") String profess
+    );
 }

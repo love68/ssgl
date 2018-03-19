@@ -133,7 +133,8 @@
                         formatter: function (value, row, index) {
                             var time = new Date(value);
                             return time.toLocaleDateString();
-                        }},
+                        }
+                    },
                     {field: 'gender', title: '性别', width: 100, align: 'right',
                         formatter: function (value, row, index) {
                             if(value==1){

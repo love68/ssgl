@@ -16,12 +16,11 @@ public interface CustomerStudentMapper {
     List<Student> selectStudentsPage(@Param("name") String name,
                                      @Param("sid") String sid,
                                      @Param("roomNumber") String roomNumber,
-                                     @Param("age") Integer age,
-                                     @Param("sex") Boolean sex,
-                                     @Param("entranceTime1") String entranceTime,
+                                     @Param("age") String age,
+                                     @Param("sex") String sex,
+                                     @Param("entranceTime") String entranceTime,
                                      @Param("graduateTime") String graduateTime,
                                      @Param("duty") String duty,
-                                     @Param("faculty") String faculty,
-                                     @Param("profess") String profess
+                                     @Param("faculty") String faculty
     );
 }

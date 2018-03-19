@@ -45,7 +45,17 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Page<Student> selectStudentsPage(Integer page, Integer rows, HttpServletRequest request) throws Exception {
         PageHelper.startPage(page,rows);
-        List<Student> students = customerStudentMapper.selectStudentsPage(null,null,null,null,null,null,null,null,null,null);
+        String name=request.getParameter("name");
+        String sid = request.getParameter("sid");
+        String roomNumber = request.getParameter("roomNumber");
+        String sex = request.getParameter("sex");
+        String age = request.getParameter("age");
+        String  entranceTime = request.getParameter("entranceTime");
+        String graduateTime = request.getParameter("graduateTime");
+        String duty = request.getParameter("duty");
+        String faculty = request.getParameter("faculty");
+        List<Student> students = customerStudentMapper.selectStudentsPage(name,sid,roomNumber,age,sex,entranceTime,graduateTime,duty,
+                faculty);
         if(null!=students&&students.size()>0){
             PageInfo<Student> pageInfo = new PageInfo<Student>(students);
             Page<Student> result = new Page<>();
@@ -54,6 +64,15 @@ public class StudentServiceImpl implements StudentService {
             return result;
         }
         return null;
+    }
+
+    @Override
+    public Student selectStudentInfo(String id) throws Exception {
+//        StudentExample example = new StudentExample();
+//        example.createCriteria().andIdEqualTo(id);
+//        List<Student> students = studentMapper.selectByExample(example);
+        Student student = studentMapper.selectByPrimaryKey(id);
+        return student;
     }
 
     @Override

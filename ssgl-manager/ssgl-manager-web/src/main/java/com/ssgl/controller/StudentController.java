@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -37,17 +38,30 @@ public class StudentController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "selectStudentsPage",produces = "text/json;charset=utf-8")
+    @RequestMapping(value = "selectStudentsPage", produces = "text/json;charset=utf-8")
     public String selectStudentsPage(Integer page, Integer rows, HttpServletRequest request) {
         try {
-            Page<Student> page1 = studentService.selectStudentsPage(page,rows,request);
-            Map<String,Object> map = new HashMap<>();
-            if(null!=page1){
-                map.put("total",page1.getTotalRecord());
-                map.put("rows",page1.getList());
+            Page<Student> page1 = studentService.selectStudentsPage(page, rows, request);
+            Map<String, Object> map = new HashMap<>();
+            if (null != page1) {
+                map.put("total", page1.getTotalRecord());
+                map.put("rows", page1.getList());
                 return JSONObject.toJSONString(map);
             }
             return null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @RequestMapping(value = "selectStudentInfo")
+    public ModelAndView selectStudentInfo(String id) {
+        try {
+            Student student = studentService.selectStudentInfo(id);
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("StudentInfo");
+            modelAndView.addObject("student",student);
+            return modelAndView;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -88,9 +102,9 @@ public class StudentController {
                     roomNumber,
                     dormitoryNo,
                     bedNo,
-                     province,
-                     city,
-                     county,
+                    province,
+                    city,
+                    county,
                     phone,
                     duty,
                     faculty,

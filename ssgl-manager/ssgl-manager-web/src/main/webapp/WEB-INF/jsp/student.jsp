@@ -11,6 +11,11 @@
 <head>
     <title>学生管理</title>
     <script>
+
+        Date.prototype.toLocaleString = function() {
+            return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate() + "/ " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
+        };
+
         var flag ="";
         $.extend($.fn.validatebox.defaults.rules, {
             validateSid: {
@@ -58,15 +63,21 @@
         });
 
         $(function () {
-            $("#entranceTime,#entranceTime1").datebox({
+            $("#entranceTime").datebox({
                 required: true,
                 editable:false,
                 missingMessage: '入学时间必填'
             });
-            $("#graduateTime,#graduateTime1").datebox({
+            $("#entranceTime1").datebox({
+                editable:false
+            });
+            $("#graduateTime").datebox({
                 required: true,
                 editable:false,
                 missingMessage: '毕业时间必填'
+            });
+            $("#graduateTime1").datebox({
+                editable:false
             });
 
             $("#roomNumber").combobox({
@@ -125,11 +136,21 @@
                 missingMessage:"所属县必填！"
             }),
 
-            $("#faculty,#faculty1").combobox({
+            $("#faculty").combobox({
                 required:true,
                 valueField:"facultyid",
                 textField:"faculty",
                 missingMessage:"学院必填",
+                url:"${pageContext.request.contextPath}/faculty/selectAllFaculties.action",
+                onSelect:function (record) {
+                    var faultyid = record.facultyid;
+                    $("#profess").combobox("clear");
+                    $("#profess").combobox("reload","${pageContext.request.contextPath}/faculty/selectAllFacultiesByFacultyId.action?facultyid="+faultyid);
+                }
+            }),
+                $("#faculty1").combobox({
+                valueField:"facultyid",
+                textField:"faculty",
                 url:"${pageContext.request.contextPath}/faculty/selectAllFaculties.action",
                 onSelect:function (record) {
                     var faultyid = record.facultyid;
@@ -159,25 +180,77 @@
                 title:"学生管理",
                 url: '${pageContext.request.contextPath}/student/selectStudentsPage.action',
                 pagination:true,
+                frozenColumns:[[{field:"ck",title:"选择",checkbox:true},{field:'sid',title:'学号',width:100}]],
                 columns:[[
-                    {field:"ck",title:"选择",checkbox:true},
-                    {field:'sid',title:'学号',width:100},
                     {field:'name',title:'姓名',width:100},
                     {field:'address',title:'地址',width:100,align:'right'},
                     {field:'age',title:'年龄',width:100,align:'right'},
                     {field:'dormitoryNo',title:'宿舍楼号',width:100,align:'right'},
                     {field:'duty',title:'职务',width:100,align:'right'},
-                    {field:'graduateTime',title:'毕业时间',width:100,align:'right'},
+                    {field:'graduateTime',title:'毕业时间',width:100,align:'right',
+                        formatter: function (value, row, index) {
+                            var time = new Date(value);
+                            return time.toLocaleDateString();
+                        }},
                     {field:'homePhone',title:'家庭电话',width:100,align:'right'},
                     {field:'entranceTime',title:'入学时间',width:100,align:'right'},
-                    {field:'faculty',title:'院系',width:100,align:'right'},
-                    {field:'isGraduate',title:'是否毕业',width:100,align:'right'},
-                    {field:'isUndergraduate',title:'是否本科',width:100,align:'right'},
+                    {field:'faculty',title:'院系',width:100,align:'right',
+                        formatter: function(value,row,index){
+                            if (value==1){
+                                return "计算机工程系";
+                            } else if(value==2){
+                                return "数学系";
+                            }else if(value==3){
+                                return "外语系";
+                            }else if(value==4){
+                                return "经济管理系";
+                            }else if(value==5){
+                                return "物理系";
+                            }else if(value==6){
+                                return "中文系";
+                            }else if(value==7){
+                                return "中语系";
+                            }else if(value==8){
+                                return "化学工程系";
+                            }else if(value==9){
+                                return "初等教育学院";
+                            }else if(value==10){
+                                return "体育系";
+                            }else if(value==11){
+                                return "音乐系";
+                            }else if(value==12){
+                                return "美术系";
+                            }
+                        }},
+                    {field:'isGraduate',title:'是否毕业',width:100,align:'right',
+                        formatter: function(value,row,index){
+                            if (value==true){
+                                return "是";
+                            } else if(value==false){
+                                return "否";
+                            }
+                        }
+                    },
+                    {field:'isUndergraduate',title:'是否本科',width:100,align:'right',
+                        formatter: function(value,row,index){
+                            if (value==true){
+                                return "是";
+                            } else if(value==false){
+                                return "否";
+                            }
+                        }},
                     {field:'phone',title:'电话',width:100,align:'right'},
                     {field:'roomNumber',title:'宿舍号',width:100,align:'right'},
-                    {field:'sex',title:'性别',width:100,align:'right'},
+                    {field:'sex',title:'性别',width:100,align:'right',
+                        formatter: function(value,row,index){
+                            if (value==true){
+                                return "男";
+                            } else if(value==false){
+                                return "女";
+                            }
+                        }},
                     {field:'bedNo',title:'床位',width:100,align:'right'},
-                    {field:'头像',title:'床位',width:100,align:'right'},
+                    {field:'icon',title:'头像',width:100,align:'right'},
                 ]],
                 toolbar: [
                     {
@@ -275,7 +348,16 @@
                             $("#dg").datagrid("reload");
                         }
                     }
-                ]
+                ],
+                onDblClickRow:function (index, row) {
+                    var jq = top.jQuery;
+                    var content = "<iframe frameborder=0 scrolling='auto' style='width:100%;height:100%' src='${pageContext.request.contextPath}/student/selectStudentInfo.action?id=" + row.id + "'></iframe>";
+                    jq("#tt").tabs('add',{
+                        title:"学生详细信息",
+                        content:content,
+                        closable:true
+                    });
+                }
             });
 
 
@@ -349,12 +431,11 @@
                 <br/>
                 入学时间：
                    <input id="entranceTime1" type="text" name="entranceTime" value="">
-                毕学时间：
-                    <input id="graduateTime1" type="text" name="graduateTime" value="" required="false">
+                毕业时间：
+                    <input id="graduateTime1" type="text" name="graduateTime" value="">
                 职务：<input type="text" name="duty" value="" class="easyui-textbox">
                 院系：
                     <input id="faculty1" name="faculty" value="" style="width: 70px;">
-                        <input id="profess1" name="profess" value="" style="width: 70px;">
                 <a class="easyui-linkbutton" id="btn1">搜索</a>
                 <a class="easyui-linkbutton" id="btn2">清空</a>
             </form>

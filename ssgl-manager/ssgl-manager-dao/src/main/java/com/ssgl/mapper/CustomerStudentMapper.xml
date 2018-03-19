@@ -26,6 +26,17 @@
 
     <select id="selectStudentsPage" resultMap="studentMap">
        SELECT * FROM student
+       <where>
+           <if test="name!=null and name!=''">and name=#{name}</if>
+           <if test="sid!=null and sid!=''">and sid=#{sid}</if>
+           <if test="roomNumber!=null and roomNumber!=''">and room_number=#{roomNumber}</if>
+           <if test="age!=null and age!=''">and age=#{age}</if>
+           <if test="sex!=null and sex!=''">and sex=#{sex}</if>
+           <if test="duty!=null and duty!=''">and age=#{duty}</if>
+           <if test="faculty!=null and faculty!=''">and faculty=#{faculty}</if>
+           <if test="entranceTime!=null and entranceTime!=''">and entrance_time=#{entranceTime}</if>
+           <if test="graduateTime!=null and graduateTime!=''">and graduate_time=#{graduateTime}</if>
+       </where>
     </select>
 
     <delete id="deleteStudents">

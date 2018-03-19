@@ -97,5 +97,5 @@ public interface StudentService {
 
     Page<Student> selectStudentsPage(Integer page, Integer rows, HttpServletRequest request) throws Exception;
 
-
+    Student selectStudentInfo(String id) throws Exception;
 }

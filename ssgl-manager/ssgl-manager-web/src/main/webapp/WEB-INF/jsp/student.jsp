@@ -347,6 +347,12 @@
                         handler: function () {
                             $("#dg").datagrid("reload");
                         }
+                    }, {
+                        iconCls: 'icon-print',
+                        text: '导出',
+                        handler: function () {
+                            window.location.href="${pageContext.request.contentType}/student/exportStudent.action?name="+$("#name1").val()+"&sid="+$("#sid1").val()+"&sex="+$("#sex1").val()+"&age="+$("#age1").val()+"&entranceTime="+$("#entranceTime1").val()+"&graduateTime="+$("#graduateTime1").val()+"&faculty="+$("#faculty1").val()+"&roomNumber="+$("#roomNumber1").val()+"&duty="+$("#duty1").val();
+                        }
                     }
                 ],
                 onDblClickRow:function (index, row) {
@@ -421,19 +427,19 @@
     <div id="cc" class="easyui-layout" style="width:100%;height:500px;">
         <div id="serarchDiv" data-options="region:'north',title:'查询',split:true,collapsed:true"style="height:100px;" >
             <form id="mysearch" method="post">
-                姓名：<input name="name" type="text" value="" class="easyui-textbox">
-                学号：<input name="sid" type="text" value="" class="easyui-textbox">
-                宿舍号：<input name="roomNumber" class="easyui-numberbox" value="">
-                年龄：<input name="age" type="text" value="" class="easyui-numberbox"/>
+                姓名：<input id="name1"name="name1" type="text" value="" class="easyui-textbox">
+                学号：<input id="sid1" name="sid" type="text" value="" class="easyui-textbox">
+                宿舍号：<input id="roomNumber1" name="roomNumber" class="easyui-numberbox" value="">
+                年龄：<input id="age1" name="age" type="text" value="" class="easyui-numberbox"/>
                 性别 ：
-                    <input name="sex" type="radio" value="0">女
+                    <input id="sex1" name="sex" type="radio" value="0">女
                     <input name="sex" type="radio" value="1">男
                 <br/>
                 入学时间：
                    <input id="entranceTime1" type="text" name="entranceTime" value="">
                 毕业时间：
                     <input id="graduateTime1" type="text" name="graduateTime" value="">
-                职务：<input type="text" name="duty" value="" class="easyui-textbox">
+                职务：<input id="duty1"type="text" name="duty" value="" class="easyui-textbox">
                 院系：
                     <input id="faculty1" name="faculty" value="" style="width: 70px;">
                 <a class="easyui-linkbutton" id="btn1">搜索</a>
@@ -459,7 +465,7 @@
             </tr>
             <tr>
                 <td>姓名：</td>
-                <td><input id="name" name="name" type="text" value="贾俊康" class="easyui-textbox" required="true"
+                <td><input id="name" name="name" type="text" value="贾俊康1111" class="easyui-textbox" required="true"
                            missingMessage="学生姓名必填！" validType="validateName"></td>
             </tr>
             <tr>

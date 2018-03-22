@@ -20,6 +20,7 @@ function hideURLbar(){ window.scrollTo(0,1); } </script>
 <h1>${student.name}<img src="${student.icon}" name="icon"></h1>
 	<div class="form-content">
 		<form action="${pageContext.request.contentType}/student/updateStudent.action" method="post">
+			<input type="hidden" name="id" value="${student.id}">
 			<div class="name">
 				<label>学号</label>
 				<input class="input1" type="text" name="sid" readonly required="" value="${student.sid}" >
@@ -119,6 +120,7 @@ function hideURLbar(){ window.scrollTo(0,1); } </script>
 																						</c:otherwise>
 																					</c:choose> >
 			</div>
+			<div style="display: none;"><img src="${student.icon}" name="icon"><input name="isGraduate" type="radio" value="${student.isGraduate}"></div>
 			<div class="signup">
 				<input type="submit" value="修改">
 			</div>

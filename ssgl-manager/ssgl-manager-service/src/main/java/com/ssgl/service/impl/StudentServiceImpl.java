@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -44,23 +45,23 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Page<Student> selectStudentsPage(Integer page, Integer rows, HttpServletRequest request) throws Exception {
-        PageHelper.startPage(page,rows);
-        String name=request.getParameter("name");
+        PageHelper.startPage(page, rows);
+        String name = request.getParameter("name");
         String sid = request.getParameter("sid");
         String roomNumber = request.getParameter("roomNumber");
         String sex = request.getParameter("sex");
         String age = request.getParameter("age");
-        String  entranceTime = request.getParameter("entranceTime");
+        String entranceTime = request.getParameter("entranceTime");
         String graduateTime = request.getParameter("graduateTime");
         String duty = request.getParameter("duty");
         String faculty = request.getParameter("faculty");
-        List<Student> students = customerStudentMapper.selectStudentsPage(name,sid,roomNumber,age,sex,entranceTime,graduateTime,duty,
+        List<Student> students = customerStudentMapper.selectStudentsPage(name, sid, roomNumber, age, sex, entranceTime, graduateTime, duty,
                 faculty);
-        if(null!=students&&students.size()>0){
+        if (null != students && students.size() > 0) {
             PageInfo<Student> pageInfo = new PageInfo<Student>(students);
             Page<Student> result = new Page<>();
             result.setList(pageInfo.getList());
-            result.setTotalRecord((int)pageInfo.getTotal());
+            result.setTotalRecord((int) pageInfo.getTotal());
             return result;
         }
         return null;
@@ -73,6 +74,25 @@ public class StudentServiceImpl implements StudentService {
 //        List<Student> students = studentMapper.selectByExample(example);
         Student student = studentMapper.selectByPrimaryKey(id);
         return student;
+    }
+
+    @Override
+    public List<Student> exportStudent(HttpServletRequest request,HttpServletResponse response, String sid, String name, String sex, String age, String entranceTime, String graduateTime, String faculty, String roomNumber, String duty) throws Exception {
+       return customerStudentMapper.selectStudentsPage(name, sid, roomNumber, age, sex, entranceTime, graduateTime, faculty, duty);
+    }
+
+    @Override
+    public void updateStudent(String id, String phone, String homePhone, String address, String bedNo, String dormitoryNo, String duty, String roomNumber, Integer age) throws Exception {
+        Student oldStudent = studentMapper.selectByPrimaryKey(id);
+        oldStudent.setPhone(phone);
+        oldStudent.setHomePhone(homePhone);
+        oldStudent.setAddress(address);
+        oldStudent.setBedNo(bedNo);
+        oldStudent.setDormitoryNo(dormitoryNo);
+        oldStudent.setDuty(duty);
+        oldStudent.setRoomNumber(roomNumber);
+        oldStudent.setAge(age);
+        studentMapper.updateByPrimaryKey(oldStudent);
     }
 
     @Override
@@ -107,9 +127,9 @@ public class StudentServiceImpl implements StudentService {
 
         CountyExample example3 = new CountyExample();
         example3.createCriteria().andAreaidEqualTo(county);
-        String c2= countyMapper.selectByExample(example3).get(0).getArea();
+        String c2 = countyMapper.selectByExample(example3).get(0).getArea();
 
-        student.setAddress(p+" "+c+" "+c2);
+        student.setAddress(p + " " + c + " " + c2);
         student.setAge(age);
         student.setBedNo(bedNo);
         student.setIsUndergraduate(isUndergraduate);
@@ -127,21 +147,21 @@ public class StudentServiceImpl implements StudentService {
         student.setName(name);
 
         String imageName = icon.getOriginalFilename();
-        String extName = imageName.substring(imageName.lastIndexOf(".")+1);
+        String extName = imageName.substring(imageName.lastIndexOf(".") + 1);
         FastDFSClient fastDFSClient = new FastDFSClient("classpath:properties/Client.conf");
-        String url = fastDFSClient.uploadFile(icon.getBytes(),extName);
-        url =BASE_IMAGE_SERVER_URL+url;
+        String url = fastDFSClient.uploadFile(icon.getBytes(), extName);
+        url = BASE_IMAGE_SERVER_URL + url;
         student.setIcon(url);
         System.out.println(url);
         studentMapper.insert(student);
-        return new Result("ok","添加成功");
+        return new Result("ok", "添加成功");
     }
 
     @Override
     public Result editStudent(Student student) throws Exception {
         Student oldStudent = studentMapper.selectByPrimaryKey(student.getId());//从数据库中查询到的学生
-        BeanUtils.copyProperties(student,oldStudent);
-        return new Result("ok","修改成功");
+        BeanUtils.copyProperties(student, oldStudent);
+        return new Result("ok", "修改成功");
     }
 
     @Override

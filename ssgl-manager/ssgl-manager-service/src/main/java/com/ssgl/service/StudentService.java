@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 public interface StudentService {
     /**
@@ -68,6 +70,8 @@ public interface StudentService {
      */
     Result editStudent(Student student) throws Exception;
 
+    void updateStudent(String id,String phone,String homePhone,String address,String bedNo,String dormitoryNo,String duty,String roomNumber,Integer age) throws Exception;
+
     /**
      * 删除学生
      *
@@ -98,4 +102,8 @@ public interface StudentService {
     Page<Student> selectStudentsPage(Integer page, Integer rows, HttpServletRequest request) throws Exception;
 
     Student selectStudentInfo(String id) throws Exception;
+
+
+    List<Student>  exportStudent(HttpServletRequest request, HttpServletResponse response, String sid, String name, String sex, String age, String entranceTime, String graduateTime, String faculty, String roomNumber, String duty) throws Exception;
+
 }

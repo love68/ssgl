@@ -45,6 +45,18 @@ public class StudentController {
         return "student";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "changeStudentRoom")
+    public Result changeStudentRoom(String ids){
+        try {
+            return studentService.changeStudentRoom(ids);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("error","交换失败");
+        }
+    }
+
+
     @RequestMapping(value = "exportStudent")
     public void exportStudent(HttpServletRequest request,HttpServletResponse response,String sid, String name, String sex, String age, String entranceTime, String graduateTime, String faculty, String roomNumber, String duty){
         try {

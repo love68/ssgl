@@ -106,4 +106,6 @@ public interface StudentService {
 
     List<Student>  exportStudent(HttpServletRequest request, HttpServletResponse response, String sid, String name, String sex, String age, String entranceTime, String graduateTime, String faculty, String roomNumber, String duty) throws Exception;
 
+    Result changeStudentRoom(String idlist) throws Exception;
+
 }

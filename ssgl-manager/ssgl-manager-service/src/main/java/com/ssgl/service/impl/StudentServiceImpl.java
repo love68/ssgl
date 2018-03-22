@@ -13,6 +13,7 @@ import com.ssgl.bean.*;
 import com.ssgl.mapper.*;
 import com.ssgl.service.StudentService;
 import com.ssgl.util.FastDFSClient;
+import com.ssgl.util.StringUtils;
 import com.ssgl.util.Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,22 @@ public class StudentServiceImpl implements StudentService {
     public StudentMapper studentMapper;
     @Autowired
     public CustomerStudentMapper customerStudentMapper;
+
+    @Override
+    public Result changeStudentRoom(String idlist) throws Exception {
+        List<String> ids = StringUtils.stringConvertList(idlist);
+        String id1 = ids.get(0);
+        String id2= ids.get(1);
+        Student s1 = studentMapper.selectByPrimaryKey(id1);
+        String roomNum1 = s1.getRoomNumber();
+        Student s2 = studentMapper.selectByPrimaryKey(id2);
+        String roomNum2 = s2.getRoomNumber();
+        s1.setRoomNumber(roomNum2);
+        s2.setRoomNumber(roomNum1);
+        studentMapper.updateByPrimaryKey(s1);
+        studentMapper.updateByPrimaryKey(s2);
+        return new Result("ok","交换成功！");
+    }
 
     @Override
     public Page<Student> selectStudentsPage(Integer page, Integer rows, HttpServletRequest request) throws Exception {

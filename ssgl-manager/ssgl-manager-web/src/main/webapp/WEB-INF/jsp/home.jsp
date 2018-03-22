@@ -21,7 +21,6 @@
         a {
             text-decoration: none;
         }
-
         a:hover {
             color: #555;
             font-size: 14px;

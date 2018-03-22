@@ -353,6 +353,47 @@
                         handler: function () {
                             window.location.href="${pageContext.request.contentType}/student/exportStudent.action?name="+$("#name1").val()+"&sid="+$("#sid1").val()+"&sex="+$("#sex1").val()+"&age="+$("#age1").val()+"&entranceTime="+$("#entranceTime1").val()+"&graduateTime="+$("#graduateTime1").val()+"&faculty="+$("#faculty1").val()+"&roomNumber="+$("#roomNumber1").val()+"&duty="+$("#duty1").val();
                         }
+                    }, {
+                        iconCls: 'icon-print',
+                        text: '交换宿舍',
+                        handler: function () {
+                            var ids = "";
+                           var arr = $("#dg").datagrid("getSelections");
+                           if(arr.length==2){
+                               for(var i = 0;i<arr.length;i++){
+                                   ids += arr[i].id + ",";
+                               }
+                               ids = ids.substring(0,ids.length-1);
+                                $.ajax({
+                                    url:"${pageContext.request.contextPath}/student/changeStudentRoom.action",
+                                    type:"post",
+                                    data:{ids:ids},
+                                    cache:false,
+                                    dataType:"json",
+                                    success:function (r) {
+                                        $("#dg").datagrid("reload");
+                                        $("#dg").datagrid("clearSelections");
+                                        $.messager.show({
+                                            title:r.status,
+                                            msg:r.message
+                                        })
+                                    },
+                                    error:function (r) {
+                                        $.messager.show({
+                                            title:r.status,
+                                            msg:r.message
+                                        })
+                                    }
+                                })
+                           }else{
+                               $.messager.show({
+                                   title:'提示信息',
+                                   msg:'请选择两个学生',
+                                   timeout:5000,
+                                   showType:'slide'
+                               });
+                            }
+                        }
                     }
                 ],
                 onDblClickRow:function (index, row) {
@@ -432,8 +473,11 @@
                 宿舍号：<input id="roomNumber1" name="roomNumber" class="easyui-numberbox" value="">
                 年龄：<input id="age1" name="age" type="text" value="" class="easyui-numberbox"/>
                 性别 ：
-                    <input id="sex1" name="sex" type="radio" value="0">女
-                    <input name="sex" type="radio" value="1">男
+                <select id="sex1" class="easyui-combobox" name="sex" style="width:200px;">
+                    <option value="-1">请选择</option>
+                    <option value="0">女</option>
+                    <option value="1">男</option>
+                </select>
                 <br/>
                 入学时间：
                    <input id="entranceTime1" type="text" name="entranceTime" value="">

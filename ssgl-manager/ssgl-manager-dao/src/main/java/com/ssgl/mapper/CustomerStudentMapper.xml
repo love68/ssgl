@@ -31,7 +31,7 @@
            <if test="sid!=null and sid!=''">and sid=#{sid}</if>
            <if test="roomNumber!=null and roomNumber!=''">and room_number=#{roomNumber}</if>
            <if test="age!=null and age!=''">and age=#{age}</if>
-           <if test="sex!=null and sex!=''and sex!='undefined'">and sex=#{sex}</if>
+           <if test="sex!=null and sex!=''and sex!='undefined' and sex!='-1'">and sex=#{sex}</if>
            <if test="duty!=null and duty!=''">and age=#{duty}</if>
            <if test="faculty!=null and faculty!=''">and faculty=#{faculty}</if>
            <if test="entranceTime!=null and entranceTime!=''">and entrance_time=#{entranceTime}</if>

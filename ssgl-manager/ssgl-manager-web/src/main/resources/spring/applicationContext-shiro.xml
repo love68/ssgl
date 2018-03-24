@@ -17,11 +17,17 @@
         <!-- 注入相关页面访问URL -->
         <property name="loginUrl" value="/login.jsp"/>
         <property name="successUrl" value="/index.jsp"/>
-        <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
+        <property name="unauthorizedUrl" value="/refuse.jsp"/>
         <property name="filterChainDefinitions">
             <value>
+                /student/managerStudent.action=perms["managerStudent"]
                 /user/logout.action = logout
-                /** = anon
+                /css/** = anon
+                /fonts/** = anon
+                /images/** = anon
+                /js/** = anon
+                /login.jsp=anon
+                /validatecode.jsp=anon
             </value>
         </property>
     </bean>

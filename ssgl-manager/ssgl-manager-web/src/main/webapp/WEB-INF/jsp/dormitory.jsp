@@ -24,6 +24,7 @@
             $("#dg").datagrid({
                 idField:"buildingNo",
                 title:'宿舍楼管理',
+                fit:true,
                 pagination:true,
                 pageSize:5,
                 pageList:[5,10,15,20],
@@ -198,8 +199,8 @@
     </script>
 </head>
 <body>
-    <div id="cc" class="easyui-layout" style="width:100%;height:100%;">
-        <div id="serarchDiv" data-options="region:'north',title:'查询',split:true,collapsed:true"style="height:100px;" >
+    <div id="cc" class="easyui-layout" style="width:100%;height: 85%;">
+        <div id="serarchDiv" data-options="region:'north',title:'查询',split:true,collapsed:true" style="height: 100px;">
             <form id="mysearch" method="post">
                 宿舍楼号：<input id="building_no1" name="buildingNo" value="">
                 <script>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssgl.mapper.CustomerPrivilegeMapper">
+
+    <select id="selectPrivileges" resultType="string" parameterType="string">
+        SELECT
+			auth_privilege. CODE
+		FROM
+			t_user,
+			user_role,
+			role_privilege,
+			auth_privilege
+		WHERE
+			t_user.id = #{id}
+			AND t_user.id = user_role.user_id
+			AND user_role.role_id = role_privilege.role_id
+			AND role_privilege.privilege_id = auth_privilege.id
+    </select>
+
+</mapper>

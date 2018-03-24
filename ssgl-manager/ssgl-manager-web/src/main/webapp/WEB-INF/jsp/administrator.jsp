@@ -26,6 +26,7 @@
             var flag = "";
             $("#dg").datagrid({
                 title: '访客管理',
+                fit:true,
                 url: '${pageContext.request.contextPath}/selectUsersPage.action',
                 toolbar: [
                     {

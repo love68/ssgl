@@ -22,6 +22,7 @@
             $("#dg").datagrid({
                 idField:"id",
                 title:'楼层管理',
+                fit:true,
                 url:"${pageContext.request.contextPath}/floor/selectFloorDormitories.action",
                 rownumbers:true,
                 columns:[[

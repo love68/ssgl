@@ -179,6 +179,7 @@
             $("#dg").datagrid({
                 title:"学生管理",
                 url: '${pageContext.request.contextPath}/student/selectStudentsPage.action',
+                fit:true,
                 pagination:true,
                 frozenColumns:[[{field:"ck",title:"选择",checkbox:true},{field:'sid',title:'学号',width:100}]],
                 columns:[[

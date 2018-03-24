@@ -23,6 +23,7 @@
         $(function () {
             $("#visitorDatagrid").datagrid({
                 title: '访客管理',
+                fit:true,
                 url: '${pageContext.request.contextPath}/visitor/selectVisitorsPage.action',
                 toolbar: [
                     {

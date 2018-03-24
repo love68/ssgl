@@ -8,21 +8,35 @@ package com.ssgl.realm;
  */
 
 import com.ssgl.bean.TUser;
+import com.ssgl.mapper.CustomerPrivilegeMapper;
 import com.ssgl.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 public class SsglRealm extends AuthorizingRealm {
 
     @Autowired
     public UserService userService;
 
+    @Autowired
+    public CustomerPrivilegeMapper customerPrivilegeMapper;
+    
+    //授权方法
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        return null;
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        TUser subject = (TUser) principalCollection.getPrimaryPrincipal();
+
+        List<String> codes = customerPrivilegeMapper.selectPrivileges(subject.getId());
+        info.addStringPermissions(codes);
+
+        return info;
     }
 
     //认证方法

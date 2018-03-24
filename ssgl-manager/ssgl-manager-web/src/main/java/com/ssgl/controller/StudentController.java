@@ -187,6 +187,7 @@ public class StudentController {
             throw new RuntimeException(e);
         }
     }
+
     @ResponseBody
     @RequestMapping(value = "addStudent")
     public Result addStudent(String sid,
@@ -210,25 +211,25 @@ public class StudentController {
                              @RequestParam(value = "icon") MultipartFile icon) {
 
         try {
-            return studentService.addStudent(sid,
-                    name,
-                    age,
-                    sex,
-                    graduateTime,
-                    homePhone,
-                    entranceTime,
-                    isUndergraduate,
-                    isGraduate,
-                    roomNumber,
-                    dormitoryNo,
-                    bedNo,
-                    province,
-                    city,
-                    county,
-                    phone,
-                    duty,
-                    faculty,
-                    icon);
+                return studentService.addStudent(sid,
+                        name,
+                        age,
+                        sex,
+                        graduateTime,
+                        homePhone,
+                        entranceTime,
+                        isUndergraduate,
+                        isGraduate,
+                        roomNumber,
+                        dormitoryNo,
+                        bedNo,
+                        province,
+                        city,
+                        county,
+                        phone,
+                        duty,
+                        faculty,
+                        icon);
         } catch (Exception e) {
             e.printStackTrace();
             return new Result("error", "添加失败");

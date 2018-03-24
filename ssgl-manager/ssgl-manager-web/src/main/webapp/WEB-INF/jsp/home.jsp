@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/jsp/common/common-easyui.jsp" %>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <html>
 <head>
     <title>宿舍管理系统后台首页</title>
@@ -36,44 +37,48 @@
 <div data-options="region:'south',title:'版权信息',split:true" style="height:100px;"></div>
 <div data-options="region:'west',title:'系统菜单',split:true" style="width:200px;">
     <div id="aa" class="easyui-accordion" style="width:180px;height:200px;" data-options="selected:1">
-        <div title="学生管理">
-            <ul>
-                <a href="#">
-                    <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;margin-left: -40px;margin-top: -12px;">
-                        <div style="font-size: 14px;margin-top: 5px;margin-left: 16px;">学生管理</div>
-                    </div>
-                </a>
+        <shiro:hasPermission name="managerStudent">
+            <div title="学生管理">
+                <ul>
+                    <a href="#">
+                        <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;margin-left: -40px;margin-top: -12px;">
+                            <div style="font-size: 14px;margin-top: 5px;margin-left: 16px;">学生管理</div>
+                        </div>
+                    </a>
 
-                <script>
-                    $(function () {
-                        /*$("a[name='studentManage']").click(function () {
-                           $("#tt").tabs("add",{
-                               title:"学生管理"
-                           })
-                        });*/
-                        $("a").click(function () {
-                            var title = $(this).text();
-                            title = $.trim(title);
-                            if ("学生管理" == title) {
-                                //查看该选项卡是否已经打开
-                                var flag = $("#tt").tabs("exists", title);
-                                //如果未打开
-                                if (!flag) {
-                                    //打开选项卡
-                                    $("#tt").tabs("add", {
-                                        "title": title,
-                                        "closable": true,
-                                        "content": '<iframe frameborder=0 style=width:100%;height:100% src=' + "${pageContext.request.contextPath}/student/managerStudent.action" + ' ></iframe>'
-                                    });
-                                }else{
-                                    $("#tt").tabs("select", title);
+                    <script>
+                        $(function () {
+                            /*$("a[name='studentManage']").click(function () {
+                               $("#tt").tabs("add",{
+                                   title:"学生管理"
+                               })
+                            });*/
+                            $("a").click(function () {
+                                var title = $(this).text();
+                                title = $.trim(title);
+                                if ("学生管理" == title) {
+                                    //查看该选项卡是否已经打开
+                                    var flag = $("#tt").tabs("exists", title);
+                                    //如果未打开
+                                    if (!flag) {
+                                        //打开选项卡
+                                        $("#tt").tabs("add", {
+                                            "title": title,
+                                            "closable": true,
+                                            "content": '<iframe frameborder=0 style=width:100%;height:100% src=' + "${pageContext.request.contextPath}/student/managerStudent.action" + ' ></iframe>'
+                                        });
+                                    }else{
+                                        $("#tt").tabs("select", title);
+                                    }
                                 }
-                            }
+                            })
                         })
-                    })
-                </script>
-            </ul>
-        </div>
+                    </script>
+                </ul>
+            </div>
+        </shiro:hasPermission>
+
+    <shiro:hasPermission name="toDormitoryUI">
         <div title="宿舍楼管理" data-options="" style="">
             <a id="sslgl">
                 <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;">
@@ -147,6 +152,9 @@
                 })
             })
         </script>
+    </shiro:hasPermission>
+     <shiro:hasPermission name="toPrivilegeUI">
+
         <div title="权限管理">
             <a id="qxgl">
                 <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;">
@@ -177,6 +185,8 @@
                 })
             </script>
         </div>
+     </shiro:hasPermission>
+         <shiro:hasPermission name="toManagerVisitorUI">
         <div title="访客管理">
             <a id="fkgl">
                 <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;">
@@ -207,6 +217,8 @@
                 });
             </script>
         </div>
+     </shiro:hasPermission>
+       <shiro:hasPermission name="toUserUI">
         <div title="管理员管理">
             <a id="glygl">
                 <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;">
@@ -237,6 +249,7 @@
                 })
             </script>
         </div>
+       </shiro:hasPermission>
         <div title="系统设置">
             <a id="logout" onclick="logout()">
                 <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;">

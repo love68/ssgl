@@ -14,44 +14,21 @@
         $(function () {
 
 
-            $("#roomDatagrid").datagrid({
+            $("#privilegeDatagrid").datagrid({
                 title:'房间管理',
-                url:'${pageContext.request.contextPath}/room/selectRoomsPage.action',
-                toolbar:[
-                    {
-                        text:'新增房间',
-                        iconCls:"icon-add",
-                        handler:function () {
-
-                        }
-                    },{
-                        text:'删除房间',
-                        iconCls:"icon-remove",
-                        handler:function () {
-
-                        }
-                    },{
-                        text:'编辑房间',
-                        iconCls:"icon-edit",
-                        handler:function () {
-
-                        }
-                    },{
-                        text:'查找房间',
-                        iconCls:"icon-search",
-                        handler:function () {
-
-                        }
-                    }
-                ],
+                url:'${pageContext.request.contextPath}/privilege/selectPrivilegePage.action',
                 columns:[[
-                    {field:'roomNumber',title:'宿舍号',width:100},
-                    {field:'capacity',title:'宿舍容量',width:100},
-                    {field:'peopleNum',title:'宿舍人数',width:100,align:'right'},
-                    {field:'dormitoryNum',title:'宿舍楼号',width:100,align:'right'},
-                    {field:'starLevel',title:'宿舍星级',width:100,align:'right'},
-                    {field:'score',title:'宿舍评分',width:100,align:'right'},
-                ]]
+                    {field:'id',title:'权限标识',width:100},
+                    {field:'name',title:'权限名称',width:100},
+                    {field:'code',title:'权限',width:100,align:'right'},
+                    {field:'description',title:'描述',width:100,align:'right'},
+                    {field:'page',title:'对应action',width:100,align:'right'},
+                    {field:'generatemenu',title:'是否生成菜单',width:100,align:'right'},
+                    {field:'pid',title:'父权限id',width:100,align:'right'},
+                ]],
+                fit:true,
+                pagination:true,
+                rownumbers:true
 
             });
 
@@ -60,8 +37,8 @@
     </script>
 </head>
 <body>
-    <div>
-        <table id="roomDatagrid"></table>
+    <div id="cc" style="width:100%;height:100%;">
+        <table id="privilegeDatagrid"></table>
     </div>
 </body>
 </html>

@@ -9,12 +9,10 @@ package com.ssgl.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ssgl.bean.Page;
-import com.ssgl.bean.Result;
-import com.ssgl.bean.TUser;
-import com.ssgl.bean.TUserExample;
+import com.ssgl.bean.*;
 import com.ssgl.mapper.CustomerUserMapper;
 import com.ssgl.mapper.TUserMapper;
+import com.ssgl.mapper.UserRoleMapper;
 import com.ssgl.service.UserService;
 import com.ssgl.util.MD5Utils;
 import org.apache.shiro.SecurityUtils;
@@ -33,6 +31,9 @@ public class UserServiceImpl implements UserService {
     public TUserMapper userMapper;
     @Autowired
     public CustomerUserMapper customerUserMapper;
+
+    @Autowired
+    public UserRoleMapper userRoleMapper;
 
     /**
      * 根据邮箱查找用户
@@ -94,6 +95,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result addUser(TUser user) throws Exception {
         userMapper.insertSelective(user);
+        UserRoleKey userRoleKey = new UserRoleKey();
+        userRoleKey.setUserId(user.getId());
+        userRoleKey.setRoleId("2");
+        userRoleMapper.insert(userRoleKey);
         return new Result("ok", "添加成功");
     }
 

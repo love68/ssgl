@@ -76,11 +76,7 @@
                     //提交表达
                     $("#submit_btn").click(function () {
                         var user = $("#login_form").serializeJson();
-                        console.info(user);
-                        <%--window.location.href="${pageContext.request.contextPath}/user/login.action";--%>
                         $("#login_form").submit();
-
-
                     });
 
 

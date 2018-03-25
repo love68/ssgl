@@ -120,7 +120,6 @@
                                     id:arr[0].id,
                                     dormitoryNum:arr[0].dormitoryNum,
                                     score:arr[0].score,
-                                    starLevel:arr[0].starLevel,
                                     peopleNum:arr[0].peopleNum,
                                     roomNumber:arr[0].roomNumber,
                                     capacity:arr[0].capacity
@@ -153,7 +152,21 @@
                     {field:'capacity',title:'宿舍容量',width:100},
                     {field:'peopleNum',title:'宿舍人数',width:100,align:'right'},
                     {field:'dormitoryNum',title:'宿舍楼号',width:100,align:'right'},
-                    {field:'starLevel',title:'宿舍星级',width:100,align:'right'},
+                    {field:'starLevel',title:'宿舍星级',width:100,align:'right',formatter:function(value, row, index){
+                        if(row.score>=40){
+                            return 5;
+                        }else if(row.score>30){
+                            return 4;
+                        }else if(row.score>20){
+                            return 3;
+                        }else if (row.score>20){
+                            return 2
+                        }else if(row.score>10){
+                            return 1;
+                        }else if(row.score>=0){
+                            return 0;
+                        }
+                    }},
                     {field:'score',title:'宿舍评分',width:100,align:'right'},
                 ]],
                 pagination:true,
@@ -240,10 +253,10 @@
                     <td>实际人数：</td>
                     <td><input id="peopleNum" type="text" name="peopleNum" class="easyui-numberbox" required="true" missingMessage="实际人数必填"></td>
                 </tr>
-                <tr>
+               <%-- <tr>
                     <td>宿舍星级：</td>
                     <td><input id="starLevel" type="text" name="starLevel" class="easyui-numberbox" required="true" missingMessage="星级必填"></td>
-                </tr>
+                </tr>--%>
                 <tr>
                     <td>宿舍分数：</td>
                     <td><input id="score" type="text" name="score" class="easyui-numberbox" ></td>

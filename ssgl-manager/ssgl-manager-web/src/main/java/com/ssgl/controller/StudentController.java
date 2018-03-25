@@ -16,6 +16,7 @@ import com.ssgl.util.FileUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,28 +41,30 @@ public class StudentController {
     @Autowired
     public StudentService studentService;
 
+    @RequiresPermissions("managerStudent")
     @RequestMapping("managerStudent")
     public String managerStudent() {
         return "student";
     }
 
+    @RequiresPermissions("changeStudentRoom")
     @ResponseBody
     @RequestMapping(value = "changeStudentRoom")
-    public Result changeStudentRoom(String ids){
+    public Result changeStudentRoom(String ids) {
         try {
             return studentService.changeStudentRoom(ids);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("error","交换失败");
+            return new Result("error", "交换失败");
         }
     }
 
-
+    @RequiresPermissions("exportStudent")
     @RequestMapping(value = "exportStudent")
-    public void exportStudent(HttpServletRequest request,HttpServletResponse response,String sid, String name, String sex, String age, String entranceTime, String graduateTime, String faculty, String roomNumber, String duty){
+    public void exportStudent(HttpServletRequest request, HttpServletResponse response, String sid, String name, String sex, String age, String entranceTime, String graduateTime, String faculty, String roomNumber, String duty) {
         try {
             name = request.getParameter("name");
-            List<Student> students =studentService.exportStudent(request,response,sid,name,sex,age,entranceTime,graduateTime,faculty,roomNumber,duty);
+            List<Student> students = studentService.exportStudent(request, response, sid, name, sex, age, entranceTime, graduateTime, faculty, roomNumber, duty);
 
             HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFCellStyle cellStyle = workbook.createCellStyle();
@@ -100,7 +103,7 @@ public class StudentController {
 //        }
 
             for (Student student : students) {
-                HSSFRow h = sheet.createRow(sheet.getLastRowNum()+1);
+                HSSFRow h = sheet.createRow(sheet.getLastRowNum() + 1);
                 h.createCell(0).setCellValue(student.getId());
                 h.createCell(1).setCellValue(student.getSid());
                 h.createCell(2).setCellValue(student.getName());
@@ -120,12 +123,12 @@ public class StudentController {
                 h.createCell(16).setCellValue(student.getFaculty());
                 h.createCell(17).setCellValue(student.getIcon());
             }
-            ServletOutputStream out =  response.getOutputStream();
+            ServletOutputStream out = response.getOutputStream();
             response.setContentType("application/msexcel");
 
             String agent = request.getHeader("User-Agent");
-            String filename = FileUtils.encodeDownloadFilename("学生信息表.xls",agent);
-            response.setHeader("content-disposition", "attachment;filename="+filename);
+            String filename = FileUtils.encodeDownloadFilename("学生信息表.xls", agent);
+            response.setHeader("content-disposition", "attachment;filename=" + filename);
 
             workbook.write(out);
             out.flush();
@@ -135,6 +138,7 @@ public class StudentController {
         }
     }
 
+    @RequiresPermissions("selectStudentsPage")
     @ResponseBody
     @RequestMapping(value = "selectStudentsPage", produces = "text/json;charset=utf-8")
     public String selectStudentsPage(Integer page, Integer rows, HttpServletRequest request) {
@@ -152,24 +156,26 @@ public class StudentController {
         }
     }
 
+    @RequiresPermissions("selectStudentInfo")
     @RequestMapping(value = "selectStudentInfo")
     public ModelAndView selectStudentInfo(String id) {
         try {
             Student student = studentService.selectStudentInfo(id);
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("StudentInfo");
-            modelAndView.addObject("student",student);
+            modelAndView.addObject("student", student);
             return modelAndView;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
+    @RequiresPermissions("updateStudent")
     @RequestMapping(value = "updateStudent")
-    public String updateStudent(String id,String phone,String homePhone,String address,String bedNo,String dormitoryNo,String duty,String roomNumber,Integer age, HttpServletResponse response){
+    public String updateStudent(String id, String phone, String homePhone, String address, String bedNo, String dormitoryNo, String duty, String roomNumber, Integer age, HttpServletResponse response) {
         try {
-            studentService.updateStudent(id,phone,homePhone,address,bedNo,dormitoryNo,duty,roomNumber,age);
-            Page<Student> page = studentService.selectStudentsPage(1,10,null);
+            studentService.updateStudent(id, phone, homePhone, address, bedNo, dormitoryNo, duty, roomNumber, age);
+            Page<Student> page = studentService.selectStudentsPage(1, 10, null);
             Map<String, Object> map = new HashMap<>();
             if (null != page) {
                 map.put("total", page.getTotalRecord());
@@ -188,6 +194,7 @@ public class StudentController {
         }
     }
 
+    @RequiresPermissions("addStudent")
     @ResponseBody
     @RequestMapping(value = "addStudent")
     public Result addStudent(String sid,
@@ -211,25 +218,25 @@ public class StudentController {
                              @RequestParam(value = "icon") MultipartFile icon) {
 
         try {
-                return studentService.addStudent(sid,
-                        name,
-                        age,
-                        sex,
-                        graduateTime,
-                        homePhone,
-                        entranceTime,
-                        isUndergraduate,
-                        isGraduate,
-                        roomNumber,
-                        dormitoryNo,
-                        bedNo,
-                        province,
-                        city,
-                        county,
-                        phone,
-                        duty,
-                        faculty,
-                        icon);
+            return studentService.addStudent(sid,
+                    name,
+                    age,
+                    sex,
+                    graduateTime,
+                    homePhone,
+                    entranceTime,
+                    isUndergraduate,
+                    isGraduate,
+                    roomNumber,
+                    dormitoryNo,
+                    bedNo,
+                    province,
+                    city,
+                    county,
+                    phone,
+                    duty,
+                    faculty,
+                    icon);
         } catch (Exception e) {
             e.printStackTrace();
             return new Result("error", "添加失败");

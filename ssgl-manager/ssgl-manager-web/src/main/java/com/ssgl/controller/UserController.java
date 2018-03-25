@@ -15,6 +15,7 @@ import com.ssgl.service.UserService;
 import com.ssgl.util.MD5Utils;
 import com.ssgl.util.StringUtils;
 import com.ssgl.util.Util;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,11 +41,12 @@ public class UserController {
         return userService.login(user, request, j_captcha);
     }
 
+    @RequiresPermissions("toFloorUI")
     @RequestMapping(value = "toUserUI")
     public String toFloorUI() {
         return "administrator";
     }
-
+    @RequiresPermissions("addUser")
     @ResponseBody
     @RequestMapping(value = "addUser")
     public Result addUser(TUser user) {
@@ -57,7 +59,7 @@ public class UserController {
             return new Result("error", "添加失败");
         }
     }
-
+    @RequiresPermissions("selectUsersPage")
     @ResponseBody
     @RequestMapping(value = "selectUsersPage", produces = "text/html;charset=utf-8")
     public String selectUsersPage(Integer page, Integer rows, HttpServletRequest request) {
@@ -74,7 +76,7 @@ public class UserController {
             throw new RuntimeException(e);
         }
     }
-
+    @RequiresPermissions("deleteUsers")
     @ResponseBody
     @RequestMapping(value="deleteUsers")
     public Result deleteUsers(String ids){
@@ -85,7 +87,7 @@ public class UserController {
             return new Result("error", "删除失败");
         }
     }
-
+    @RequiresPermissions("updateUser")
     @ResponseBody
     @RequestMapping(value="updateUser")
     public Result updateUser(TUser user){

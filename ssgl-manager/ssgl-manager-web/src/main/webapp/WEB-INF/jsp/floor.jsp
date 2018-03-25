@@ -191,7 +191,7 @@
     </script>
 </head>
 <body>
-<div id="cc" class="easyui-layout" style="width:100%;height:100%;">
+<div id="cc" class="easyui-layout" style="width:100%;height:85%;">
     <div id="serarchDiv" data-options="region:'north',title:'查询',split:true,collapsed:true"style="height:100px;" >
         <form id="mysearch" method="post">
             宿舍楼号：<input id="building_no1" name="building_no" value="" >
@@ -218,7 +218,7 @@
             <a class="easyui-linkbutton" id="btn2">清空</a>
         </form>
     </div>
-    <div data-options="region:'center',split:true" style="height:100px;">
+    <div data-options="region:'center'">
         <table id="dg"></table>
     </div>
 </div>

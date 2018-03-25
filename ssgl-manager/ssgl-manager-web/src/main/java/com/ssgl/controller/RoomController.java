@@ -7,6 +7,7 @@ import com.ssgl.bean.Room;
 import com.ssgl.service.RoomService;
 import com.ssgl.util.StringUtils;
 import com.ssgl.util.Util;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ public class RoomController {
     @Autowired
     public RoomService roomService;
 
+    @RequiresPermissions("selectRoomsPage")
     @ResponseBody
     @RequestMapping(value = "selectRoomsPage",produces = "text/json;charset=utf-8")
     public String selectRoomsPage(Integer page,Integer rows, HttpServletRequest request){
@@ -44,11 +46,13 @@ public class RoomController {
         }
     }
 
+    @RequiresPermissions("toManagerRoomUI")
     @RequestMapping(value = "toManagerRoomUI")
     public String toManagerRoomUI(){
         return "room";
     }
 
+    @RequiresPermissions("addRoom")
     @ResponseBody
     @RequestMapping(value = "addRoom")
     public Result addRoom(Room room){
@@ -62,6 +66,7 @@ public class RoomController {
         }
     }
 
+    @RequiresPermissions("editRoom")
     @ResponseBody
     @RequestMapping(value = "editRoom")
     public Result editRoom(Room room){
@@ -74,6 +79,7 @@ public class RoomController {
         }
     }
 
+    @RequiresPermissions("deleteRooms")
     @ResponseBody
     @RequestMapping(value = "deleteRooms")
     public Result deleteRooms(HttpServletRequest request){

@@ -1,15 +1,14 @@
 package com.ssgl.controller;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.ssgl.bean.CustomFloor;
 import com.ssgl.bean.Floor;
 import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
 import com.ssgl.service.FloorService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,6 +30,7 @@ public class FloorController {
     @Autowired
     public FloorService floorService;
 
+    @RequiresPermissions("toFloorUI")
     @RequestMapping(value = "toFloorUI")
     public String toFloorUI(){
         return "floor";
@@ -48,6 +48,7 @@ public class FloorController {
     }
 
     @ResponseBody
+    @RequiresPermissions("deleteFloors")
     @RequestMapping(value = "deleteFloors")
     public Result deleteFloors(String ids){
         try {
@@ -75,7 +76,7 @@ public class FloorController {
             return null;
         }
     }
-
+    @RequiresPermissions("addFloor")
     @ResponseBody
     @RequestMapping(value = "addFloor")
     public Result addFloor(Floor floor,Integer building_no){

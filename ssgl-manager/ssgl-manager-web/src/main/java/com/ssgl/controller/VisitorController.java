@@ -6,13 +6,13 @@ import com.ssgl.bean.Result;
 import com.ssgl.bean.Visiter;
 import com.ssgl.service.VisitorService;
 import com.ssgl.util.Util;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,11 +30,12 @@ public class VisitorController {
     @Autowired
     public VisitorService visitorService;
 
+    @RequiresPermissions("toManagerVisitorUI")
     @RequestMapping(value = "toManagerVisitorUI")
     public String toManagerVisitorUI(){
         return "visitor";
     }
-
+    @RequiresPermissions("selectVisitorsPage")
     @ResponseBody
     @RequestMapping(value = "selectVisitorsPage" ,produces = "text/json;charset=utf-8")
     public String selectVisitorsPage(Integer page, Integer rows, HttpServletRequest request){
@@ -52,7 +53,7 @@ public class VisitorController {
             throw new RuntimeException("出错了。。。");
         }
     }
-
+    @RequiresPermissions("addVisitor")
     @ResponseBody
     @RequestMapping(value ="addVisitor")
     public Result addVisitor(Visiter visiter){

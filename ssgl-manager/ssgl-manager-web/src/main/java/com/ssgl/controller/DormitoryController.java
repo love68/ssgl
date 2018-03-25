@@ -6,8 +6,8 @@ import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
 import com.ssgl.service.DormitoryService;
 import com.ssgl.util.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,6 +35,7 @@ public class DormitoryController {
         return "dormitory";
     }
 
+    @RequiresPermissions("addDormitory")
     @ResponseBody
     @RequestMapping(value = "addDormitory")
     public Result addDormitory(Dormitory dormitory){
@@ -70,6 +71,7 @@ public class DormitoryController {
             throw new RuntimeException("出错了。。。");
         }
     }
+    @RequiresPermissions("deleteDormitories")
     @ResponseBody
     @RequestMapping(value = "deleteDormitories")
     public Result deleteDormitories(HttpServletRequest request){
@@ -81,6 +83,7 @@ public class DormitoryController {
         }
     }
 
+    @RequiresPermissions("editDormitory")
     @ResponseBody
     @RequestMapping(value="editDormitory")
     public Result editDormitory(Dormitory dormitory){

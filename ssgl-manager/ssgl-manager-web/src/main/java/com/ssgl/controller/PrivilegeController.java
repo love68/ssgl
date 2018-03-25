@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ssgl.bean.AuthPrivilege;
 import com.ssgl.bean.Page;
 import com.ssgl.service.PrivilegeService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +20,13 @@ public class PrivilegeController {
     @Autowired
     public PrivilegeService privilegeService;
 
+    @RequiresPermissions("toPrivilegeUI")
     @RequestMapping("toPrivilegeUI")
     public String toPrivilegeUI(){
         return "privilege";
     }
 
+    @RequiresPermissions("selectPrivilegePage")
     @ResponseBody
     @RequestMapping(value="selectPrivilegePage",produces = "text/json;charset=utf-8")
     public String selectPrivilegePage(Integer page,Integer rows){

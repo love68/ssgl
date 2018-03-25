@@ -22,7 +22,7 @@
                     {field:'name',title:'权限名称',width:100},
                     {field:'code',title:'权限',width:100,align:'right'},
                     {field:'description',title:'描述',width:100,align:'right'},
-                    {field:'page',title:'对应action',width:100,align:'right'},
+                    {field:'page',title:'对应action',width:200,align:'left'},
                     {field:'generatemenu',title:'是否生成菜单',width:100,align:'right'},
                     {field:'pid',title:'父权限id',width:100,align:'right'},
                 ]],

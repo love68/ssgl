@@ -3,6 +3,7 @@ package com.ssgl.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ssgl.bean.Page;
+import com.ssgl.bean.Result;
 import com.ssgl.bean.StudentStatus;
 import com.ssgl.bean.StudentStatusExample;
 import com.ssgl.mapper.StudentStatusMapper;
@@ -18,6 +19,12 @@ public class StateServiceImpl implements StateService {
 
     @Autowired
     public StudentStatusMapper statusMapper;
+
+    @Override
+    public Result addStatus(StudentStatus studentStatus) throws Exception {
+        statusMapper.insert(studentStatus);
+        return new Result("ok","添加成功");
+    }
 
     @Override
     public Page<StudentStatus> selectStatesPage(Integer currentPage, Integer pageSize, HttpServletRequest request) throws Exception {

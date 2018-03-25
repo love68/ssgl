@@ -2,6 +2,7 @@ package com.ssgl.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ssgl.bean.Page;
+import com.ssgl.bean.Result;
 import com.ssgl.bean.StudentStatus;
 import com.ssgl.service.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,15 @@ public class StateController {
         }
     }
 
-
+    @ResponseBody
+    @RequestMapping(value = "addStatus",produces = "text/json;charset=utf-8")
+    public Result addStatus(StudentStatus studentStatus){
+        try {
+            return stateService.addStatus(studentStatus);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("error","添加失败");
+        }
+    }
 
 }

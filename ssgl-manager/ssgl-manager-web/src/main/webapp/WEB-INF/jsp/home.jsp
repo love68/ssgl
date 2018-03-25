@@ -40,11 +40,17 @@
         <shiro:hasPermission name="managerStudent">
             <div title="学生管理">
                 <ul>
-                    <a href="#">
+                    <a href="javascript:;">
                         <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;margin-left: -40px;margin-top: -12px;">
                             <div style="font-size: 14px;margin-top: 5px;margin-left: 16px;">学生管理</div>
                         </div>
                     </a>
+
+    <a href="javascript:;">
+        <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;margin-left: -40px;;">
+            <div style="font-size: 14px;margin-top: 5px;margin-left: 16px;">学生情况</div>
+        </div>
+    </a>
 
                     <script>
                         $(function () {
@@ -66,6 +72,20 @@
                                             "title": title,
                                             "closable": true,
                                             "content": '<iframe frameborder=0 style=width:100%;height:100% src=' + "${pageContext.request.contextPath}/student/managerStudent.action" + ' ></iframe>'
+                                        });
+                                    }else{
+                                        $("#tt").tabs("select", title);
+                                    }
+                                }else if("学生情况" == title){
+                                    //查看该选项卡是否已经打开
+                                    var flag = $("#tt").tabs("exists", title);
+                                    //如果未打开
+                                    if (!flag) {
+                                        //打开选项卡
+                                        $("#tt").tabs("add", {
+                                            "title": title,
+                                            "closable": true,
+                                            "content": '<iframe frameborder=0 style=width:100%;height:100% src=' + "${pageContext.request.contextPath}/student/managerStudentState.action" + ' ></iframe>'
                                         });
                                     }else{
                                         $("#tt").tabs("select", title);

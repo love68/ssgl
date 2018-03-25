@@ -85,7 +85,7 @@
                                         $("#tt").tabs("add", {
                                             "title": title,
                                             "closable": true,
-                                            "content": '<iframe frameborder=0 style=width:100%;height:100% src=' + "${pageContext.request.contextPath}/student/managerStudentState.action" + ' ></iframe>'
+                                            "content": '<iframe frameborder=0 style=width:100%;height:100% src=' + "${pageContext.request.contextPath}/status/managerStudentState.action" + ' ></iframe>'
                                         });
                                     }else{
                                         $("#tt").tabs("select", title);

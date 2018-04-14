@@ -35,8 +35,7 @@
                     {field:"buildingNo",title:"宿舍楼号"},
                     {field:"students",title:"学生总数"},
                     {field:"rooms",title:"房间总数"},
-                    {field:"floors",title:"楼层数"},
-                    {field:"surplus",title:"剩余房间数"}
+                    {field:"floors",title:"楼层数"}
                 ]],
                 toolbar:[
                     {
@@ -138,7 +137,7 @@
                         iconCls: 'icon-print',
                         text: '导出',
                         handler: function () {
-                            window.location.href="${pageContext.request.contentType}/student/exportStudent.action?name="+$("#name1").val()+"&sid="+$("#sid1").val()+"&sex="+$("#sex1").val()+"&age="+$("#age1").val()+"&entranceTime="+$("#entranceTime1").val()+"&graduateTime="+$("#graduateTime1").val()+"&faculty="+$("#faculty1").val()+"&roomNumber="+$("#roomNumber1").val()+"&duty="+$("#duty1").val();
+                            window.location.href="${pageContext.request.contentType}/dormitory/exportDormitory.action";
                         }
                     }
                 ]

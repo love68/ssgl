@@ -126,4 +126,10 @@ public class UserServiceImpl implements UserService {
         customerUserMapper.deleteUsers(ids);
         return new Result("ok", "删除成功");
     }
+
+    @Override
+    public List<TUser> exportUser() {
+        TUserExample example = new TUserExample();
+        return userMapper.selectByExample(example);
+    }
 }

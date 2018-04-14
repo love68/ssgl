@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,6 +38,12 @@ public class RoomServiceImpl implements RoomService {
         result.setList(pageInfo.getList());
         result.setTotalRecord((int) pageInfo.getTotal());
         return result;
+    }
+
+    @Override
+    public List<Room> exportRoom() {
+        RoomExample example = new RoomExample();
+        return roomMapper.selectByExample(example);
     }
 
     @Override

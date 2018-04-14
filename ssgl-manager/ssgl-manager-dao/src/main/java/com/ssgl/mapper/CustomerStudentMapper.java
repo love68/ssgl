@@ -23,4 +23,7 @@ public interface CustomerStudentMapper {
                                      @Param("duty") String duty,
                                      @Param("faculty") String faculty
     );
+
+    void deleteStudents(List<String> ids);
+
 }

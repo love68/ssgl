@@ -122,6 +122,12 @@
                                 });
                             }
                         }
+                    },{
+                        iconCls: 'icon-print',
+                        text: '导出',
+                        handler: function () {
+                            window.location.href="${pageContext.request.contentType}/exportUser.action";
+                        }
                     }
                 ],
                 columns: [[

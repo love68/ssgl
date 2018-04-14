@@ -7,7 +7,6 @@ package com.ssgl.service.impl;
  * Time: 1:07
  */
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -18,14 +17,12 @@ import com.ssgl.bean.Result;
 import com.ssgl.mapper.CustomerDormitoryMapper;
 import com.ssgl.mapper.DormitoryMapper;
 import com.ssgl.service.DormitoryService;
-import com.ssgl.util.StringUtils;
 import com.ssgl.util.Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.rmi.activation.ActivationGroup_Stub;
 import java.util.List;
 
 @Service
@@ -35,6 +32,12 @@ public class DormitoryServiceImpl implements DormitoryService {
 
     @Autowired
     public CustomerDormitoryMapper customerDormitoryMapper;
+
+    @Override
+    public List<Dormitory> exportDormitory() {
+        DormitoryExample example = new DormitoryExample();
+        return dormitoryMapper.selectByExample(example);
+    }
 
     @Override
     public void addDormitory(Dormitory dormitory) throws Exception {

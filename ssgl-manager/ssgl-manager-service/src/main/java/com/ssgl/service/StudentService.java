@@ -79,25 +79,8 @@ public interface StudentService {
      * @return
      * @throws Exception
      */
-    Result deleteStudent(String[] ids) throws Exception;
+    Result deleteStudent(List<String> ids) throws Exception;
 
-    /**
-     * 根据条件查询学生信息
-     * @param sid
-     * @param name
-     * @param sex
-     * @param age
-     * @param entranceTime
-     * @param graduateTime
-     * @param faculty
-     * @param dedNo
-     * @param dormitoryNo
-     * @param roomNumber
-     * @param isUndergraduate
-     * @return
-     * @throws Exception
-     */
-    String selectStudent(String sid, String name, String sex, Integer age, String entranceTime, String graduateTime, String faculty, Integer dedNo, Integer dormitoryNo, Integer roomNumber, Boolean isUndergraduate) throws Exception;
 
     Page<Student> selectStudentsPage(Integer page, Integer rows, HttpServletRequest request) throws Exception;
 

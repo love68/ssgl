@@ -13,6 +13,7 @@ import com.ssgl.bean.Result;
 import com.ssgl.bean.Student;
 import com.ssgl.service.StudentService;
 import com.ssgl.util.FileUtils;
+import com.ssgl.util.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -71,7 +72,7 @@ public class StudentController {
             HSSFSheet sheet = workbook.createSheet("学生信息表");
             HSSFRow row = sheet.createRow(0);
             HSSFCell cell = row.createCell(0);
-            cell.setCellValue("学生考试成绩");
+            cell.setCellValue("学生信息");
             cellStyle.setAlignment(CellStyle.ALIGN_CENTER);
             cell.setCellStyle(cellStyle);
             sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 17));
@@ -95,12 +96,6 @@ public class StudentController {
             r.createCell(15).setCellValue("职务");
             r.createCell(16).setCellValue("院系");
             r.createCell(17).setCellValue("照片");
-//        for(int i = 2;i<students.size();i++){
-//            HSSFRow hssfRow  = sheet.createRow(i);//创建第i行
-//            for(int j=0;i<18;j++){
-//                HSSFCell c=hssfRow.createCell(i);
-//            }
-//        }
 
             for (Student student : students) {
                 HSSFRow h = sheet.createRow(sheet.getLastRowNum() + 1);
@@ -242,5 +237,18 @@ public class StudentController {
             return new Result("error", "添加失败");
         }
     }
+
+    @RequiresPermissions("deleteStudent")
+    @ResponseBody
+    @RequestMapping(value = "deleteStudent")
+    public Result deleteStudent(HttpServletRequest request){
+        try {
+            return studentService.deleteStudent(StringUtils.stringConvertList(request.getParameter("ids")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("error","删除失败");
+        }
+    }
+
 }
 

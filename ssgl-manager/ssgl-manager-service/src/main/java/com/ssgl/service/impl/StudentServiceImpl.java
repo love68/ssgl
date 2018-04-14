@@ -34,6 +34,8 @@ public class StudentServiceImpl implements StudentService {
     private String BASE_IMAGE_SERVER_URL;
 
     @Autowired
+    public DormitoryMapper dormitoryMapper;
+    @Autowired
     public ProvinceMapper provinceMapper;
     @Autowired
     public CityMapper cityMapper;
@@ -43,12 +45,14 @@ public class StudentServiceImpl implements StudentService {
     public StudentMapper studentMapper;
     @Autowired
     public CustomerStudentMapper customerStudentMapper;
+    @Autowired
+    public RoomMapper roomMapper;
 
     @Override
     public Result changeStudentRoom(String idlist) throws Exception {
         List<String> ids = StringUtils.stringConvertList(idlist);
         String id1 = ids.get(0);
-        String id2= ids.get(1);
+        String id2 = ids.get(1);
         Student s1 = studentMapper.selectByPrimaryKey(id1);
         String roomNum1 = s1.getRoomNumber();
         Student s2 = studentMapper.selectByPrimaryKey(id2);
@@ -57,7 +61,7 @@ public class StudentServiceImpl implements StudentService {
         s2.setRoomNumber(roomNum1);
         studentMapper.updateByPrimaryKey(s1);
         studentMapper.updateByPrimaryKey(s2);
-        return new Result("ok","交换成功！");
+        return new Result("ok", "交换成功！");
     }
 
     @Override
@@ -86,16 +90,13 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student selectStudentInfo(String id) throws Exception {
-//        StudentExample example = new StudentExample();
-//        example.createCriteria().andIdEqualTo(id);
-//        List<Student> students = studentMapper.selectByExample(example);
         Student student = studentMapper.selectByPrimaryKey(id);
         return student;
     }
 
     @Override
-    public List<Student> exportStudent(HttpServletRequest request,HttpServletResponse response, String sid, String name, String sex, String age, String entranceTime, String graduateTime, String faculty, String roomNumber, String duty) throws Exception {
-       return customerStudentMapper.selectStudentsPage(name, sid, roomNumber, age, sex, entranceTime, graduateTime, faculty, duty);
+    public List<Student> exportStudent(HttpServletRequest request, HttpServletResponse response, String sid, String name, String sex, String age, String entranceTime, String graduateTime, String faculty, String roomNumber, String duty) throws Exception {
+        return customerStudentMapper.selectStudentsPage(name, sid, roomNumber, age, sex, entranceTime, graduateTime, faculty, duty);
     }
 
     @Override
@@ -132,6 +133,13 @@ public class StudentServiceImpl implements StudentService {
                              String duty,
                              String faculty,
                              @RequestParam(value = "icon") MultipartFile icon) throws Exception {
+
+        DormitoryExample example = new DormitoryExample();
+        DormitoryExample.Criteria criteria1 = example.createCriteria().andBuildingNoEqualTo(Integer.parseInt(dormitoryNo));
+        Dormitory dormitoriy = dormitoryMapper.selectByExample(example).get(0);
+        dormitoriy.setStudents(dormitoriy.getStudents()+1);
+        dormitoryMapper.updateByPrimaryKey(dormitoriy);
+
         Student student = new Student();
         student.setId(Util.makeId());
         ProvinceExample example1 = new ProvinceExample();
@@ -163,6 +171,12 @@ public class StudentServiceImpl implements StudentService {
         student.setPhone(phone);
         student.setName(name);
 
+        RoomExample roomExample = new RoomExample();
+        RoomExample.Criteria criteria = roomExample.createCriteria().andRoomNumberEqualTo(roomNumber);
+        Room room = roomMapper.selectByExample(roomExample).get(0);
+        room.setPeopleNum(room.getPeopleNum()+1);
+        roomMapper.updateByPrimaryKey(room);
+
         String imageName = icon.getOriginalFilename();
         String extName = imageName.substring(imageName.lastIndexOf(".") + 1);
         FastDFSClient fastDFSClient = new FastDFSClient("classpath:properties/Client.conf");
@@ -182,12 +196,17 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Result deleteStudent(String[] ids) throws Exception {
-        return null;
-    }
-
-    @Override
-    public String selectStudent(String sid, String name, String sex, Integer age, String entranceTime, String graduateTime, String faculty, Integer dedNo, Integer dormitoryNo, Integer roomNumber, Boolean isUndergraduate) throws Exception {
-        return null;
+    public Result deleteStudent(List<String> ids) throws Exception {
+        for (String id : ids) {
+            Student student = studentMapper.selectByPrimaryKey(id);
+            String roomNumber = student.getRoomNumber();
+            RoomExample roomExample = new RoomExample();
+            RoomExample.Criteria criteria = roomExample.createCriteria().andRoomNumberEqualTo(roomNumber);
+            Room room = roomMapper.selectByExample(roomExample).get(0);
+            room.setPeopleNum(room.getPeopleNum()-1);
+            roomMapper.updateByPrimaryKey(room);
+        }
+        customerStudentMapper.deleteStudents(ids);
+        return new Result("ok", "删除成功");
     }
 }

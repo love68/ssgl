@@ -131,7 +131,7 @@
                         iconCls: 'icon-print',
                         text: '导出',
                         handler: function () {
-                            window.location.href="${pageContext.request.contentType}/student/exportStudent.action?name="+$("#name1").val()+"&sid="+$("#sid1").val()+"&sex="+$("#sex1").val()+"&age="+$("#age1").val()+"&entranceTime="+$("#entranceTime1").val()+"&graduateTime="+$("#graduateTime1").val()+"&faculty="+$("#faculty1").val()+"&roomNumber="+$("#roomNumber1").val()+"&duty="+$("#duty1").val();
+                            window.location.href="${pageContext.request.contentType}/floor/exportFloor.action";
                         }
                     }
                 ],

@@ -16,7 +16,7 @@ public interface RoomService {
      * @throws Exception
      */
     Page<Room> selectRoomPage(Integer page, Integer rows,HttpServletRequest request) throws Exception;
-
+    List<Room> exportRoom();
     /**
      * 批量删除房间
      * @param ids

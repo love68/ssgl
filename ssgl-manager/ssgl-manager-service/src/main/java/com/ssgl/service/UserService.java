@@ -33,4 +33,6 @@ public interface UserService {
 
     Result deleteUsers(List<String> ids) throws Exception;
 
+    List<TUser> exportUser();
+
 }

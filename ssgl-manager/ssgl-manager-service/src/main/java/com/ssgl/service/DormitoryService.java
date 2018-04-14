@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface DormitoryService {
+
+    List<Dormitory> exportDormitory();
+
     /**
      * 添加宿舍楼
      * @param dormitory

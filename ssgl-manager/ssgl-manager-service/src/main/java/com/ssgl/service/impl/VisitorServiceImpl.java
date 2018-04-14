@@ -56,4 +56,10 @@ public class VisitorServiceImpl implements VisitorService {
         }
         return null;
     }
+
+    @Override
+    public List<Visiter> exportVisitor() {
+        VisiterExample example = new VisiterExample();
+        return visiterMapper.selectByExample(example);
+    }
 }

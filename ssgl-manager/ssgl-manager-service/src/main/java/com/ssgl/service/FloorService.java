@@ -13,6 +13,7 @@ import com.ssgl.bean.Page;
 import com.ssgl.bean.Result;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface FloorService {
     /**
@@ -30,5 +31,7 @@ public interface FloorService {
     Result deleteFloors(String ids) throws Exception;
 
     String selectLayerByBuidingNo(Integer buildingNo) throws Exception;
+
+    List<Floor> exportFloor();
 
 }

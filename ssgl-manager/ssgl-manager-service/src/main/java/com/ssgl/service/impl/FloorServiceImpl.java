@@ -122,5 +122,11 @@ public class FloorServiceImpl implements FloorService {
         return JSONArray.toJSONString(list);
     }
 
+    @Override
+    public List<Floor> exportFloor() {
+        FloorExample example = new FloorExample();
+        return floorMapper.selectByExample(example);
+    }
+
 
 }

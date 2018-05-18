@@ -93,9 +93,9 @@
                 onChange:function (newValue, oldValue) {
                     var bulidingNo = newValue;
                     $("#roomNumber").combobox({
-                        url:'${pageContext.request.contextPath}/floor/getLayers.action?buildingNo='+bulidingNo,
-                        valueField:'buildingNo',
-                        textField:'buildingNo'
+                        url:'${pageContext.request.contextPath}/room/getRooms.action?buildingNo='+bulidingNo,
+                        valueField:'roomNumber',
+                        textField:'roomNumber'
                     });
                 }
             });
@@ -183,17 +183,18 @@
                 pagination:true,
                 frozenColumns:[[{field:"ck",title:"选择",checkbox:true},{field:'sid',title:'学号',width:100}]],
                 columns:[[
-                    {field:'name',title:'姓名',width:100},
-                    {field:'address',title:'地址',width:100,align:'right'},
-                    {field:'age',title:'年龄',width:100,align:'right'},
-                    {field:'dormitoryNo',title:'宿舍楼号',width:100,align:'right'},
-                    {field:'duty',title:'职务',width:100,align:'right'},
+                    {field:'name',title:'姓名',width:60},
+                    {field:'address',title:'地址',width:140,align:'right'},
+                    {field:'age',title:'年龄',width:40,align:'right'},
+                    {field:'dormitoryNo',title:'宿舍楼号',width:60,align:'center'},
+                    {field:'duty',title:'职务',width:60,align:'center'},
                     {field:'graduateTime',title:'毕业时间',width:100,align:'right',
                         formatter: function (value, row, index) {
                             var time = new Date(value);
                             return time.toLocaleDateString();
                         }},
                     {field:'homePhone',title:'家庭电话',width:100,align:'right'},
+                    {field:'phone',title:'电话',width:100,align:'right'},
                     {field:'entranceTime',title:'入学时间',width:100,align:'right'},
                     {field:'faculty',title:'院系',width:100,align:'right',
                         formatter: function(value,row,index){
@@ -223,7 +224,7 @@
                                 return "美术系";
                             }
                         }},
-                    {field:'isGraduate',title:'是否毕业',width:100,align:'right',
+                    {field:'isGraduate',title:'是否毕业',width:80,align:'center',
                         formatter: function(value,row,index){
                             if (value==true){
                                 return "是";
@@ -232,7 +233,7 @@
                             }
                         }
                     },
-                    {field:'isUndergraduate',title:'是否本科',width:100,align:'right',
+                    {field:'isUndergraduate',title:'是否本科',width:80,align:'center',
                         formatter: function(value,row,index){
                             if (value==true){
                                 return "是";
@@ -241,8 +242,8 @@
                             }
                         }},
                     {field:'phone',title:'电话',width:100,align:'right'},
-                    {field:'roomNumber',title:'宿舍号',width:100,align:'right'},
-                    {field:'sex',title:'性别',width:100,align:'right',
+                    {field:'roomNumber',title:'宿舍号',width:80,align:'center'},
+                    {field:'sex',title:'性别',width:60,align:'center',
                         formatter: function(value,row,index){
                             if (value==true){
                                 return "男";
@@ -250,8 +251,8 @@
                                 return "女";
                             }
                         }},
-                    {field:'bedNo',title:'床位',width:100,align:'right'},
-                    {field:'icon',title:'头像',width:100,align:'right'},
+                    {field:'bedNo',title:'床位',width:40,align:'center'},
+                    {field:'icon',title:'头像',width:120,align:'right'},
                 ]],
                 toolbar: [
                     {
@@ -264,35 +265,7 @@
                             });
                             $("#mydialog").dialog('open');
                         }
-                    }, {
-                        iconCls: 'icon-edit',
-                        text: '修改学生',
-                        handler: function () {
-                            flag = "edit";
-                            var arr = $("#dg").datagrid("getSelections");
-                            if(arr.length!=1){
-                                $.messager.show({
-                                    title:"提示信息",
-                                    msg:"请选择一行数据操作",
-                                    showType:'show'
-                                })
-                            }else{
-                                $("#myDialog").dialog({
-                                    title:"修改学生"
-                                })
-                                $("#myDialog").dialog("open");
-                                $("#studentForm").form("load",{
-                                    id:arr[0].id,
-                                    dormitoryNum:arr[0].dormitoryNum,
-                                    score:arr[0].score,
-                                    starLevel:arr[0].starLevel,
-                                    peopleNum:arr[0].peopleNum,
-                                    roomNumber:arr[0].roomNumber,
-                                    capacity:arr[0].capacity
-                                });
-                            }
-                        }
-                    }, {
+                    },{
                         iconCls: 'icon-remove',
                         text: '删除学生',
                         handler: function () {
@@ -311,7 +284,7 @@
                                         }
                                         ids = ids.substring(0,ids.length-1);
                                         $.ajax({
-                                            url:"${pageContext.request.contextPath}/student/deleteStudents.action",
+                                            url:"${pageContext.request.contextPath}/student/deleteStudent.action",
                                             type:"post",
                                             data:{ids:ids},
                                             async:true,
@@ -466,7 +439,7 @@
 </head>
 <body>
 
-    <div id="cc" class="easyui-layout" style="width:100%;height:500px;">
+    <div id="cc" class="easyui-layout" style="width:100%;height:530px;">
         <div id="serarchDiv" data-options="region:'north',title:'查询',split:true,collapsed:true"style="height:100px;" >
             <form id="mysearch" method="post">
                 姓名：<input id="name1"name="name1" type="text" value="" class="easyui-textbox">
@@ -502,7 +475,7 @@
         <table align="center">
             <tr>
                 <td>学号：</td>
-                <td><input id="sid" type="text" name="sid" value="1234567890"
+                <td><input id="sid" type="text" name="sid" value=""
                            class="easyui-numberbox"
                            data-options="required:true,
                        missingMessage:'学号为必选项！',
@@ -510,12 +483,12 @@
             </tr>
             <tr>
                 <td>姓名：</td>
-                <td><input id="name" name="name" type="text" value="贾俊康1111" class="easyui-textbox" required="true"
+                <td><input id="name" name="name" type="text" value="" class="easyui-textbox" required="true"
                            missingMessage="学生姓名必填！" validType="validateName"></td>
             </tr>
             <tr>
                 <td>年龄：</td>
-                <td><input id="age" name="age" type="text" value="12" class="easyui-numberbox" required="true"
+                <td><input id="age" name="age" type="text" value="18" class="easyui-numberbox" required="true"
                            missingMessage="学生年龄必填！"></td>
             </tr>
             <tr>
@@ -527,11 +500,11 @@
             </tr>
             <tr>
                 <td>入学时间：</td>
-                <td><input id="entranceTime" type="text" name="entranceTime" value="2018-03-08"></td>
+                <td><input id="entranceTime" type="text" name="entranceTime" value=""></td>
             </tr>
             <tr>
                 <td>毕学时间：</td>
-                <td><input id="graduateTime" type="text" name="graduateTime" value="2018-03-08"></td>
+                <td><input id="graduateTime" type="text" name="graduateTime" value=""></td>
             </tr>
             <tr>
                 <td>本科生：</td>
@@ -550,17 +523,17 @@
             <tr>
                 <td>楼号：</td>
                 <td>
-                    <input id="dormitoryNo" name="dormitoryNo" value="1">
+                    <input id="dormitoryNo" name="dormitoryNo" value="">
                 </td>
             </tr>
             <tr>
                 <td>宿舍号：</td>
-                <td><input id="roomNumber" name="roomNumber" value="1101">
+                <td><input id="roomNumber" name="roomNumber" value="">
                     </td>
             </tr>
             <tr>
                 <td>床号：</td>
-                <td><input id="bedNo" type="text" name="bedNo" value="1"></td>
+                <td><input id="bedNo" type="text" name="bedNo" value=""></td>
             </tr>
             <tr style="rowspan: 3">
                 <td>家庭住址：</td>
@@ -570,15 +543,15 @@
             </tr>
             <tr>
                 <td>手机号码：</td>
-                <td><input id="phone" type="text" name="phone" value="12345678901"></td>
+                <td><input id="phone" type="text" name="phone" value=""></td>
             </tr>
             <tr>
                 <td>家庭电话：</td>
-                <td><input id="homePhone" type="text" name="homePhone" value="12345678901"></td>
+                <td><input id="homePhone" type="text" name="homePhone" value=""></td>
             </tr>
             <tr>
                 <td>职务：</td>
-                <td><input id="duty" type="text" name="duty" value="xx" class="easyui-textbox"></td>
+                <td><input id="duty" type="text" name="duty" value="无" class="easyui-textbox"></td>
             </tr>
             <tr>
                 <td>院系：</td>

@@ -167,10 +167,11 @@ public class StudentController {
 
     @RequiresPermissions("updateStudent")
     @RequestMapping(value = "updateStudent")
-    public String updateStudent(String id, String phone, String homePhone, String address, String bedNo, String dormitoryNo, String duty, String roomNumber, Integer age, HttpServletResponse response) {
+    public String updateStudent( HttpServletRequest request,String id, String phone, String homePhone, String address, String bedNo, String dormitoryNo, String duty, String roomNumber, Integer age, HttpServletResponse response) {
         try {
             studentService.updateStudent(id, phone, homePhone, address, bedNo, dormitoryNo, duty, roomNumber, age);
-            Page<Student> page = studentService.selectStudentsPage(1, 10, null);
+            studentService.updateStudent(id,phone,homePhone,address,bedNo,dormitoryNo,duty,roomNumber,age);
+            Page<Student> page = studentService.selectStudentsPage(1, 10, request);
             Map<String, Object> map = new HashMap<>();
             if (null != page) {
                 map.put("total", page.getTotalRecord());
@@ -249,6 +250,14 @@ public class StudentController {
             return new Result("error","删除失败");
         }
     }
+
+    @ResponseBody
+    @RequestMapping(value = "checkStudentSid")
+    public Boolean checkStudentSid(String sid){
+        Boolean aBoolean = studentService.checkStudentSid(sid);
+        return aBoolean;
+    }
+
 
 }
 

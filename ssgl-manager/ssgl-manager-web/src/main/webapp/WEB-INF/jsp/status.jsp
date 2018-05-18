@@ -12,6 +12,12 @@
     <title>学生情况管理</title>
     <script>
         $(function () {
+            $("#sid").validatebox({
+                validType:{
+                    remote:['${pageContext.request.contextPath}/student/checkStudentSid.action','sid']
+                }
+            });
+
             $("#btn1").click(function () {
                 $('#dg').datagrid('load' ,serializeForm($('#mysearch')));
             });
@@ -67,19 +73,23 @@
                         handler:function () {
                             $("#dg").datagrid("reload");
                         }
-                    },{
-                        iconCls: 'icon-print',
-                        text: '导出',
-                        handler: function () {
-                            window.location.href="${pageContext.request.contentType}/status/exportStudent.action?name="+$("#name1").val()+"&sid="+$("#sid1").val()+"&sex="+$("#sex1").val()+"&age="+$("#age1").val()+"&entranceTime="+$("#entranceTime1").val()+"&graduateTime="+$("#graduateTime1").val()+"&faculty="+$("#faculty1").val()+"&roomNumber="+$("#roomNumber1").val()+"&duty="+$("#duty1").val();
-                        }
                     }
                 ],
                 columns:[[
                     {field:"ck",title:"选择",checkbox:true},
-                    {field:'sid',title:'学号',width:100},
+                    {field:'studentid',title:'学号',width:100},
                     {field:'name',title:'学生姓名',width:100},
-                    {field:'stateid',title:'状态',width:100,align:'right'},
+                    {field:'stateid',title:'状态',width:100,align:'right',
+                        formatter: function(value,row,index) {
+                            if(value==1){
+                                return '正常';
+                            }else if(value==2){
+                                return "外出"
+                            }else{
+                                return "请假"
+                            }
+                        }
+                    },
                     {field:'createtime',title:'创建时间',width:100,align:'right'},
                     {field:'adminname',title:'记录人',width:100,align:'right'}
                 ]],
@@ -127,7 +137,6 @@
     <div id="cc" class="easyui-layout" style="width:100%;height:100%;">
         <div id="serarchDiv" data-options="region:'north',title:'查询',split:true,collapsed:true"style="height:100px;" >
             <form id="mysearch" method="post">
-                学号：<input name="sid" class="easyui-textbox" value="">
                 姓名：<input name="name" class="easyui-textbox" value="">
                 <a class="easyui-linkbutton" id="btn1">搜索</a>
                 <a class="easyui-linkbutton" id="btn2">清空</a>
@@ -144,12 +153,11 @@
             <table>
                 <tr>
                     <td>学号：</td>
-                    <td><input id="sid" name="sid" class="easyui-textbox" value="" required="true" missingMessage="学号必填"></td>
+                    <td><input id="studentid" name="studentid" class="easyui-validatebox" value="" required="true" missingMessage="学号必填"></td>
                 </tr>
                 <tr>
                     <td>学生姓名：</td>
                     <td><input id="name" name="name" value="" class="easyui-textbox"></td>
-
                 </tr>
 
                 <tr>
@@ -158,11 +166,11 @@
                 </tr>
                 <tr>
                     <td>学生情况：</td>
-                    <td><input id="stateid" type="text" name="stateid" class="easyui-textbox" required="true" missingMessage="学生情况必填"></td>
+                    <td><input id="stateid" type="text" prompt="1:正常,2外出,3:请假" name="stateid" class="easyui-textbox" required="true" missingMessage="学生情况必填"></td>
                 </tr>
                 <tr>
                     <td>记录人：</td>
-                    <td><input id="adminnum" type="text" name="adminnum" class="easyui-textbox" required="true" missingMessage="记录人必填"></td>
+                    <td><input id="adminnum" type="text" name="adminname" value="${loginUser.username}" class="easyui-textbox" required="true" missingMessage="记录人必填"></td>
                 </tr>
                 <tr align="center">
                     <td><a id="confirm" class="easyui-linkbutton">确定</a></td>

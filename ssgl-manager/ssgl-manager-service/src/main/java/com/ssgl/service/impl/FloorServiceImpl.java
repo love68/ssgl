@@ -46,7 +46,7 @@ public class FloorServiceImpl implements FloorService {
 
         //宿舍楼房间数要相应减少
         DormitoryExample example = new DormitoryExample();
-        DormitoryExample.Criteria criteria = example.createCriteria().andBuildingNoEqualTo(building_no);
+        example.createCriteria().andBuildingNoEqualTo(building_no);
         List<Dormitory> dormitoryList = dormitoryMapper.selectByExample(example);
         if (null != dormitoryList && dormitoryList.size() > 0) {
             Dormitory dormitory = dormitoryList.get(0);
@@ -95,6 +95,14 @@ public class FloorServiceImpl implements FloorService {
     public Result deleteFloors(String ids) throws Exception {
         if (StringUtils.isNotBlank(ids)) {
             String[] floorIds = ids.split(",");
+            FloorExample example = new FloorExample();
+            for (String id:floorIds){
+                example.createCriteria().andIdEqualTo(Integer.parseInt(id));
+                Floor floor = floorMapper.selectByExample(example).get(0);
+                if(floor.getRoomNumber()>floor.getSpaces() || floor.getStudents()>0){
+                    throw new RuntimeException("出错");
+                }
+            }
             List<Integer> list = new ArrayList<>();
             for (int i = 0; i < floorIds.length; i++) {
                 list.add(Integer.parseInt(floorIds[i]));
@@ -104,7 +112,7 @@ public class FloorServiceImpl implements FloorService {
             customFloorMapper.deleteFloors(list);//删除楼层
             return new Result("ok", "删除成功");
         }
-        return null;
+        return new Result("error", "删除失败");
     }
 
     @Override

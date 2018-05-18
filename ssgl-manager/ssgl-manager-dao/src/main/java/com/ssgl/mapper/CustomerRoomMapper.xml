@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ssgl.mapper.CustomerRoomMapper">
+
+    <resultMap id="BaseMap" type="com.ssgl.bean.Room">
+        <id column="id" property="id"></id>
+        <result column="room_number" property="roomNumber"></result>
+        <result column="capacity" property="capacity"></result>
+        <result column="people_num" property="peopleNum"></result>
+        <result column="dormitory_num" property="dormitoryNum"></result>
+        <result column="star_level" property="starLevel"></result>
+        <result column="score" property="score"></result>
+    </resultMap>
+
     <delete id="deleteRooms">
         delete from room where room.id in
         <foreach collection="list" index="index" open="(" close=")" separator="," item="item">
@@ -10,4 +21,17 @@
     <delete id="deleteRoom" parameterType="string">
         delete from room where id=#{id}
     </delete>
+
+    <select id="getRooms" resultMap="BaseMap" parameterType="int">
+        SELECT * FROM room WHERE room_number LIKE '${_parameter}%'
+    </select>
+
+    <select id="selectRoomById" resultType="string">
+        select room_number from room where room.id in
+        <foreach collection="list" index="index" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+    
+    
 </mapper>

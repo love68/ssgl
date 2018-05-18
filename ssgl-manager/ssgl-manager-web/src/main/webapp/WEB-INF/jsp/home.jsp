@@ -31,12 +31,15 @@
 </head>
 <body class="easyui-layout">
 <div data-options="region:'north',title:'宿舍管理系统',split:true"
-     style="height:100px;background-image: url('/images/123.jpg');">
-    <div style="margin-left: 20px;">[${loginUser.username}],您好</div>
+     style="height:100px;">
+    <span style="margin-left:800px;font-size: 32px;">昌吉学院宿舍管理系统</span>
+    <span style="margin-left: 1520px;font-size: 16px">[${loginUser.username}],您好</span>
 </div>
-<div data-options="region:'south',title:'版权信息',split:true" style="height:100px;"></div>
+<div data-options="region:'south',title:'版权信息',split:true" style="height:100px;">
+    <center><h2>昌吉学院版权所有</h2></center>
+</div>
 <div data-options="region:'west',title:'系统菜单',split:true" style="width:200px;">
-    <div id="aa" class="easyui-accordion" style="width:180px;height:200px;" data-options="selected:1">
+    <div id="aa" class="easyui-accordion" style="width:180px;height:200px;" data-options="selected:-1">
         <shiro:hasPermission name="managerStudent">
             <div title="学生管理">
                 <ul>
@@ -105,11 +108,11 @@
                     <div style="font-size: 14px;margin-top: 5px;margin-left: 16px;">宿舍楼管理</div>
                 </div>
             </a>
-            <a id="lcgl">
+           <%-- <a id="lcgl">
                 <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;">
                     <div style="font-size: 14px;margin-top: 5px;margin-left: 16px;">楼层管理</div>
                 </div>
-            </a>
+            </a>--%>
             <a id="fjgl">
                 <div style="height: 30px;border-top: solid 0.5px grey;background-color: #66FF99;border-bottom: solid 0.5px grey;">
                     <div style="font-size: 14px;margin-top: 5px;margin-left: 16px;">房间管理</div>
@@ -289,7 +292,7 @@
     </div>
 
 </div>
-<div data-options="region:'center'" style="background:#eee;">
+<div data-options="region:'center'" >
     <div id="tt" class="easyui-tabs" data-options="fit:true">
     </div>
 </div>

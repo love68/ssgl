@@ -12,7 +12,7 @@
     </resultMap>
 
     <select id="selectFloorDormitories" resultMap="selectFloorDormitoriesMap">
-        SELECT FLOOR.*,dormitory_floor.dormitory_num FROM FLOOR LEFT JOIN dormitory_floor ON floor.id=dormitory_floor.floor_id
+        SELECT FLOOR.*,dormitory_floor.dormitory_num FROM FLOOR,dormitory_floor WHERE floor.id=dormitory_floor.floor_id
         <where>
             <if test="buildingNo!=null and buildingNo!=''">AND dormitory_num = #{buildingNo}</if>
         </where>
@@ -32,5 +32,8 @@
         </foreach>
     </delete>
 
+    <select id="getFloor" resultMap="selectFloorDormitoriesMap">
+        SELECT id,f.students,f.room_number,f.spaces FROM FLOOR f,dormitory_floor d WHERE layer = #{1} AND d.dormitory_num=#{0} AND f.id = d.floor_id
+    </select>
 
 </mapper>

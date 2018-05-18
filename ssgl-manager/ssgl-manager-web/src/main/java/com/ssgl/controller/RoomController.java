@@ -145,4 +145,10 @@ public class RoomController {
         }
     }
 
+    @ResponseBody
+    @RequestMapping(value = "getRooms")
+    public String getRooms(Integer buildingNo){
+        return roomService.getRooms(buildingNo);
+    }
+
 }

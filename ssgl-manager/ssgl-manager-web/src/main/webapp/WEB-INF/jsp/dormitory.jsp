@@ -35,6 +35,7 @@
                     {field:"buildingNo",title:"宿舍楼号"},
                     {field:"students",title:"学生总数"},
                     {field:"rooms",title:"房间总数"},
+                    {field:"surplus",title:"剩余房间总数"},
                     {field:"floors",title:"楼层数"}
                 ]],
                 toolbar:[

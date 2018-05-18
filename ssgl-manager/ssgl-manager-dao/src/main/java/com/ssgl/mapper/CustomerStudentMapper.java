@@ -26,4 +26,6 @@ public interface CustomerStudentMapper {
 
     void deleteStudents(List<String> ids);
 
+    List<Student> selectStudentsByRoomNumber(List<String> roomNumbers);
+
 }

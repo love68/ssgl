@@ -59,11 +59,11 @@
                         <img id="captcha_img" alt="点击更换" title="点击更换" src="${pageContext.request.contextPath }/validatecode.jsp" class="m"
                              onclick="javascript:document.getElementById('captcha_img').src='${pageContext.request.contextPath }/validatecode.jsp?'+Math.random();">
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label class="t"></label>
                         <label for="j_remember" class="m">
                             <input id="j_remember" type="checkbox" value="true">&nbsp;记住登陆账号!</label>
-                    </div>
+                    </div>--%>
                     <div class="form-group space">
                         <label class="t"></label>　　　
                         <button type="button"  id="submit_btn"

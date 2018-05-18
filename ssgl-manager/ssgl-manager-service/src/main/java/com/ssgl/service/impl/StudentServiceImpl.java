@@ -65,9 +65,20 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Boolean checkStudentSid(String sid) {
+        StudentExample example = new StudentExample();
+        example.createCriteria().andSidEqualTo(sid);
+        List<Student> students = studentMapper.selectByExample(example);
+        if(students == null || students.size()==0){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public Page<Student> selectStudentsPage(Integer page, Integer rows, HttpServletRequest request) throws Exception {
         PageHelper.startPage(page, rows);
-        String name = request.getParameter("name");
+        String name = request.getParameter("name1");
         String sid = request.getParameter("sid");
         String roomNumber = request.getParameter("roomNumber");
         String sex = request.getParameter("sex");
@@ -102,15 +113,46 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void updateStudent(String id, String phone, String homePhone, String address, String bedNo, String dormitoryNo, String duty, String roomNumber, Integer age) throws Exception {
         Student oldStudent = studentMapper.selectByPrimaryKey(id);
-        oldStudent.setPhone(phone);
-        oldStudent.setHomePhone(homePhone);
-        oldStudent.setAddress(address);
-        oldStudent.setBedNo(bedNo);
-        oldStudent.setDormitoryNo(dormitoryNo);
-        oldStudent.setDuty(duty);
-        oldStudent.setRoomNumber(roomNumber);
-        oldStudent.setAge(age);
-        studentMapper.updateByPrimaryKey(oldStudent);
+        String roomNumber1 = oldStudent.getRoomNumber();
+
+        if(roomNumber1==roomNumber){
+            oldStudent.setPhone(phone);
+            oldStudent.setHomePhone(homePhone);
+            oldStudent.setAddress(address);
+            oldStudent.setBedNo(bedNo);
+            oldStudent.setDormitoryNo(dormitoryNo);
+            oldStudent.setDuty(duty);
+            oldStudent.setAge(age);
+            studentMapper.updateByPrimaryKey(oldStudent);
+            return;
+        }
+
+        RoomExample roomExample = new RoomExample();
+        roomExample.createCriteria().andRoomNumberEqualTo(roomNumber1);
+        Room room = roomMapper.selectByExample(roomExample).get(0);
+        RoomExample roomExample1 = new RoomExample();
+        roomExample1.createCriteria().andRoomNumberEqualTo(roomNumber);
+        Room room1 = roomMapper.selectByExample(roomExample1).get(0);
+        if(room.getCapacity()!=0 && room1.getCapacity()!=0){
+            room.setCapacity(room.getCapacity()-1);
+            roomMapper.updateByPrimaryKey(room);
+            oldStudent.setPhone(phone);
+            oldStudent.setHomePhone(homePhone);
+            oldStudent.setAddress(address);
+            oldStudent.setBedNo(bedNo);
+            oldStudent.setDormitoryNo(dormitoryNo);
+            oldStudent.setDuty(duty);
+            oldStudent.setRoomNumber(roomNumber);
+            oldStudent.setAge(age);
+            studentMapper.updateByPrimaryKey(oldStudent);
+            return;
+        }
+        throw new RuntimeException("房间已满");
+    }
+
+    @Override
+    public List<Student> selectStudentsByRoomNumber(List<String> roomNumers) {
+        return customerStudentMapper.selectStudentsByRoomNumber(roomNumers);
     }
 
     @Override
@@ -135,7 +177,7 @@ public class StudentServiceImpl implements StudentService {
                              @RequestParam(value = "icon") MultipartFile icon) throws Exception {
 
         DormitoryExample example = new DormitoryExample();
-        DormitoryExample.Criteria criteria1 = example.createCriteria().andBuildingNoEqualTo(Integer.parseInt(dormitoryNo));
+        example.createCriteria().andBuildingNoEqualTo(Integer.parseInt(dormitoryNo));
         Dormitory dormitoriy = dormitoryMapper.selectByExample(example).get(0);
         dormitoriy.setStudents(dormitoriy.getStudents()+1);
         dormitoryMapper.updateByPrimaryKey(dormitoriy);
@@ -172,8 +214,11 @@ public class StudentServiceImpl implements StudentService {
         student.setName(name);
 
         RoomExample roomExample = new RoomExample();
-        RoomExample.Criteria criteria = roomExample.createCriteria().andRoomNumberEqualTo(roomNumber);
+        roomExample.createCriteria().andRoomNumberEqualTo(roomNumber);
         Room room = roomMapper.selectByExample(roomExample).get(0);
+        if(room.getCapacity()==0){
+            throw new RuntimeException("房间已满");
+        }
         room.setPeopleNum(room.getPeopleNum()+1);
         roomMapper.updateByPrimaryKey(room);
 
@@ -201,9 +246,15 @@ public class StudentServiceImpl implements StudentService {
             Student student = studentMapper.selectByPrimaryKey(id);
             String roomNumber = student.getRoomNumber();
             RoomExample roomExample = new RoomExample();
-            RoomExample.Criteria criteria = roomExample.createCriteria().andRoomNumberEqualTo(roomNumber);
+            roomExample.createCriteria().andRoomNumberEqualTo(roomNumber);
             Room room = roomMapper.selectByExample(roomExample).get(0);
             room.setPeopleNum(room.getPeopleNum()-1);
+            String dNo = room.getRoomNumber().substring(0, 1);
+            DormitoryExample example = new DormitoryExample();
+            example.createCriteria().andBuildingNoEqualTo(Integer.parseInt(dNo));
+            Dormitory dormitory = dormitoryMapper.selectByExample(example).get(0);
+            dormitory.setStudents(dormitory.getStudents()-1);
+            dormitoryMapper.updateByPrimaryKey(dormitory);
             roomMapper.updateByPrimaryKey(room);
         }
         customerStudentMapper.deleteStudents(ids);

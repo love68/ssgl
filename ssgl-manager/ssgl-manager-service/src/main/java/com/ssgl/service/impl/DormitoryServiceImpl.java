@@ -10,12 +10,8 @@ package com.ssgl.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ssgl.bean.Dormitory;
-import com.ssgl.bean.DormitoryExample;
-import com.ssgl.bean.Page;
-import com.ssgl.bean.Result;
-import com.ssgl.mapper.CustomerDormitoryMapper;
-import com.ssgl.mapper.DormitoryMapper;
+import com.ssgl.bean.*;
+import com.ssgl.mapper.*;
 import com.ssgl.service.DormitoryService;
 import com.ssgl.util.Util;
 import org.springframework.beans.BeanUtils;
@@ -23,15 +19,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class DormitoryServiceImpl implements DormitoryService {
     @Autowired
     public DormitoryMapper dormitoryMapper;
-
     @Autowired
     public CustomerDormitoryMapper customerDormitoryMapper;
+    @Autowired
+    public StudentMapper studentMapper;
+    @Autowired
+    public FloorMapper floorMapper;
+    @Autowired
+    public RoomMapper roomMapper;
+    @Autowired
+    public CustomerStudentMapper customerStudentMapper;
+    @Autowired
+    public DormitoryFloorMapper dormitoryFloorMapper;
+
 
     @Override
     public List<Dormitory> exportDormitory() {
@@ -72,6 +79,33 @@ public class DormitoryServiceImpl implements DormitoryService {
 
     @Override
     public Result deleteDormitories(List<String> ids) throws Exception {
+        List<Dormitory> dormitories = customerDormitoryMapper.selectDormitoryById(ids);
+        List<Integer> list = new ArrayList<>();
+        for(Dormitory dormitory:dormitories){
+            StudentExample example = new StudentExample();
+            example.createCriteria().andDormitoryNoEqualTo(dormitory.getBuildingNo()+"");
+            if (studentMapper.selectByExample(example)!=null && studentMapper.selectByExample(example).size()>0){
+                throw new RuntimeException("删除失败");
+            }
+        }
+
+        for(Dormitory dormitory:dormitories){
+            RoomExample example = new RoomExample();
+            example.createCriteria().andDormitoryNumEqualTo(dormitory.getBuildingNo());
+
+            roomMapper.deleteByExample(example);
+
+            DormitoryFloorExample dormitoryFloorExample = new DormitoryFloorExample();
+            dormitoryFloorExample.createCriteria().andDormitoryNumEqualTo(dormitory.getBuildingNo());
+            List<DormitoryFloor> dormitoryFloors = dormitoryFloorMapper.selectByExample(dormitoryFloorExample);
+
+            for(DormitoryFloor dormitoryFloor : dormitoryFloors){
+                FloorExample floorExample = new FloorExample();
+                floorExample.createCriteria().andRoomNumberEqualTo(dormitoryFloor.getDormitoryNum());
+                floorMapper.deleteByExample(floorExample);
+            }
+            dormitoryFloorMapper.deleteByExample(dormitoryFloorExample);
+        }
         customerDormitoryMapper.deleteDormitories(ids);
         return new Result("ok", "删除成功");
     }

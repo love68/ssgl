@@ -8,6 +8,7 @@ import com.ssgl.bean.StudentStatus;
 import com.ssgl.bean.StudentStatusExample;
 import com.ssgl.mapper.StudentStatusMapper;
 import com.ssgl.service.StateService;
+import com.ssgl.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public Result addStatus(StudentStatus studentStatus) throws Exception {
+        studentStatus.setId(Util.makeId());
         statusMapper.insert(studentStatus);
         return new Result("ok","添加成功");
     }
@@ -37,7 +39,7 @@ public class StateServiceImpl implements StateService {
             example.createCriteria().andSidEqualTo(sid);
         }
         if(name.length()>0){
-            example.createCriteria().andSidEqualTo(name);
+            example.createCriteria().andNameEqualTo(name);
         }
         List<StudentStatus> list = statusMapper.selectByExample(example);
 

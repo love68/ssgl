@@ -59,7 +59,7 @@ public class FloorController {
             return floorService.deleteFloors(ids);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("出错了");
+            return new Result("error","删除失败");
         }
     }
 

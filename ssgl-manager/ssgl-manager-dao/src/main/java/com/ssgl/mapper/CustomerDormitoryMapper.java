@@ -7,6 +7,7 @@ package com.ssgl.mapper;
  * Time: 14:40
  */
 
+import com.ssgl.bean.Dormitory;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
@@ -18,4 +19,5 @@ public interface CustomerDormitoryMapper {
 
     Integer selectLayerByBuidingNo(Integer buildingNo);
 
+    List<Dormitory> selectDormitoryById(List<String> ids);
 }

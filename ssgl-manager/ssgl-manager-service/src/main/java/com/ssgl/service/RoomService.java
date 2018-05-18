@@ -46,6 +46,6 @@ public interface RoomService {
      */
     void addRoom(Room room) throws Exception;
 
-
+    String getRooms(Integer buildingNo);
 
 }

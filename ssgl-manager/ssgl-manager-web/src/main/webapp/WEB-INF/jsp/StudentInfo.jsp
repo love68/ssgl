@@ -13,11 +13,9 @@
 function hideURLbar(){ window.scrollTo(0,1); } </script>
 
 <link href="${pageContext.request.contentType}/css/style.css" rel="stylesheet" type="text/css" media="all">
-<link href="//fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900&amp;subset=cyrillic,cyrillic-ext,latin-ext,vietnamese" rel="stylesheet">
 </head>
 <body>
 <div class="form">
-<h1>${student.name}<img src="${student.icon}" name="icon"></h1>
 	<div class="form-content">
 		<form action="${pageContext.request.contentType}/student/updateStudent.action" method="post">
 			<input type="hidden" name="id" value="${student.id}">
@@ -29,6 +27,9 @@ function hideURLbar(){ window.scrollTo(0,1); } </script>
 				<label>姓名</label>
 				<input class="input1" type="text" name="name" value="${student.name}" readonly required="">
 			</div>
+			<div class="name">
+				<img src="${student.icon}" name="icon">
+			</div>
 			<div class="email">
 				<label>手机号码</label>
 				<input class="input1" type="text" name="phone" value="${student.phone}" required="">
@@ -39,7 +40,12 @@ function hideURLbar(){ window.scrollTo(0,1); } </script>
 			</div>
 			<div class="pass2">
 				<label>性别</label>
-				<input class="input1" type="text" name="sex" readonly required="" <c:if test="${student.sex}">value='男'</c:if> <c:if test="${student.sex}">value='女'</c:if>>
+				<input class="input1" type="text" name="sex" readonly required=""
+						<c:choose>
+							<c:when test="${student.sex}">value='男'</c:when>
+							<c:otherwise>value='女'</c:otherwise>
+						</c:choose>
+				/>
 			</div>
 
 			<div class="pass2">
@@ -54,22 +60,27 @@ function hideURLbar(){ window.scrollTo(0,1); } </script>
 
 			<div class="pass2">
 				<label>本科生</label>
-				<input class="input1" type="text" name="isUndergraduate" readonly required=""<c:if test="${student.isUndergraduate}">value='是'</c:if> <c:if test="${student.isUndergraduate}">value='否'</c:if>">
+				<input class="input1" type="text" name="isUndergraduate" readonly required=""
+					   <c:choose>
+						   <c:when test="${student.isUndergraduate}">value='是'</c:when>
+						   <c:otherwise>value='否'</c:otherwise>
+					   </c:choose>
+				>
 			</div>
 
 			<div class="pass2">
 				<label>楼号</label>
-				<input class="input1" type="text" name="dormitoryNo" required="" value="${student.dormitoryNo}">
+				<input class="input1" type="text" name="dormitoryNo" required="" readonly value="${student.dormitoryNo}">
 			</div>
 
 			<div class="pass2">
 				<label>宿舍号</label>
-				<input class="input1" type="text" name="roomNumber" required="" value="${student.roomNumber}">
+				<input class="input1" type="text" name="roomNumber" required="" readonly value="${student.roomNumber}">
 			</div>
 
-			<div class="pass2">
+			<div class="pass2" style="display: none">
 				<label>床号</label>
-				<input class="input1" type="text" name="bedNo" required="" value="${student.bedNo}">
+				<input class="input1" type="text" name="bedNo" required="" readonly value="${student.bedNo}">
 			</div>
 
 			<div class="pass2">
@@ -88,7 +99,7 @@ function hideURLbar(){ window.scrollTo(0,1); } </script>
 			</div>
 			<div class="pass2">
 				<label>院系</label>
-				<input class="input1" type="text" name="faculty" required="" <c:choose>
+				<input class="input1" type="text" readonly name="faculty" required="" <c:choose>
 																						<c:when test="${student.faculty==1}">
 																							  value="计算机工程系"
 																						</c:when>

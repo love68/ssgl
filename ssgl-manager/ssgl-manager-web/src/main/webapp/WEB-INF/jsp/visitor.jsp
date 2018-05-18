@@ -33,6 +33,7 @@
                             $("#visitorDialog").dialog({
                                 title:"添加房间"
                             });
+                            $("#visitorForm").form("clear");
                             $("#visitorDialog").dialog("open");
                         }
                     },{
@@ -82,9 +83,9 @@
                         //关闭对话框
                         $("#visitorDialog").dialog("close");
                         //刷新数据表格
-                        $("#visitorDialog").datagrid("reload");
+                        $("#visitorDatagrid").datagrid("reload");
                         //清空所选项
-                        $("#visitorDialog").datagrid("clearSelections");
+                        $("#visitorDatagrid").datagrid("clearSelections");
                         //清空表单
                         $("#visitorForm").form("clear");
                         var result = $.parseJSON(result);
